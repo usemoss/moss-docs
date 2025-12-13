@@ -56,6 +56,10 @@
       }
     ]
   },
+  "logo": {
+    "light": "/logo/moss.jpg",
+    "dark": "/logo/moss.jpg"
+  },
   
   "navbar": {
     "links": [
