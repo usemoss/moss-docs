@@ -1,0 +1,30 @@
+---
+title: "Agent Memory"
+description: "Add long-term memory to AI agents with Moss"
+---
+
+## Problem
+Agents forget context across sessions. We need durable memory.
+
+## Architecture
+- Store interactions as documents with embeddings
+- Retrieve relevant memories per prompt
+- Update memory store after each turn
+
+## Code walkthrough
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+const moss = new Moss()
+
+await moss.index.upsert([{ id: 'user_profile', text: 'User prefers concise answers.' }])
+const memories = await moss.search.query('preferences for responses')
+```
+
+## Result
+Agents recall user preferences and prior context reliably.
+
+## Related
+- Retrieval: /integrate/retrieval
+- Storage & persistence: /integrate/storage-persistence
+

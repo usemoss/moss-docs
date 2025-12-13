@@ -1,0 +1,25 @@
+---
+title: "Local Embeddings"
+description: "Run embeddings locally for privacy and reliability"
+---
+
+## Why local
+Keep data on-device and remove network as a bottleneck.
+
+## Setup
+Configure Moss to use a local embedding runtime. Example:
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+const moss = new Moss({ embeddings: { provider: 'local' } })
+```
+
+## Tips
+- Batch inputs for speed
+- Cache vectors for unchanged content
+- Use hybrid retrieval for best relevance
+
+## Next
+- Retrieval strategies: /integrate/retrieval
+- Storage & persistence: /integrate/storage-persistence
+

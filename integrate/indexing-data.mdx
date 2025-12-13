@@ -1,0 +1,28 @@
+---
+title: "Indexing Data"
+description: "Prepare and upsert your content into Moss indexes"
+---
+
+## Data model
+Each document has an `id` and `text` (plus optional metadata).
+
+```ts
+await moss.index.upsert([
+  { id: 'doc-1', text: '...' },
+  { id: 'doc-2', text: '...' }
+])
+```
+
+## Chunking tips
+- Aim for ~200–500 tokens per chunk
+- Overlap 10–20% to preserve context
+- Normalize whitespace and strip boilerplate
+
+## Monitoring
+- Track upsert counts and latency
+- Rebuild index after major schema changes
+
+## Next
+- Retrieval strategies: /integrate/retrieval
+- Storage & persistence: /integrate/storage-persistence
+

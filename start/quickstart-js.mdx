@@ -1,0 +1,58 @@
+---
+title: "Quickstart (JavaScript)"
+description: "Install, authenticate, index sample data, and query it in JS"
+---
+
+Follow a single, straight path to your first successful query.
+
+## 1. Install SDK
+
+```bash
+npm install @moss-ai/sdk
+```
+
+## 2. Authenticate
+
+Get an API key from your Moss dashboard and set `MOSS_API_KEY`.
+
+```bash
+export MOSS_API_KEY=your_key_here
+```
+
+## 3. Index sample data
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+
+const moss = new Moss({ apiKey: process.env.MOSS_API_KEY })
+
+await moss.index.upsert([
+  { id: '1', text: 'Moss supports offline-first semantic search.' },
+  { id: '2', text: 'Queries run locally with sub-10ms latency.' },
+  { id: '3', text: 'Add long-term memory to AI agents.' },
+])
+```
+
+## 4. Query it
+
+```ts
+const results = await moss.search.query('How fast are local queries?')
+console.log(results[0])
+```
+
+### Example output
+
+```json
+{
+  "id": "2",
+  "score": 0.92,
+  "text": "Queries run locally with sub-10ms latency."
+}
+```
+
+## Next steps
+
+- Indexing your own data: /integrate/indexing-data
+- Retrieval strategies: /integrate/retrieval
+- Production checklist: /integrate/deployment-production
+

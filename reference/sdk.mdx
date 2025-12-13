@@ -1,0 +1,26 @@
+---
+title: "SDK Reference"
+description: "Classes and methods for Moss SDKs"
+---
+
+This section summarizes key SDK surfaces. See the API Reference for endpoints.
+
+## Client
+```
+new Moss(options)
+```
+
+Options:
+- `apiKey` – string (optional for local-only)
+- `embeddings.provider` – `local` | `remote`
+
+## Index
+- `index.upsert(docs)` – add or update documents
+- `index.delete(ids)` – remove documents
+
+## Search
+- `search.query(text, options)` – retrieve documents
+
+## Errors
+See /reference/errors for common cases.
+

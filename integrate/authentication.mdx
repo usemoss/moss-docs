@@ -1,0 +1,22 @@
+---
+title: "Authentication"
+description: "Use API keys for optional cloud features"
+---
+
+Most Moss features run locally and require no auth. For cloud sync or hosted embeddings, set `MOSS_API_KEY`.
+
+```bash
+export MOSS_API_KEY=your_key
+```
+
+In code:
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+const moss = new Moss({ apiKey: process.env.MOSS_API_KEY })
+```
+
+## Next
+- Indexing data: /integrate/indexing-data
+- Deployment / Production: /integrate/deployment-production
+

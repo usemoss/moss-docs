@@ -1,0 +1,31 @@
+---
+title: "Offline-first Search"
+description: "Build local-first semantic search with fast, private queries"
+---
+
+## Problem
+Search must work without network access and stay private.
+
+## Architecture
+- Local embeddings and index stored on device
+- Optional background sync to cloud
+- Query pipeline: text -> embed -> retrieve -> rerank (optional)
+
+## Code walkthrough
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+const moss = new Moss()
+
+await moss.index.upsert(docs) // local index
+const hits = await moss.search.query('install steps offline')
+```
+
+## Result
+Sub-10ms queries with zero network dependency.
+
+## Related
+- Indexing data: /integrate/indexing-data
+- Storage & persistence: /integrate/storage-persistence
+- Retrieval: /integrate/retrieval
+

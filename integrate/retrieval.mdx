@@ -1,0 +1,25 @@
+---
+title: "Retrieval"
+description: "Choose vector, keyword, or hybrid retrieval"
+---
+
+## Strategies
+- Vector similarity (semantic)
+- Keyword/BM25
+- Hybrid (best of both)
+
+```ts
+const byVector = await moss.search.query('getting started latency')
+```
+
+## Reranking
+Apply a reranker to reorder top-k for precision.
+
+## Tuning
+- Adjust k and score thresholds
+- Use metadata filters
+
+## Next
+- Storage & persistence: /integrate/storage-persistence
+- Deployment / Production: /integrate/deployment-production
+

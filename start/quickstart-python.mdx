@@ -1,0 +1,59 @@
+---
+title: "Quickstart (Python)"
+description: "Install, authenticate, index sample data, and query it in Python"
+---
+
+Follow a single, straight path to your first successful query.
+
+## 1. Install SDK
+
+```bash
+pip install moss-ai
+```
+
+## 2. Authenticate
+
+Set your API key as an environment variable `MOSS_API_KEY`.
+
+```bash
+export MOSS_API_KEY=your_key_here
+```
+
+## 3. Index sample data
+
+```python
+from moss import Moss
+import os
+
+moss = Moss(api_key=os.getenv("MOSS_API_KEY"))
+
+moss.index.upsert([
+    { "id": "1", "text": "Moss supports offline-first semantic search." },
+    { "id": "2", "text": "Queries run locally with sub-10ms latency." },
+    { "id": "3", "text": "Add long-term memory to AI agents." },
+])
+```
+
+## 4. Query it
+
+```python
+results = moss.search.query("How fast are local queries?")
+print(results[0])
+```
+
+### Example output
+
+```json
+{
+  "id": "2",
+  "score": 0.92,
+  "text": "Queries run locally with sub-10ms latency."
+}
+```
+
+## Next steps
+
+- Indexing your own data: /integrate/indexing-data
+- Retrieval strategies: /integrate/retrieval
+- Production checklist: /integrate/deployment-production
+

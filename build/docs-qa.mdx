@@ -1,0 +1,29 @@
+---
+title: "Docs / Knowledge Q&A"
+description: "Power help-center and docs Q&A using Moss retrieval"
+---
+
+## Problem
+Users need precise answers from large documentation sets.
+
+## Architecture
+- Chunk docs -> embed -> index
+- Query: retrieve top-k -> rerank -> answer
+
+## Code walkthrough
+
+```ts
+import { Moss } from '@moss-ai/sdk'
+const moss = new Moss()
+
+await moss.index.upsert(chunks)
+const results = await moss.search.query('reset password limits')
+```
+
+## Outcome
+Accurate, fast answers in-product without leaving the page.
+
+## Related
+- Indexing data: /integrate/indexing-data
+- Retrieval: /integrate/retrieval
+
