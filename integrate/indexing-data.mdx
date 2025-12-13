@@ -4,13 +4,16 @@ description: "Prepare and upsert your content into Moss indexes"
 ---
 
 ## Data model
-Each document has an `id` and `text` (plus optional metadata).
+Each document has an `id` and `text` (plus optional metadata). Use `moss-minilm` as the default model.
 
-```ts
+## Examples
+
+<CodeGroup>
+```ts JavaScript
 import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 await client.createIndex('my-index', [
-  { id: 'doc-1', text: '...' },
+  { id: 'doc-1', text: '...', metadata: { category: 'faq', tags: 'returns,shipping', lang: 'en' } },
   { id: 'doc-2', text: '...' }
 ], 'moss-minilm')
 
@@ -19,7 +22,45 @@ await client.addDocs('my-index', [
   { id: 'doc-2', text: 'updated text' }, // will be updated
   { id: 'doc-3', text: 'new text' }
 ], { upsert: true })
+
+// Fetch specific docs
+const subset = await client.getDocs('my-index', { docIds: ['doc-1', 'doc-3'] })
+
+// Delete docs or the index when done
+await client.deleteDocs('my-index', ['doc-3'])
+await client.deleteIndex('my-index')
 ```
+
+```python Python
+from inferedge_moss import MossClient, AddDocumentsOptions, GetDocumentsOptions
+
+client = MossClient(project_id, project_key)
+await client.create_index('my-index', [
+    { 'id': 'doc-1', 'text': '...', 'metadata': { 'category': 'faq', 'tags': 'returns,shipping', 'lang': 'en' } },
+    { 'id': 'doc-2', 'text': '...' }
+], 'moss-minilm')
+
+# Upsert more docs later
+await client.add_docs('my-index', [
+    { 'id': 'doc-2', 'text': 'updated text' },
+    { 'id': 'doc-3', 'text': 'new text' }
+], AddDocumentsOptions(upsert=True))
+
+# Fetch specific docs
+subset = await client.get_docs('my-index', GetDocumentsOptions(doc_ids=['doc-1', 'doc-3']))
+
+# Delete docs or the index when done
+await client.delete_docs('my-index', ['doc-3'])
+await client.delete_index('my-index')
+```
+</CodeGroup>
+
+## Notes
+- `createIndex` / `create_index` will sync indexes to cloud (if enabled) while remaining usable locally
+- Supports multiple indexes per project; pick the model per index:
+  - `moss-minilm`: fast, lightweight (default)
+  - `moss-mediumlm`: higher accuracy, still efficient
+  - Use `moss-minilm` for speed-first, edge/offline use; use `moss-mediumlm` when you need higher recall/precision
 
 ## Chunking tips
 - Aim for ~200–500 tokens per chunk
@@ -33,23 +74,3 @@ await client.addDocs('my-index', [
 import NextSteps from '/snippets/next-steps.mdx';
 
 <NextSteps />
-
----
-
-### Python upsert example
-
-```python
-from inferedge_moss import MossClient, AddDocumentsOptions
-
-client = MossClient(project_id, project_key)
-await client.create_index('my-index', [
-    { 'id': 'doc-1', 'text': '...' },
-    { 'id': 'doc-2', 'text': '...' }
-], 'moss-minilm')
-
-# Upsert more docs later
-await client.add_docs('my-index', [
-    { 'id': 'doc-2', 'text': 'updated text' },
-    { 'id': 'doc-3', 'text': 'new text' }
-], AddDocumentsOptions(upsert=True))
-```

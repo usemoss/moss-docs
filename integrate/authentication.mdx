@@ -3,26 +3,35 @@ title: "Authentication"
 description: "Configure project credentials for the Moss SDKs"
 ---
 
-For SDK access, set your Moss project credentials:
+For SDK access, set your Moss project credentials. Choose shell exports or a `.env` file.
 
 ```bash
 export MOSS_PROJECT_ID=your_project_id
 export MOSS_PROJECT_KEY=your_project_key
 ```
 
-JavaScript:
+Or `.env`:
 
-```ts
+```bash
+echo "MOSS_PROJECT_ID=your_project_id" >> .env
+echo "MOSS_PROJECT_KEY=your_project_key" >> .env
+```
+
+<CodeGroup>
+```ts JavaScript
 import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 ```
 
-Python:
-
-```python
+```python Python
+import os
+from dotenv import load_dotenv
 from inferedge_moss import MossClient
+
+load_dotenv()  # optional, if using a .env file
 client = MossClient(os.getenv('MOSS_PROJECT_ID'), os.getenv('MOSS_PROJECT_KEY'))
 ```
+</CodeGroup>
 
 import NextSteps from '/snippets/next-steps.mdx';
 

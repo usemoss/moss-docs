@@ -5,9 +5,10 @@ description: "Offline-first semantic search and memory for AI apps"
 
 Moss enables low-latency, offline-first semantic search and memory for AI applications.
 
-- Offline-first search with local indexes
+- High-performance runtime for real-time semantic search (sub-10 ms lookups)
+- Offline-first search with local indexes; zero infra overhead
 - Private by default (process locally, sync when needed)
-- Sub-10ms query latency on commodity hardware
+- Runs where your agent lives: cloud, browser, or on-device
 
 ## Where Moss shines
 
@@ -15,6 +16,24 @@ Moss enables low-latency, offline-first semantic search and memory for AI applic
 - Add long-term memory to AI agents
 - Run local embeddings without a cloud call
 - Power docs/help-center Q&A with fast retrieval
+
+## Using Moss Portal
+
+- Sign up at Moss, confirm email, and sign in
+- Choose a plan:
+  - Free Tier ($0): 1 project, 3 indexes, 1,000 items/index, community support
+  - Developer Workspace ($2000/month + usage): unlimited projects/indexes, 100 GB storage, 100 GB ingestion, 1 TB egress, priority support
+- From the dashboard, click **Create Index** and copy your **Project ID** and **Project Key** for `.env`
+- Join our Discord to get onboarded: [Moss Discord](https://discord.gg/eMXExuafBR)
+
+![Moss Portal walkthrough](https://github.com/user-attachments/assets/c3db9d2d-0df5-4cec-99fd-7d49d0a30844)
+
+## Samples
+
+- View samples repo: [moss-samples on GitHub](https://github.com/usemoss/moss-samples)
+- JavaScript: `javascript/comprehensive_sample.ts`, `javascript/load_and_query_sample.ts`
+- Python: `python/comprehensive_sample.py`, `python/load_and_query_sample.py`
+- Adapt by swapping the FAQ data with your own, or plug Moss calls into your app
 
 ## How it works (at a glance)
 

@@ -1,13 +1,13 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Moss",
+  "name": "Moss Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#C63FA9",
+    "light": "#E868CF",
+    "dark": "#8A2C7E"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/moss-dark.png",
   "navigation": {
     "tabs": [
       {
@@ -64,8 +64,18 @@
   "navbar": {
     "links": [
       {
+        "label": "Website",
+        "href": "https://www.usemoss.dev/",
+        "style": "secondary"
+      },
+      {
+        "label": "Dashboard ›",
+        "href": "https://portal.usemoss.dev/auth/login",
+        "style": "primary"
+      },
+      {
         "label": "GitHub",
-        "href": "https://github.com/usemoss"
+        "href": "https://github.com/usemoss/moss-samples"
       }
     ]
   },

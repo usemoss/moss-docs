@@ -22,10 +22,12 @@ Phase-oriented plan with status checkboxes. Update status as we ship. Completed 
 
 ## Phase 4 — Branding & Navigation Polish (IN PROGRESS)
 - [x] Add Moss icon in navbar (theme-aware)
-- [ ] Decide final navbar treatment (icon-only vs wordmark icon+text)
-- [ ] Set final brand colors (confirm gradient or official palette)
+- [x] Decide final navbar treatment (wordmark with embedded moss icon, normal size)
+- [x] Set final brand colors (gradient-inspired magenta → violet palette; tuned for contrast)
+- [ ] (Optional) TOC styling: add right-rail accent line (would require custom CSS/theming beyond Mintlify defaults)
 
 ## Phase 5 — Reference & Quality Gate (TODO)
+- [x] Pull SDK behavior from moss-samples into quickstarts and Integrate pages (env vars, load/query, lifecycle ops)
 - [ ] Replace sample OpenAPI with Moss spec and re-enable API Reference tab
 - [ ] Add SDK method signatures/examples per method in `reference/sdk`
 - [ ] Add error codes/messages table in `reference/errors`
@@ -42,6 +44,5 @@ Phase-oriented plan with status checkboxes. Update status as we ship. Completed 
 
 ## Notes / Decisions
 - API Reference hidden until Moss spec is available (avoids Mint sample confusion)
-- Navbar currently uses icon-only for guaranteed visibility; can switch to wordmark when finalized
+- Navbar currently uses wordmark (icon + text) with the provided moss-dark asset embedded; size reset to the preferred smaller treatment
 - Homepage “Explore the SDK reference” points to `/reference/sdk`
-

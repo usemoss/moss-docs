@@ -8,15 +8,85 @@ description: "Choose vector, keyword, or hybrid retrieval"
 - Keyword/BM25
 - Hybrid (best of both)
 
-```ts
+<CodeGroup>
+```ts JavaScript
 import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 await client.loadIndex('my-index')
 const byVector = await client.query('my-index', 'getting started latency', 5)
 
-// Metadata filtering example (availability depends on SDK version)
-// const filtered = await client.query('my-index', 'refund policy', 5, { filters: { category: 'faq', lang: 'en' } })
+// Metadata filtering (mirrors moss-samples)
+const filtered = await client.query('my-index', 'refund policy', 5, {
+  filters: { category: 'faq', lang: 'en' }
+})
 ```
+
+```python Python
+from inferedge_moss import MossClient
+import os
+
+client = MossClient(os.getenv("MOSS_PROJECT_ID"), os.getenv("MOSS_PROJECT_KEY"))
+await client.load_index("my-index")
+by_vector = await client.query("my-index", "getting started latency", 5)
+
+# Metadata filtering (mirrors moss-samples)
+filtered = await client.query("my-index", "refund policy", 5, {
+    "filters": { "category": "faq", "lang": "en" }
+})
+```
+</CodeGroup>
+
+## Hybrid weighting (`alpha`)
+- `alpha = 1.0`: pure semantic (embeddings)
+- `alpha = 0.0`: pure keyword
+- Between 0 and 1 blends the two (default is semantic-heavy)
+
+<CodeGroup>
+```ts JavaScript
+// Blend semantic and keyword scores (60/40)
+const hybrid = await client.query('my-index', 'return policy', 3, { alpha: 0.6 })
+
+// Pure keyword
+const keywordOnly = await client.query('my-index', 'return policy', 3, { alpha: 0.0 })
+```
+
+```python Python
+# Blend semantic and keyword scores (60/40)
+hybrid = await client.query("my-index", "return policy", top_k=3, alpha=0.6)
+
+# Pure keyword
+keyword_only = await client.query("my-index", "return policy", top_k=3, alpha=0.0)
+```
+</CodeGroup>
+
+## Hybrid weighting (`alpha`)
+- `alpha = 1.0`: pure semantic (embeddings)
+- `alpha = 0.0`: pure keyword
+- Between 0 and 1 blends the two (default is semantic-heavy, e.g., ~0.8)
+
+<CodeGroup>
+```ts JavaScript
+// Blend semantic and keyword scores (60/40)
+const hybrid = await client.query('my-index', 'return policy', 3, { alpha: 0.6 })
+
+// Pure keyword
+const keywordOnly = await client.query('my-index', 'return policy', 3, { alpha: 0.0 })
+
+// Pure semantic
+const semanticOnly = await client.query('my-index', 'return policy', 3, { alpha: 1.0 })
+```
+
+```python Python
+# Blend semantic and keyword scores (60/40)
+hybrid = await client.query("my-index", "return policy", top_k=3, alpha=0.6)
+
+# Pure keyword
+keyword_only = await client.query("my-index", "return policy", top_k=3, alpha=0.0)
+
+# Pure semantic
+semantic_only = await client.query("my-index", "return policy", top_k=3, alpha=1.0)
+```
+</CodeGroup>
 
 ## Reranking
 Apply a reranker to reorder top-k for precision.
@@ -24,6 +94,8 @@ Apply a reranker to reorder top-k for precision.
 ## Tuning
 - Adjust k and score thresholds
 - Use metadata filters
+- Group queries by intent (e.g., returns, billing, onboarding) and tune per index
+- Choose model per index: `moss-minilm` (fast) or `moss-mediumlm` (more accurate)
 
 import NextSteps from '/snippets/next-steps.mdx';
 
