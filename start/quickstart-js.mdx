@@ -1,43 +1,53 @@
 ---
 title: "Quickstart (JavaScript)"
-description: "Install, authenticate, index sample data, and query it in JS"
+description: "Install, authenticate, create an index, and query it"
 ---
 
-Follow a single, straight path to your first successful query.
+Follow one path to a visible result using the official JS SDK.
 
-## 1. Install SDK
-
-```bash
-npm install @moss-ai/sdk
-```
-
-## 2. Authenticate
-
-Get an API key from your Moss dashboard and set `MOSS_API_KEY`.
+## 1) Install
 
 ```bash
-export MOSS_API_KEY=your_key_here
+npm install @inferedge/moss dotenv
 ```
 
-## 3. Index sample data
+## 2) Configure credentials
 
-```ts
-import { Moss } from '@moss-ai/sdk'
+From the Moss portal, copy your project credentials and set env vars:
 
-const moss = new Moss({ apiKey: process.env.MOSS_API_KEY })
-
-await moss.index.upsert([
-  { id: '1', text: 'Moss supports offline-first semantic search.' },
-  { id: '2', text: 'Queries run locally with sub-10ms latency.' },
-  { id: '3', text: 'Add long-term memory to AI agents.' },
-])
+```bash
+export MOSS_PROJECT_ID=your_project_id
+export MOSS_PROJECT_KEY=your_project_key
 ```
 
-## 4. Query it
+## 3) Create and query an index
+
+Save as `quickstart.ts` and run with `npx tsx quickstart.ts` (Node 18+):
 
 ```ts
-const results = await moss.search.query('How fast are local queries?')
-console.log(results[0])
+import { MossClient } from '@inferedge/moss'
+import { config } from 'dotenv'
+config()
+
+const projectId = process.env.MOSS_PROJECT_ID!
+const projectKey = process.env.MOSS_PROJECT_KEY!
+
+async function main() {
+  const client = new MossClient(projectId, projectKey)
+  const indexName = `quickstart-${Date.now()}`
+
+  await client.createIndex(indexName, [
+    { id: '1', text: 'Moss supports offline-first semantic search.' },
+    { id: '2', text: 'Queries can complete in sub-10ms.' },
+    { id: '3', text: 'Add long-term memory to AI agents.' },
+  ], 'moss-minilm')
+
+  await client.loadIndex(indexName)
+  const results = await client.query(indexName, 'How fast are local queries?', 3)
+  console.log(results.docs[0])
+}
+
+main().catch(console.error)
 ```
 
 ### Example output
@@ -46,7 +56,7 @@ console.log(results[0])
 {
   "id": "2",
   "score": 0.92,
-  "text": "Queries run locally with sub-10ms latency."
+  "text": "Queries can complete in sub-10ms."
 }
 ```
 

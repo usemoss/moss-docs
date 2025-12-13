@@ -1,44 +1,53 @@
 ---
 title: "Quickstart (Python)"
-description: "Install, authenticate, index sample data, and query it in Python"
+description: "Install, authenticate, create an index, and query it"
 ---
 
-Follow a single, straight path to your first successful query.
+Follow one path to a visible result using the official Python SDK.
 
-## 1. Install SDK
-
-```bash
-pip install moss-ai
-```
-
-## 2. Authenticate
-
-Set your API key as an environment variable `MOSS_API_KEY`.
+## 1) Install
 
 ```bash
-export MOSS_API_KEY=your_key_here
+python -m venv .venv && source .venv/bin/activate
+pip install inferedge-moss python-dotenv
 ```
 
-## 3. Index sample data
+## 2) Configure credentials
+
+From the Moss portal, copy your project credentials and set env vars:
+
+```bash
+export MOSS_PROJECT_ID=your_project_id
+export MOSS_PROJECT_KEY=your_project_key
+```
+
+## 3) Create and query an index
+
+Save as `quickstart.py` and run with `python quickstart.py` (Python 3.9+):
 
 ```python
-from moss import Moss
 import os
+import asyncio
+from inferedge_moss import MossClient
 
-moss = Moss(api_key=os.getenv("MOSS_API_KEY"))
+PROJECT_ID = os.getenv("MOSS_PROJECT_ID")
+PROJECT_KEY = os.getenv("MOSS_PROJECT_KEY")
 
-moss.index.upsert([
-    { "id": "1", "text": "Moss supports offline-first semantic search." },
-    { "id": "2", "text": "Queries run locally with sub-10ms latency." },
-    { "id": "3", "text": "Add long-term memory to AI agents." },
-])
-```
+async def main():
+    client = MossClient(PROJECT_ID, PROJECT_KEY)
+    index_name = f"quickstart-{os.getpid()}"
 
-## 4. Query it
+    await client.create_index(index_name, [
+        { "id": "1", "text": "Moss supports offline-first semantic search." },
+        { "id": "2", "text": "Queries can complete in sub-10ms." },
+        { "id": "3", "text": "Add long-term memory to AI agents." }
+    ], "moss-minilm")
 
-```python
-results = moss.search.query("How fast are local queries?")
-print(results[0])
+    await client.load_index(index_name)
+    results = await client.query(index_name, "How fast are local queries?", 3)
+    print(results.docs[0])
+
+asyncio.run(main())
 ```
 
 ### Example output
@@ -47,7 +56,7 @@ print(results[0])
 {
   "id": "2",
   "score": 0.92,
-  "text": "Queries run locally with sub-10ms latency."
+  "text": "Queries can complete in sub-10ms."
 }
 ```
 

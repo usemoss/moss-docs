@@ -3,23 +3,36 @@ title: "SDK Reference"
 description: "Classes and methods for Moss SDKs"
 ---
 
-This section summarizes key SDK surfaces. See the API Reference for endpoints.
+High-level overview of the official SDKs. See the API Reference for endpoints.
 
-## Client
+## JavaScript (`@inferedge/moss`)
+
+```ts
+import { MossClient } from '@inferedge/moss'
+
+const client = new MossClient(projectId, projectKey)
+
+await client.createIndex(name, docs, 'moss-minilm')
+await client.loadIndex(name)
+const results = await client.query(name, 'query text', 5)
+await client.deleteIndex(name)
 ```
-new Moss(options)
+
+Types you’ll see:
+- `DocumentInfo` – `{ id: string; text: string; metadata?: Record<string,string> }`
+- `AddDocumentsOptions` – `{ upsert?: boolean }`
+
+## Python (`inferedge-moss`)
+
+```python
+from inferedge_moss import MossClient
+
+client = MossClient(project_id, project_key)
+await client.create_index(name, docs, 'moss-minilm')
+await client.load_index(name)
+res = await client.query(name, 'query text', 5)
+await client.delete_index(name)
 ```
-
-Options:
-- `apiKey` – string (optional for local-only)
-- `embeddings.provider` – `local` | `remote`
-
-## Index
-- `index.upsert(docs)` – add or update documents
-- `index.delete(ids)` – remove documents
-
-## Search
-- `search.query(text, options)` – retrieve documents
 
 import NextSteps from '/snippets/next-steps.mdx';
 

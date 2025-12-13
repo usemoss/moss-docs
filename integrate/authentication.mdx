@@ -1,19 +1,27 @@
 ---
 title: "Authentication"
-description: "Use API keys for optional cloud features"
+description: "Configure project credentials for the Moss SDKs"
 ---
 
-Most Moss features run locally and require no auth. For cloud sync or hosted embeddings, set `MOSS_API_KEY`.
+For SDK access, set your Moss project credentials:
 
 ```bash
-export MOSS_API_KEY=your_key
+export MOSS_PROJECT_ID=your_project_id
+export MOSS_PROJECT_KEY=your_project_key
 ```
 
-In code:
+JavaScript:
 
 ```ts
-import { Moss } from '@moss-ai/sdk'
-const moss = new Moss({ apiKey: process.env.MOSS_API_KEY })
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+```
+
+Python:
+
+```python
+from inferedge_moss import MossClient
+client = MossClient(os.getenv('MOSS_PROJECT_ID'), os.getenv('MOSS_PROJECT_KEY'))
 ```
 
 import NextSteps from '/snippets/next-steps.mdx';
