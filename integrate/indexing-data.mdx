@@ -33,3 +33,23 @@ await client.addDocs('my-index', [
 import NextSteps from '/snippets/next-steps.mdx';
 
 <NextSteps />
+
+---
+
+### Python upsert example
+
+```python
+from inferedge_moss import MossClient, AddDocumentsOptions
+
+client = MossClient(project_id, project_key)
+await client.create_index('my-index', [
+    { 'id': 'doc-1', 'text': '...' },
+    { 'id': 'doc-2', 'text': '...' }
+], 'moss-minilm')
+
+# Upsert more docs later
+await client.add_docs('my-index', [
+    { 'id': 'doc-2', 'text': 'updated text' },
+    { 'id': 'doc-3', 'text': 'new text' }
+], AddDocumentsOptions(upsert=True))
+```
