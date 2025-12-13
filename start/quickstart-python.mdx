@@ -17,8 +17,8 @@ pip install inferedge-moss python-dotenv
 From the Moss portal, copy your project credentials and set env vars:
 
 ```bash
-export MOSS_PROJECT_ID=your_project_id
-export MOSS_PROJECT_KEY=your_project_key
+echo "MOSS_PROJECT_ID=your_project_id" >> .env
+echo "MOSS_PROJECT_KEY=your_project_key" >> .env
 ```
 
 ## 3) Create and query an index
@@ -28,8 +28,10 @@ Save as `quickstart.py` and run with `python quickstart.py` (Python 3.9+):
 ```python
 import os
 import asyncio
+from dotenv import load_dotenv
 from inferedge_moss import MossClient
 
+load_dotenv()  # loads .env
 PROJECT_ID = os.getenv("MOSS_PROJECT_ID")
 PROJECT_KEY = os.getenv("MOSS_PROJECT_KEY")
 

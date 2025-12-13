@@ -13,6 +13,12 @@ await client.createIndex('my-index', [
   { id: 'doc-1', text: '...' },
   { id: 'doc-2', text: '...' }
 ], 'moss-minilm')
+
+// Upsert more docs later
+await client.addDocs('my-index', [
+  { id: 'doc-2', text: 'updated text' }, // will be updated
+  { id: 'doc-3', text: 'new text' }
+], { upsert: true })
 ```
 
 ## Chunking tips

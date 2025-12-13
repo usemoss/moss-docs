@@ -13,6 +13,11 @@ import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 await client.loadIndex('my-index')
 const byVector = await client.query('my-index', 'getting started latency', 5)
+
+// Metadata filtering example
+const filtered = await client.query('my-index', 'refund policy', 5 /* topK */)
+// e.g., apply filters when available in your SDK version
+// { filters: { category: 'faq', lang: 'en' } }
 ```
 
 ## Reranking

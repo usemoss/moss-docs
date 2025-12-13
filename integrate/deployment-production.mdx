@@ -14,6 +14,11 @@ description: "Checklist for shipping Moss-backed features"
 - Keep data local whenever possible
 - Encrypt synced data at rest/in transit
 
+## Observability
+- Track query latency (p50/p95) and index size growth
+- Log index lifecycle events (create/load/delete, rebuilds)
+- Establish backup/export cadence for disaster recovery
+
 import NextSteps from '/snippets/next-steps.mdx';
 
 <NextSteps />

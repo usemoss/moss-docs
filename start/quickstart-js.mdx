@@ -13,11 +13,11 @@ npm install @inferedge/moss dotenv
 
 ## 2) Configure credentials
 
-From the Moss portal, copy your project credentials and set env vars:
+From the Moss portal, copy your project credentials and set env vars. Create a `.env` file in your project root:
 
 ```bash
-export MOSS_PROJECT_ID=your_project_id
-export MOSS_PROJECT_KEY=your_project_key
+echo "MOSS_PROJECT_ID=your_project_id" >> .env
+echo "MOSS_PROJECT_KEY=your_project_key" >> .env
 ```
 
 ## 3) Create and query an index
@@ -27,7 +27,7 @@ Save as `quickstart.ts` and run with `npx tsx quickstart.ts` (Node 18+):
 ```ts
 import { MossClient } from '@inferedge/moss'
 import { config } from 'dotenv'
-config()
+config() // loads .env
 
 const projectId = process.env.MOSS_PROJECT_ID!
 const projectKey = process.env.MOSS_PROJECT_KEY!

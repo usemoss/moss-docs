@@ -29,7 +29,9 @@
               "build/offline-first-search",
               "build/agent-memory",
               "build/local-embeddings",
-              "build/docs-qa"
+              "build/docs-qa",
+              "build/electron-local-search",
+              "build/browser-extension-memory"
             ]
           },
           {
@@ -46,7 +48,6 @@
             "group": "Reference",
             "pages": [
               "reference/sdk",
-              "api-reference/introduction",
               "reference/errors",
               "reference/changelog"
             ]
@@ -55,10 +56,7 @@
       }
     ]
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
+  
   "navbar": {
     "links": [
       {

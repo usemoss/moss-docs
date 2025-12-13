@@ -1,0 +1,36 @@
+---
+title: "Browser Extension Memory"
+description: "Give your extension durable local memory for better UX"
+---
+
+## Problem
+Extensions need to remember context and work with limited APIs.
+
+## Architecture
+- Background service worker hosts a Moss client
+- Content scripts post messages to background for index/query
+- Persist index using extension storage or IndexedDB
+
+## Code walkthrough (Background)
+
+```ts
+// background.ts
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+
+chrome.runtime.onMessage.addListener(async (msg, _sender, sendResponse) => {
+  if (msg.type === 'query') {
+    await client.loadIndex('ext-memory')
+    const res = await client.query('ext-memory', msg.text, 3)
+    sendResponse(res)
+  }
+})
+```
+
+## Outcome
+Lightweight, private memory that improves responses and suggestions.
+
+import NextSteps from '/snippets/next-steps.mdx';
+
+<NextSteps />
+

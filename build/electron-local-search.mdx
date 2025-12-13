@@ -1,0 +1,41 @@
+---
+title: "Electron App Local Search"
+description: "Add offline-first semantic search to an Electron desktop app"
+---
+
+## Problem
+Desktop apps need instant, private search that works offline.
+
+## Architecture
+- Main process owns a Moss client
+- Renderer calls main via IPC for index/query
+- Index persisted to user data directory
+
+## Code walkthrough (Main)
+
+```ts
+// main.ts
+import { app, ipcMain } from 'electron'
+import { MossClient } from '@inferedge/moss'
+
+let client: MossClient
+const INDEX = 'electron-docs'
+
+app.whenReady().then(async () => {
+  client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+  await client.createIndex(INDEX, initialDocs, 'moss-minilm')
+})
+
+ipcMain.handle('search', async (_e, q: string) => {
+  await client.loadIndex(INDEX)
+  return client.query(INDEX, q, 5)
+})
+```
+
+## Result
+Native-feel search with sub-10ms latency, no network dependency.
+
+import NextSteps from '/snippets/next-steps.mdx';
+
+<NextSteps />
+
