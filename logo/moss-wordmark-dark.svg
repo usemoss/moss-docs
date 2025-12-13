@@ -1,6 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="140" height="28" viewBox="0 0 140 28" role="img" aria-label="Moss">
-  <circle cx="14" cy="14" r="10" fill="#16A34A" />
-  <text x="32" y="16" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#E5E7EB" dominant-baseline="middle">
-    Moss
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="28" viewBox="0 0 160 28" role="img" aria-label="Moss">
+  <image href="/logo/moss.jpg" x="0" y="2" width="24" height="24" />
+  <text x="32" y="16" font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#E5E7EB" dominant-baseline="middle">Moss</text>
 </svg>
