@@ -9,7 +9,10 @@ description: "Choose vector, keyword, or hybrid retrieval"
 - Hybrid (best of both)
 
 ```ts
-const byVector = await moss.search.query('getting started latency')
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+await client.loadIndex('my-index')
+const byVector = await client.query('my-index', 'getting started latency', 5)
 ```
 
 ## Reranking

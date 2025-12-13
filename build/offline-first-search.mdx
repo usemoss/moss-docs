@@ -11,14 +11,17 @@ Search must work without network access and stay private.
 - Optional background sync to cloud
 - Query pipeline: text -> embed -> retrieve -> rerank (optional)
 
-## Code walkthrough
+## Code walkthrough (JavaScript)
 
 ```ts
-import { Moss } from '@moss-ai/sdk'
-const moss = new Moss()
+import { MossClient } from '@inferedge/moss'
 
-await moss.index.upsert(docs) // local index
-const hits = await moss.search.query('install steps offline')
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+const indexName = 'offline-demo'
+
+await client.createIndex(indexName, docs, 'moss-minilm')
+await client.loadIndex(indexName)
+const hits = await client.query(indexName, 'install steps offline', 5)
 ```
 
 ## Result

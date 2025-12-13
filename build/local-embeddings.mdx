@@ -7,11 +7,12 @@ description: "Run embeddings locally for privacy and reliability"
 Keep data on-device and remove network as a bottleneck.
 
 ## Setup
-Configure Moss to use a local embedding runtime. Example:
+Use a local model where supported, or pick a remote embedding in index creation.
 
 ```ts
-import { Moss } from '@moss-ai/sdk'
-const moss = new Moss({ embeddings: { provider: 'local' } })
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+await client.createIndex('local-embeddings', docs, 'moss-minilm')
 ```
 
 ## Tips

@@ -7,10 +7,12 @@ description: "Prepare and upsert your content into Moss indexes"
 Each document has an `id` and `text` (plus optional metadata).
 
 ```ts
-await moss.index.upsert([
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+await client.createIndex('my-index', [
   { id: 'doc-1', text: '...' },
   { id: 'doc-2', text: '...' }
-])
+], 'moss-minilm')
 ```
 
 ## Chunking tips

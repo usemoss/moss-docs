@@ -10,14 +10,15 @@ Users need precise answers from large documentation sets.
 - Chunk docs -> embed -> index
 - Query: retrieve top-k -> rerank -> answer
 
-## Code walkthrough
+## Code walkthrough (JavaScript)
 
 ```ts
-import { Moss } from '@moss-ai/sdk'
-const moss = new Moss()
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 
-await moss.index.upsert(chunks)
-const results = await moss.search.query('reset password limits')
+await client.createIndex('docs-qa', chunks, 'moss-minilm')
+await client.loadIndex('docs-qa')
+const results = await client.query('docs-qa', 'reset password limits', 5)
 ```
 
 ## Outcome
