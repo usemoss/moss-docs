@@ -17,44 +17,32 @@
         ]
       },
       {
-        "tab": "Docs",
+        "tab": "SDK",
         "groups": [
           {
-            "group": "Start",
+            "group": "Getting Started",
             "pages": [
+              "start/quickstart",
               "start/what-is-moss",
-              "start/quickstart-js",
-              "start/quickstart-python",
-              "start/core-concepts"
+              "start/core-concepts",
+              "reference/sdk"
             ]
           },
           {
-            "group": "Build",
+            "group": "Use Cases",
             "pages": [
               "build/offline-first-search",
-              "build/agent-memory",
-              "build/local-embeddings",
-              "build/docs-qa",
-              "build/electron-local-search",
-              "build/browser-extension-memory"
+              "build/docs-qa"
             ]
           },
           {
-            "group": "Integrate",
+            "group": "Integrations",
             "pages": [
               "integrate/authentication",
               "integrate/indexing-data",
               "integrate/retrieval",
               "integrate/storage-persistence",
               "integrate/deployment-production"
-            ]
-          },
-          {
-            "group": "Reference",
-            "pages": [
-              "reference/sdk",
-              "reference/errors",
-              "reference/changelog"
             ]
           }
         ]
