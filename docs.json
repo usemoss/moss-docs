@@ -71,16 +71,17 @@
       {
         "label": "Website",
         "href": "https://www.usemoss.dev/",
-        "style": "secondary"
+        "icon": "globe"
       },
       {
-        "label": "Dashboard ›",
+        "label": "Portal ›",
         "href": "https://portal.usemoss.dev/auth/login",
-        "style": "primary"
+        "icon": "square-terminal"
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/usemoss/moss-samples"
+        "href": "https://github.com/usemoss/moss-samples",
+        "icon": "github"
       }
     ]
   },
