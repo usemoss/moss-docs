@@ -11,12 +11,17 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "Home",
+        "pages": [
+          "index"
+        ]
+      },
+      {
         "tab": "Docs",
         "groups": [
           {
             "group": "Start",
             "pages": [
-              "index",
               "start/what-is-moss",
               "start/quickstart-js",
               "start/quickstart-python",
