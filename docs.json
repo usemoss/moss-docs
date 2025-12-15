@@ -22,14 +22,8 @@
           {
             "group": "Community",
             "pages": [
-              {
-                "page": "start/community",
-                "icon": "discord"
-              },
-              {
-                "page": "start/support",
-                "icon": "mail"
-              }
+              "start/community",
+              "start/support"
             ]
           },
           {
