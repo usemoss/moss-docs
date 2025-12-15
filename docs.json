@@ -29,8 +29,8 @@
           {
             "group": "Getting Started",
             "pages": [
-              "start/quickstart",
               "start/what-is-moss",
+              "start/quickstart",
               "start/core-concepts",
               "reference/sdk"
             ]

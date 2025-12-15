@@ -14,10 +14,9 @@ Prerequisites:
 
 <CodeGroup>
 ```bash JavaScript
-npm install @inferedge/moss dotenv
+npm install @inferedge/moss
 ```
 ```bash Python
-python -m venv .venv && source .venv/bin/activate
 pip install inferedge-moss
 ```
 </CodeGroup>
@@ -30,7 +29,6 @@ From the Moss portal, copy your project credentials. Set them as env vars:
 export MOSS_PROJECT_ID="your_project_id"
 export MOSS_PROJECT_KEY="your_project_key"
 ```
-For JS, you can also use a `.env` file (loaded via `dotenv` in the sample).
 
 ## 3) Create and query an index
 
@@ -39,8 +37,6 @@ Save and run (`npx tsx quickstart.ts` or `python quickstart.py`):
 <CodeGroup>
 ```ts JavaScript
 import { MossClient, DocumentInfo } from '@inferedge/moss'
-import { config } from 'dotenv'
-config()
 
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 
