@@ -20,6 +20,13 @@
         "tab": "SDK",
         "groups": [
           {
+            "group": "Community",
+            "pages": [
+              "start/community",
+              "start/support"
+            ]
+          },
+          {
             "group": "Getting Started",
             "pages": [
               "start/quickstart",
