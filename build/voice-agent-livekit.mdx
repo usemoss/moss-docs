@@ -1,0 +1,65 @@
+---
+title: "Voice Agent (LiveKit)"
+description: "Use Moss with LiveKit to power a voice agent"
+---
+
+## Problem
+Voice agents need real-time retrieval to answer with fresh, contextual knowledge.
+
+## Architecture
+- LiveKit voice pipeline
+- Moss index for fast retrieval (sub-10 ms)
+- Fetch top-k -> rerank -> respond via LiveKit
+
+<Note>
+  LiveKit provides the real-time audio pipeline (STT/LLM/TTS); Moss supplies fast retrieval.
+  See <a href="https://docs.livekit.io/agents/start/voice-ai/" target="_blank" rel="noreferrer">LiveKit voice AI quickstart</a>.
+</Note>
+
+## Prerequisites
+- Python 3.8+
+- LiveKit credentials (`LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, `LIVEKIT_URL`)
+- Moss credentials (`MOSS_PROJECT_ID`, `MOSS_PROJECT_KEY`) and an existing index (`MOSS_INDEX_NAME`, e.g., FAQs)
+- OpenAI API key (`OPENAI_API_KEY`)
+- Deepgram API key (`DEEPGRAM_API_KEY`)
+- Cartesia API key (`CARTESIA_API_KEY`)
+
+## Run the sample (Python)
+
+Using the LiveKit voice agent sample in [`moss-samples`](https://github.com/usemoss/moss-samples/tree/main/livekit-moss-vercel/livekit-voice-agent/livekit-moss-agent):
+
+1) Install deps:
+```bash
+git clone https://github.com/usemoss/moss-samples.git
+cd moss-samples/livekit-moss-vercel/livekit-voice-agent/livekit-moss-agent
+pip install -r requirements.txt
+```
+
+2) Create `.env.local` with your keys:
+```env
+MOSS_PROJECT_ID=your_project_id
+MOSS_PROJECT_KEY=your_project_key
+MOSS_INDEX_NAME=faqs
+LIVEKIT_API_KEY=...
+LIVEKIT_API_SECRET=...
+LIVEKIT_URL=...
+OPENAI_API_KEY=...
+DEEPGRAM_API_KEY=...
+CARTESIA_API_KEY=...
+```
+
+3) Ensure the Moss index exists (e.g., create `faqs` using the [Quickstart](/start/quickstart) sample data).
+
+4) Run the agent:
+```bash
+python agent.py
+```
+
+The agent:
+- Connects to LiveKit Agents
+- Loads the Moss index on start
+- Uses `search_support_faqs` to ground answers from Moss
+- Streams responses via LiveKit TTS
+
+## Outcome
+Voice agents answer with sub-10 ms retrieval and live audio response.

@@ -1,13 +1,13 @@
 ---
-title: "Offline-first Search"
-description: "Build local-first semantic search with fast, private queries"
+title: "Sub-10ms Knowledge Retrieval"
+description: "Build fast, private semantic retrieval with Moss"
 ---
 
 ## Problem
-Search must work without network access and stay private.
+You need sub-10 ms retrieval and instant index updates without heavy infrastructure.
 
 ## Architecture
-- Local embeddings and index stored on device
+- Index once; query in sub-10 ms
 - Optional background sync to cloud
 - Query pipeline: text -> embed -> retrieve -> rerank (optional)
 
@@ -17,7 +17,7 @@ Search must work without network access and stay private.
 import { MossClient } from '@inferedge/moss'
 
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
-const indexName = 'offline-demo'
+const indexName = 'knowledge-demo'
 
 await client.createIndex(indexName, docs, 'moss-minilm')
 await client.loadIndex(indexName)
@@ -25,4 +25,4 @@ const hits = await client.query(indexName, 'install steps offline', 5)
 ```
 
 ## Result
-Sub-10ms queries with zero network dependency.
+Sub-10 ms queries with minimal infra and optional sync.
