@@ -43,7 +43,7 @@
             ]
           },
           {
-            "group": "Integrations",
+            "group": "How it works",
             "pages": [
               "integrate/authentication",
               "integrate/indexing-data",
