@@ -51,6 +51,68 @@
               "integrate/storage-persistence",
               "integrate/deployment-production"
             ]
+          },
+          {
+            "group": "SDK Reference",
+            "pages": [
+              {
+                "group": "JavaScript",
+                "pages": [
+                  "reference/js/api",
+                  {
+                    "group": "Classes",
+                    "pages": [
+                      "reference/js/classes/MossClient"
+                    ]
+                  },
+                  {
+                    "group": "Interfaces",
+                    "pages": [
+                      "reference/js/interfaces/ModelRef",
+                      "reference/js/interfaces/IndexInfo",
+                      "reference/js/interfaces/DocumentInfo",
+                      "reference/js/interfaces/QueryResultDocumentInfo",
+                      "reference/js/interfaces/SearchResult",
+                      "reference/js/interfaces/AddDocumentsOptions",
+                      "reference/js/interfaces/GetDocumentsOptions",
+                      "reference/js/interfaces/SerializedIndex"
+                    ]
+                  },
+                  {
+                    "group": "Type Aliases",
+                    "pages": [
+                      "reference/js/type-aliases/ISODate",
+                      "reference/js/type-aliases/MossModel"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Python",
+                "pages": [
+                  "reference/python/api",
+                  {
+                    "group": "Classes",
+                    "pages": [
+                      "reference/python/classes/MossClient"
+                    ]
+                  },
+                  {
+                    "group": "Interfaces",
+                    "pages": [
+                      "reference/python/interfaces/ModelRef",
+                      "reference/python/interfaces/IndexInfo",
+                      "reference/python/interfaces/DocumentInfo",
+                      "reference/python/interfaces/QueryResultDocumentInfo",
+                      "reference/python/interfaces/SearchResult",
+                      "reference/python/interfaces/AddDocumentsOptions",
+                      "reference/python/interfaces/GetDocumentsOptions",
+                      "reference/python/interfaces/SerializedIndex"
+                    ]
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
