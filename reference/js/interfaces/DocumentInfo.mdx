@@ -1,0 +1,33 @@
+[@inferedge/moss](../api) / DocumentInfo
+
+# Interface: DocumentInfo
+
+Document that can be indexed and retrieved.
+
+## Extended by
+
+- [`QueryResultDocumentInfo`](QueryResultDocumentInfo)
+
+## Properties
+
+### id
+
+> **id**: `string`
+
+Unique identifier within an index.
+
+***
+
+### text
+
+> **text**: `string`
+
+REQUIRED canonical text to embed/search.
+
+***
+
+### metadata?
+
+> `optional` **metadata**: `Record`\<`string`, `string`\>
+
+Optional metadata associated with the document.
