@@ -1,0 +1,47 @@
+---
+title: "Core Concepts"
+description: "Understand indexing, embeddings, retrieval, and storage in Moss"
+---
+
+This page defines the core concepts you’ll use across Moss.
+
+## Index
+Structure that powers fast, local search. You add documents, we build an efficient index for sub-10ms queries.
+
+### Document schema
+- `id` (string), `text` (string), `metadata` (optional string map)
+- Upserts replace matching `id`s; keep ids stable for updates
+
+## Embeddings
+Semantic vector representations of text. Can be generated locally or via a remote model, then stored alongside your index.
+
+### Chunking
+- Aim for ~200–500 tokens per chunk; overlap 10–20%
+- Smaller chunks improve recall; overlap preserves context continuity
+
+## Retrieval
+How results are fetched. Options include vector similarity, keyword, and hybrid methods with scoring and reranking.
+
+### Retrieval knobs
+- `top_k`: number of results to return
+- `alpha`: blend semantic (1.0) vs keyword (0.0); defaults semantic-heavy
+- Filters: constrain by metadata (e.g., category/lang)
+- Rerank: reorder top-k for precision
+
+## Storage & Sync
+Persist indexes locally (desktop/mobile). Optionally sync segments to the cloud for backup and sharing.
+
+## Models
+- `moss-minilm` (default): fast, lightweight for edge/offline
+- `moss-mediumlm`: higher accuracy with reasonable performance
+
+## Authentication
+Used for optional cloud features like syncing or hosted embedding models. Local mode requires no network access.
+
+## Lifecycle
+- Create index → upsert docs → load → query → delete when done
+- Supports multiple indexes per project
+
+## Performance expectations
+- Sub-10ms local queries (hardware-dependent)
+- Sync is optional; compute stays on-device

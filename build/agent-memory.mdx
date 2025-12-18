@@ -1,0 +1,30 @@
+---
+title: "Agent Knowledge"
+description: "Add long-term knowledge to AI agents with Moss"
+---
+
+## Problem
+Agents forget context across sessions. We need durable knowledge.
+
+## Architecture
+- Store interactions as documents with embeddings
+- Retrieve relevant knowledge per prompt
+- Update the knowledge store after each turn
+
+## Code walkthrough (JavaScript)
+
+```ts
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+
+const index = 'agent-knowledge'
+await client.createIndex(index, [
+  { id: 'user_profile', text: 'User prefers concise answers.' }
+], 'moss-minilm')
+
+await client.loadIndex(index)
+const memories = await client.query(index, 'preferences for responses', 3)
+```
+
+## Result
+Agents recall user preferences and prior context reliably.

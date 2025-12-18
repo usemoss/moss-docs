@@ -1,0 +1,18 @@
+---
+title: "Errors"
+description: "Troubleshoot common issues"
+---
+
+## Common errors
+
+### Unauthorized
+Ensure `MOSS_PROJECT_ID` and `MOSS_PROJECT_KEY` are set in your environment.
+
+### Missing embeddings runtime
+Select a supported model during index creation (e.g., `moss-minilm`).
+
+### Index not found
+Ensure you’ve upserted documents before querying.
+
+### Index not loaded
+Call `loadIndex(name)` (JS) or `load_index(name)` (Python) before `query`.

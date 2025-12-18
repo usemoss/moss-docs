@@ -1,104 +1,84 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Moss Docs",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#C63FA9",
+    "light": "#E868CF",
+    "dark": "#8A2C7E"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/moss-dark.png",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
+        "tab": "Home",
+        "pages": [
+          "index"
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "SDK",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Community",
             "pages": [
-              "api-reference/introduction"
+              "start/community",
+              "start/support"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Getting Started",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "start/what-is-moss",
+              "start/quickstart",
+              "start/core-concepts",
+              "reference/sdk"
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              "build/offline-first-search",
+              "build/voice-agent-livekit"
+            ]
+          },
+          {
+            "group": "How it works",
+            "pages": [
+              "integrate/authentication",
+              "integrate/indexing-data",
+              "integrate/retrieval",
+              "integrate/storage-persistence",
+              "integrate/deployment-production"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/moss-wordmark-light.svg",
+    "dark": "/logo/moss-wordmark-dark.svg"
   },
+  
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Website",
+        "href": "https://www.usemoss.dev/",
+        "icon": "globe"
+      },
+      {
+        "label": "Portal ›",
+        "href": "https://portal.usemoss.dev/auth/login",
+        "icon": "square-terminal"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/usemoss/moss-samples",
+        "icon": "github"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "contextual": {
     "options": [
@@ -114,9 +94,9 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/usemoss",
+      "github": "https://github.com/usemoss",
+      "linkedin": "https://linkedin.com/company/mossdev"
     }
   }
 }

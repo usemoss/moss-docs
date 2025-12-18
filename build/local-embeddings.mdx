@@ -1,0 +1,21 @@
+---
+title: "Local Embeddings"
+description: "Run embeddings locally for privacy and reliability"
+---
+
+## Why local
+Keep data on-device and remove network as a bottleneck.
+
+## Setup
+Use a local model where supported, or pick a remote embedding in index creation.
+
+```ts
+import { MossClient } from '@inferedge/moss'
+const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
+await client.createIndex('local-embeddings', docs, 'moss-minilm')
+```
+
+## Tips
+- Batch inputs for speed
+- Cache vectors for unchanged content
+- Use hybrid retrieval for best relevance

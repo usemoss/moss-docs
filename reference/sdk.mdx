@@ -1,0 +1,105 @@
+---
+title: "SDK Reference"
+description: "Classes and methods for Moss SDKs"
+---
+
+High-level overview of the official SDKs. For endpoint details, see the API Reference.
+
+## What’s included
+- On-device vector search with optional cloud sync for indexes
+- Semantic, keyword, and hybrid retrieval (tune via `alpha`)
+- Multi-index support and privacy-first footprint (Rust core under the hood)
+
+## Use cases
+- Knowledge base search with cloud backup
+- Voice/agent knowledge with persistent indexes
+- Personal/edge search with cloud fallback
+
+## Install
+- JavaScript/TypeScript: `npm install @inferedge/moss`
+- Python: `pip install inferedge-moss`
+
+## Models
+- `moss-minilm` (default): fast, lightweight, great for edge/offline
+- `moss-mediumlm`: higher accuracy with reasonable performance
+
+## Client lifecycle
+- Create index with docs + model → Load index → Query (`top_k`, `alpha`, filters) → Upsert/delete docs → Delete index when done
+
+## Examples (JS/Python)
+
+<CodeGroup>
+```ts JavaScript
+import { MossClient, DocumentInfo } from '@inferedge/moss'
+
+const client = new MossClient(projectId, projectKey)
+
+const docs: DocumentInfo[] = [
+  { id: 'doc1', text: 'Track orders in your account.', metadata: { category: 'shipping' } },
+  { id: 'doc2', text: '30-day return policy for most items.', metadata: { category: 'returns' } },
+  { id: 'doc3', text: 'Change address via customer service.', metadata: { category: 'support' } },
+]
+
+await client.createIndex('faqs', docs, 'moss-minilm') // creates & syncs
+await client.loadIndex('faqs') // loads from cloud or cache
+const results = await client.query('faqs', 'return a damaged product', 3, { alpha: 0.6 }) // alpha: 1.0 semantic, 0.0 keyword
+await client.deleteIndex('faqs')
+```
+
+```python Python
+from inferedge_moss import MossClient, DocumentInfo
+
+client = MossClient(project_id, project_key)
+
+documents = [
+    DocumentInfo(id="doc1", text="Track your order in your account", metadata={"category": "shipping"}),
+    DocumentInfo(id="doc2", text="30-day return policy for most items", metadata={"category": "returns"}),
+    DocumentInfo(id="doc3", text="Change shipping address via support", metadata={"category": "support"}),
+]
+
+await client.create_index("faqs", documents, "moss-minilm")
+await client.load_index("faqs")
+res = await client.query("faqs", "return a damaged product", top_k=3, alpha=0.6)  # 1.0 semantic, 0.0 keyword
+await client.delete_index("faqs")
+```
+</CodeGroup>
+
+## Common types
+- `DocumentInfo` – `{ id: string; text: string; metadata?: Record<string,string> }`
+- `AddDocumentsOptions` – `{ upsert?: boolean }`
+- `alpha` (query option) – blend semantic (1.0) vs keyword (0.0); defaults to semantic-heavy
+
+## Hybrid search controls
+
+<CodeGroup>
+```ts JavaScript
+// Pure keyword
+await client.query('faqs', 'return policy', 3, { alpha: 0.0 })
+
+// Default (semantic heavy)
+await client.query('faqs', 'return policy', 3) // alpha defaults to semantic-heavy (e.g., ~0.8)
+
+// Pure semantic
+await client.query('faqs', 'return policy', 3, { alpha: 1.0 })
+```
+
+```python Python
+# Pure keyword
+await client.query("faqs", "return policy", top_k=3, alpha=0.0)
+
+# Default (semantic heavy)
+await client.query("faqs", "return policy", top_k=3)  # alpha defaults to semantic-heavy (e.g., ~0.8)
+
+# Pure semantic
+await client.query("faqs", "return policy", top_k=3, alpha=1.0)
+```
+</CodeGroup>
+
+## Sample code
+- Repo: [moss-samples](https://github.com/usemoss/moss-samples)
+- JavaScript: `javascript/comprehensive_sample.ts`, `javascript/load_and_query_sample.ts`
+- Python: `python/comprehensive_sample.py`, `python/load_and_query_sample.py`
+- Python deps: `pip install -r python/requirements.txt`, then `python path/to/sample.py`
+- Python walkthrough:
+
+![Moss Python walkthrough](https://github.com/user-attachments/assets/d826023d-92d6-49ac-8e5e-81cf04d409c5)
