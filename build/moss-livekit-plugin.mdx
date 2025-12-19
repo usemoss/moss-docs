@@ -1,0 +1,290 @@
+Integrate high-performance semantic search into your LiveKit voice agents with the `livekit-plugins-moss` plugin. This guide covers installation, configuration, and real-world usage patterns for building intelligent agents with sub-10ms semantic search capabilities.
+
+## Why Use Moss with LiveKit?
+
+### Ultra-Low Latency
+
+Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval from device memory, ensuring your agents respond naturally without noticeable delays.
+
+### Privacy & Offline Capability
+
+Searches happen locally on-device. Your sensitive data never needs to leave the agent. Optionally sync indexes to cloud for persistence.
+
+### Multi-Index Management
+
+Manage multiple isolated search spaces within a single agent instance. Perfect for multi-tenant scenarios or agents with different knowledge domains.
+
+### Cloud Integration
+
+Automatic index synchronization with cloud storage for backup, recovery, and cross-device access.
+
+## Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- LiveKit Agents framework
+- Valid InferEdge project credentials (for cloud features)
+
+### Install the Plugin
+
+```bash
+git clone https://github.com/usemoss/agents.git
+cd livekit-plugins/livekit-plugins-moss
+python -m venv .venv 
+source .venv/bin/activate 
+python -m pip install --upgrade pip setuptools build
+python -m pip install -e .
+```
+
+## Quick Start
+
+### 1. Basic Setup with Environment Variables
+
+```python
+from livekit.plugins.moss import MossClient, DocumentInfo
+
+# Initialize client (reads MOSS_PROJECT_ID and MOSS_PROJECT_KEY from environment)
+client = MossClient()
+
+# Create an index with documents
+documents = [
+    DocumentInfo(id="doc1", text="Semantic search is fast"),
+    DocumentInfo(id="doc2", text="fusion of keyword and semantic search is supported"),
+    DocumentInfo(id="doc3", text="Sub-10ms retrieval from device memory"),
+]
+
+await client.create_index(
+    "knowledge-base",
+    documents,
+    model_id="moss-minilm",
+)
+
+# Query the index
+result = await client.query("knowledge-base", "fast search", top_k=5)
+for doc in result.docs:
+    print(f"{doc.id}: {doc.text} (score: {doc.score:.4f})")
+```
+
+### 2. Environment Configuration
+
+Set these environment variables before running your agent:
+
+```bash
+export MOSS_PROJECT_ID="your-project-id"
+export MOSS_PROJECT_KEY="your-project-key"
+```
+
+Alternatively, pass credentials directly:
+
+```python
+from livekit.plugins.moss import MossClient
+
+client = MossClient(
+    project_id="your-project-id",
+    project_key="your-project-key"
+)
+```
+
+## API Reference
+
+The `MossClient` in `livekit-plugins-moss` is a thin wrapper around the standard Moss SDK. It provides the same methods and functionality.
+
+For complete API documentation, including method signatures and parameters, please refer to the [Moss Python SDK Reference](/reference/python/README.md).
+
+## Advanced Usage Patterns
+
+### Hybrid Search Tuning
+
+Control the balance between semantic and keyword relevance:
+
+```python
+# Pure keyword search (exact matches)
+result = await client.query("docs", "python programming", alpha=0.0)
+
+# Balanced search
+result = await client.query("docs", "python programming", alpha=0.5)
+
+# Pure semantic search (similarity-based)
+result = await client.query("docs", "python programming", alpha=1.0)
+```
+
+### Multi-Index Voice Agent
+
+Manage multiple knowledge bases within a single agent:
+
+```python
+client = MossClient()
+
+# Setup knowledge bases
+faq_docs = [DocumentInfo(id="faq1", text="FAQ content")]
+product_docs = [DocumentInfo(id="prod1", text="Product info")]
+
+await client.create_index("faqs", faq_docs, "moss-minilm")
+await client.create_index("products", product_docs, "moss-minilm")
+
+# Load both indexes
+await client.load_index("faqs")
+await client.load_index("products")
+```
+
+### Document Metadata for Filtering
+
+Use metadata to add context and enable filtering:
+
+```python
+documents = [
+    DocumentInfo(
+        id="order-1",
+        text="Track your order in account dashboard",
+        metadata={"category": "shipping", "dept": "support"}
+    ),
+    DocumentInfo(
+        id="return-1",
+        text="30-day return policy applies",
+        metadata={"category": "returns", "dept": "support"}
+    ),
+]
+
+await client.create_index("support-docs", documents, "moss-minilm")
+
+# Query with context from metadata
+result = await client.query("support-docs", "how to return", top_k=3)
+for doc in result.docs:
+    if doc.metadata.get("category") == "returns":
+        print(f"Found relevant return info: {doc.text}")
+```
+
+### Dynamic Index Updates
+
+Add documents to an index during agent runtime:
+
+```python
+# Initial index
+await client.create_index("knowledge", initial_docs, "moss-minilm")
+
+# Later, add new knowledge
+new_docs = [
+    DocumentInfo(id="new-1", text="New policy information")
+]
+await client.add_docs("knowledge", new_docs)
+
+# Documents are immediately available for search
+result = await client.query("knowledge", "policy")
+```
+
+## Best Practices
+
+### 1. Index Strategy
+
+- **Use semantic indexing for natural language content** — Customer queries, FAQs, documentation
+- **Use keyword search for structured data** — Product SKUs, error codes, IDs
+- **Blend searches** — Set `alpha` between 0.5-0.8 for most conversational use cases
+
+### 2. Model Selection
+
+- **`moss-minilm`** — Recommended for voice agents. Lightweight, fast, good accuracy for conversational content
+- **`moss-mediumlm`** — Use when higher accuracy is critical and latency permits
+
+### 3. Metadata Usage
+
+- Add meaningful metadata for context and filtering
+- Keep metadata lightweight (small dictionaries)
+- Use for categorization and sorting results
+
+## Troubleshooting
+
+### Index Not Found
+
+Ensure the index is created and loaded before querying:
+
+```python
+# Create if needed
+if not await client.list_indexes():
+    await client.create_index("my-index", docs, "moss-minilm")
+
+# Always load before querying
+await client.load_index("my-index")
+```
+
+### Improving Search Results
+
+- Adjust `alpha` parameter (try 0.6-0.9 for voice content)
+- Ensure document text is clear and descriptive
+- Consider using `moss-mediumlm` for higher accuracy
+- Add relevant metadata for filtering
+
+## Complete Example: Voice Agent FAQ System
+
+```python
+import asyncio
+from livekit.plugins.moss import MossClient, DocumentInfo
+
+class FAQVoiceAgent:
+    def __init__(self):
+        self.client = MossClient()
+        self.index_name = "faq-base"
+    
+    async def setup(self):
+        """Initialize the agent with FAQ data"""
+        faqs = [
+            DocumentInfo(
+                id="shipping-info",
+                text="Standard shipping takes 5-7 business days. Express shipping is available for 2-3 day delivery."
+            ),
+            DocumentInfo(
+                id="return-process",
+                text="To return an item, log into your account, find the order, and click 'Return Item'. Include the return label in your package."
+            ),
+            DocumentInfo(
+                id="payment-methods",
+                text="We accept all major credit cards, PayPal, Apple Pay, and Google Pay."
+            ),
+        ]
+        
+        await self.client.create_index(
+            self.index_name,
+            faqs,
+            model_id="moss-minilm"
+        )
+        await self.client.load_index(self.index_name)
+    
+    async def answer_question(self, question: str) -> str:
+        """Find and return relevant FAQ answer"""
+        result = await self.client.query(
+            self.index_name,
+            question,
+            top_k=1,
+            alpha=0.8
+        )
+        
+        if result.docs and result.docs[0].score > 0.3:
+            return result.docs[0].text
+        else:
+            return "I'm not sure about that. Please contact customer support."
+
+async def main():
+    agent = FAQVoiceAgent()
+    await agent.setup()
+    
+    # Test questions
+    questions = [
+        "How long does shipping take?",
+        "Can I return my order?",
+        "What payment methods do you accept?"
+    ]
+    
+    for q in questions:
+        answer = await agent.answer_question(q)
+        print(f"Q: {q}")
+        print(f"A: {answer}\n")
+
+asyncio.run(main())
+```
+
+## Resources
+
+- **[Moss Python SDK Reference](/reference/python/README.md)** — Complete Moss SDK reference
+- **[LiveKit Agents Documentation](https://docs.livekit.io/agents)** — LiveKit framework guides
+- **[Moss Platform](https://portal.usemoss.dev/)** — Manage projects and credentials
+    
