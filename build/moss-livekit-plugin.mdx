@@ -42,10 +42,10 @@ python -m pip install -e .
 ### 1. Basic Setup with Environment Variables
 
 ```python
-from livekit.plugins.moss import MossClient, DocumentInfo
+from livekit.plugins.moss import Client, DocumentInfo
 
 # Initialize client (reads MOSS_PROJECT_ID and MOSS_PROJECT_KEY from environment)
-client = MossClient()
+client = Client()
 
 # Create an index with documents
 documents = [
@@ -78,9 +78,9 @@ export MOSS_PROJECT_KEY="your-project-key"
 Alternatively, pass credentials directly:
 
 ```python
-from livekit.plugins.moss import MossClient
+from livekit.plugins.moss import Client
 
-client = MossClient(
+client = Client(
     project_id="your-project-id",
     project_key="your-project-key"
 )
@@ -88,7 +88,7 @@ client = MossClient(
 
 ## API Reference
 
-The `MossClient` in `livekit-plugins-moss` is a thin wrapper around the standard Moss SDK. It provides the same methods and functionality.
+The `Client` in `livekit-plugins-moss` is a thin wrapper around the standard Moss SDK. It provides the same methods and functionality.
 
 For complete API documentation, including method signatures and parameters, please refer to the [Moss Python SDK Reference](/reference/python/README.md).
 
@@ -114,7 +114,7 @@ result = await client.query("docs", "python programming", alpha=1.0)
 Manage multiple knowledge bases within a single agent:
 
 ```python
-client = MossClient()
+client = Client()
 
 # Setup knowledge bases
 faq_docs = [DocumentInfo(id="faq1", text="FAQ content")]
@@ -218,11 +218,11 @@ await client.load_index("my-index")
 
 ```python
 import asyncio
-from livekit.plugins.moss import MossClient, DocumentInfo
+from livekit.plugins.moss import Client, DocumentInfo
 
 class FAQVoiceAgent:
     def __init__(self):
-        self.client = MossClient()
+        self.client = Client()
         self.index_name = "faq-base"
     
     async def setup(self):
