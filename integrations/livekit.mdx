@@ -6,7 +6,7 @@ This guide demonstrates how to integrate the Moss Semantic Search SDK (inferedge
 
 ### Ultra-Low Latency
 
-Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval from device memory, ensuring your agents respond naturally without noticeable delays.
+Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval, ensuring your agents respond naturally without noticeable delays.
 
 ### Multi-Index Management
 
@@ -17,19 +17,17 @@ Manage multiple isolated search spaces within a single agent instance. Perfect f
 - Python 3.10 or higher
 - Moss api
 - LiveKit api
-- Cartesia api
 - OpenAI api
 - Deepgram api
 
 ## 1. Installation
 
-Install the LiveKit Agents framework, the Moss SDK, and the necessary plugins (OpenAI for LLM, Deepgram for STT, Cartesia for TTS).
+Install the LiveKit Agents framework, the Moss SDK, and the necessary plugins (OpenAI for LLM and TTS, Deepgram for STT).
 
 ```bash
 pip install livekit-agents \
     livekit-plugins-openai \
     livekit-plugins-deepgram \
-    livekit-plugins-cartesia \
     livekit-plugins-silero \
     livekit-plugins-turn-detector \
     inferedge-moss \
@@ -55,7 +53,6 @@ MOSS_PROJECT_KEY=your-moss-key
 # AI Provider Keys
 OPENAI_API_KEY=sk-...
 DEEPGRAM_API_KEY=your-deepgram-key
-CARTESIA_API_KEY=your-cartesia-key
 ```
 
 ## 3. Creating the Knowledge Base
@@ -129,8 +126,8 @@ import asyncio
 import logging
 import os
 from dotenv import load_dotenv
-
-# LiveKit Imports
+from livekit.plugins import openai, deepgram, silero
+from livekit.plugins.turn_detector.english import EnglishModel
 from livekit.agents import (
     JobContext,
     WorkerOptions,
@@ -140,8 +137,7 @@ from livekit.agents import (
     Agent,
     AgentSession,
 )
-from livekit.plugins import openai, deepgram, silero, cartesia
-from livekit.plugins.turn_detector.english import EnglishModel
+
 
 # Moss Import
 from inferedge_moss import MossClient
@@ -151,16 +147,13 @@ load_dotenv()
 # Configuration
 MOSS_PROJECT_ID = os.getenv("MOSS_PROJECT_ID")
 MOSS_PROJECT_KEY = os.getenv("MOSS_PROJECT_KEY")
-INDEX_NAME = "product-knowledge"
+INDEX_NAME = os.getenv("MOSS_INDEX_NAME", "product-knowledge")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("moss-agent")
 
 class MossSemanticRetrievalAgent(Agent):
-    """
-    Agent that automatically queries Moss and injects context 
-    every time the user speaks (Context Injection Pattern).
-    """
+
     def __init__(self, moss_client: MossClient):
         super().__init__(
             instructions="""
@@ -172,7 +165,7 @@ class MossSemanticRetrievalAgent(Agent):
         )
         self.moss = moss_client
 
-    async def on_user_message(self, turn_ctx: ChatContext, new_message: ChatMessage) -> None:
+    async def on_user_turn_completed(self, turn_ctx: ChatContext, new_message: ChatMessage) -> None:
         """
         Intercept user message -> Search Moss -> Inject Context -> Continue
         """
@@ -191,17 +184,19 @@ class MossSemanticRetrievalAgent(Agent):
             # 2. Context Injection
             if results.docs:
                 context_str = "\n".join([f"- {d.text}" for d in results.docs])
-                injection = f"Relevant context:\n{context_str}\n\nAnswer the user based on this."
+                injection = f"Relevant context from knowledge base:\n{context_str}\n\nUse this to answer the user."
                 
                 # Insert into chat history as a system message
                 turn_ctx.add_message(role="system", content=injection)
-                logger.info(f"Injected context length: {len(context_str)}")
+                logger.info(f"Injected context: {context_str[:100]}...")  # Log first 100 chars
+            else:
+                logger.info("No relevant context found in Moss index")
                 
         except Exception as e:
-            logger.error(f"Moss search failed: {e}")
+            logger.error(f"Moss search failed: {e}", exc_info=True)
 
         # 3. Proceed with standard generation
-        await super().on_user_message(turn_ctx, new_message)
+        await super().on_user_turn_completed(turn_ctx, new_message)
 
 
 async def entrypoint(ctx: JobContext):
@@ -213,14 +208,16 @@ async def entrypoint(ctx: JobContext):
     # Pre-load index
     try:
         await moss_client.load_index(INDEX_NAME)
-    except Exception:
-        logger.warning("Index not found or failed to load.")
+        logger.info(f"Successfully loaded index: {INDEX_NAME}")
+    except Exception as e:
+        logger.warning(f"Index not found or failed to load: {e}")
+        logger.warning("Moss queries will fail until the index is created. Run upload.py first.")
 
     # Create Session
     session = AgentSession(
         stt=deepgram.STT(),
         llm=openai.LLM(model="gpt-4o"),
-        tts=cartesia.TTS(),
+        tts=openai.TTS(),
         turn_detection=EnglishModel(),
         vad=silero.VAD.load(),
     )
