@@ -1,0 +1,302 @@
+# Building Voice Agents with LiveKit and Moss
+
+This guide demonstrates how to integrate the Moss Semantic Search SDK (inferedge-moss) directly into a LiveKit Voice Agent. This setup allows your voice AI to perform ultra-low latency searches over your custom data to answer user questions in real-time.
+
+## Why Use Moss with LiveKit?
+
+### Ultra-Low Latency
+
+Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval from device memory, ensuring your agents respond naturally without noticeable delays.
+
+### Privacy & Offline Capability
+
+Searches happen locally on-device. Your sensitive data never needs to leave the agent.
+
+### Multi-Index Management
+
+Manage multiple isolated search spaces within a single agent instance. Perfect for multi-tenant scenarios or agents with different knowledge domains.
+
+## Prerequisites
+
+- Python 3.10 or higher
+- A LiveKit Cloud project
+- A Moss (InferEdge) project
+- A Cartesia account (for high-fidelity TTS)
+
+## 1. Installation
+
+Install the LiveKit Agents framework, the Moss SDK, and the necessary plugins (OpenAI for LLM, Deepgram for STT, Cartesia for TTS).
+
+```bash
+pip install livekit-agents \
+    livekit-plugins-openai \
+    livekit-plugins-deepgram \
+    livekit-plugins-cartesia \
+    livekit-plugins-silero \
+    livekit-plugins-turn-detector \
+    inferedge-moss \
+    python-dotenv
+```
+
+## 2. Environment Configuration
+
+Create a `.env` file in your project root directory with your API keys.
+
+**File: .env**
+
+```bash
+# LiveKit Credentials
+LIVEKIT_URL=wss://your-project.livekit.cloud
+LIVEKIT_API_KEY=your-api-key
+LIVEKIT_API_SECRET=your-api-secret
+
+# Moss Credentials
+MOSS_PROJECT_ID=your-moss-id
+MOSS_PROJECT_KEY=your-moss-key
+
+# AI Provider Keys
+OPENAI_API_KEY=sk-...
+DEEPGRAM_API_KEY=your-deepgram-key
+CARTESIA_API_KEY=your-cartesia-key
+```
+
+**Important:** Add `.env` to your `.gitignore` file to keep your credentials secure:
+
+```bash
+echo ".env" >> .gitignore
+```
+
+## 3. Creating the Knowledge Base
+
+Before the agent can answer questions, you must index your data. Run this script once to upload documents to Moss.
+
+**File: build_index.py**
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from inferedge_moss import MossClient, DocumentInfo
+
+load_dotenv()
+
+async def main():
+    # Initialize the Moss Client
+    client = MossClient(
+        project_id=os.environ["MOSS_PROJECT_ID"],
+        project_key=os.environ["MOSS_PROJECT_KEY"]
+    )
+    
+    index_name = "product-knowledge"
+
+    # Define documents
+    docs = [
+        DocumentInfo(
+            id="1", 
+            text="Our return policy allows returns within 30 days of purchase with a receipt."
+        ),
+        DocumentInfo(
+            id="2", 
+            text="Standard shipping takes 3-5 business days. Express shipping takes 1-2 days."
+        ),
+        DocumentInfo(
+            id="3", 
+            text="Technical support is available 24/7 via email at support@example.com."
+        ),
+    ]
+
+    print(f"Creating index '{index_name}'...")
+    
+    # 'moss-minilm' is recommended for low-latency voice applications
+    await client.create_index(index_name, docs, model_id="moss-minilm")
+    
+    print("Index created successfully.")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Run the builder:
+
+```bash
+python build_index.py
+```
+
+## 4. Building the Agent
+
+This implementation uses a **Context Injection pattern** where Moss search results are automatically injected into the conversation context on every user turn. This is faster and more consistent than tool calling, as the LLM always has relevant context without needing to decide when to search.
+
+**Key Architecture:**
+- **Automatic semantic-retrieval**: Moss is queried automatically on every user message
+- **Context Injection**: Search results are injected into the chat history before the LLM generates a response
+- **Lower Latency**: No LLM "thinking" step to decide whether to search—it just happens
+
+**File: agent.py**
+
+```python
+import asyncio
+import logging
+import os
+from dotenv import load_dotenv
+
+# LiveKit Imports
+from livekit.agents import (
+    JobContext,
+    WorkerOptions,
+    cli,
+    ChatContext,
+    ChatMessage,
+    Agent,
+    AgentSession,
+)
+from livekit.plugins import openai, deepgram, silero, cartesia
+from livekit.plugins.turn_detector.english import EnglishModel
+
+# Moss Import
+from inferedge_moss import MossClient
+
+load_dotenv()
+
+# Configuration
+MOSS_PROJECT_ID = os.getenv("MOSS_PROJECT_ID")
+MOSS_PROJECT_KEY = os.getenv("MOSS_PROJECT_KEY")
+INDEX_NAME = "product-knowledge"
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("moss-agent")
+
+class MossSemanticRetrievalAgent(Agent):
+    """
+    Agent that automatically queries Moss and injects context 
+    every time the user speaks (Context Injection Pattern).
+    """
+    def __init__(self, moss_client: MossClient):
+        super().__init__(
+            instructions="""
+                You are a helpful customer support voice assistant.
+                You have access to a knowledge base which will be provided to you as context.
+                Always answer the user's question based on the provided context.
+                If the context doesn't contain the answer, politely say you don't know.
+            """
+        )
+        self.moss = moss_client
+
+    async def on_user_message(self, turn_ctx: ChatContext, new_message: ChatMessage) -> None:
+        """
+        Intercept user message -> Search Moss -> Inject Context -> Continue
+        """
+        user_query = new_message.text_content
+        logger.info(f"User asked: {user_query}")
+
+        try:
+            # 1. Automatic Search 
+            results = await self.moss.query(
+                INDEX_NAME, 
+                user_query, 
+                top_k=3, 
+                alpha=0.8
+            )
+            
+            # 2. Context Injection
+            if results.docs:
+                context_str = "\n".join([f"- {d.text}" for d in results.docs])
+                injection = f"Relevant context:\n{context_str}\n\nAnswer the user based on this."
+                
+                # Insert into chat history as a system message
+                turn_ctx.add_message(role="system", content=injection)
+                logger.info(f"Injected context length: {len(context_str)}")
+                
+        except Exception as e:
+            logger.error(f"Moss search failed: {e}")
+
+        # 3. Proceed with standard generation
+        await super().on_user_message(turn_ctx, new_message)
+
+
+async def entrypoint(ctx: JobContext):
+    await ctx.connect()
+
+    # Initialize Moss
+    moss_client = MossClient(project_id=MOSS_PROJECT_ID, project_key=MOSS_PROJECT_KEY)
+    
+    # Pre-load index
+    try:
+        await moss_client.load_index(INDEX_NAME)
+    except Exception:
+        logger.warning("Index not found or failed to load.")
+
+    # Create Session
+    session = AgentSession(
+        stt=deepgram.STT(),
+        llm=openai.LLM(model="gpt-4o"),
+        tts=cartesia.TTS(),
+        turn_detection=EnglishModel(),
+        vad=silero.VAD.load(),
+    )
+
+    # Start the session with our custom MossSemanticRetrievalAgent
+    await session.start(
+        agent=MossSemanticRetrievalAgent(moss_client),
+        room=ctx.room,
+    )
+
+if __name__ == "__main__":
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+```
+
+## 5. Running the Agent
+
+Simply start your worker. The necessary VAD models will handle themselves or be downloaded automatically if needed by the plugin.
+
+```bash
+python agent.py download-files
+python agent.py console
+```
+
+You can now connect to this agent using the LiveKit Playground or your own frontend.
+
+## 6. Advanced Use Cases
+
+Since we are using the Context Injection pattern (automatically searching every turn), we handle advanced logic by modifying the `on_user_message` method.
+
+### Hybrid Search Tuning
+
+The `alpha` parameter controls the balance between Keyword Search (BM25) and Semantic Search (Vector). You can adjust this dynamically based on the query length. Short queries often benefit from keyword matching, while long questions benefit from semantic understanding.
+
+**Modify `on_user_message` in agent.py:**
+
+```python
+    async def on_user_message(self, turn_ctx: ChatContext, new_message: ChatMessage) -> None:
+        user_query = new_message.text_content
+        logger.info(f"User asked: {user_query}")
+
+        # Dynamic alpha based on query length
+        # Short query? Use more keyword search (alpha closer to 0)
+        # Long query? Use more semantic search (alpha closer to 1)
+        if len(user_query.split()) < 3:
+            current_alpha = 0.3 
+        else:
+            current_alpha = 0.8
+        
+        # Query with dynamic alpha
+        try:
+            search_results = await self.moss.query(
+                INDEX_NAME, 
+                user_query, 
+                top_k=3, 
+                alpha=current_alpha
+            )
+            
+            if search_results.docs:
+                context_parts = [f"- {doc.text}" for doc in search_results.docs]
+                full_context = "\n".join(context_parts)
+                semantic_retrieval_injection = f"Relevant context from knowledge base:\n{full_context}\n\nUse this to answer the user."
+                
+                turn_ctx.add_message(role="system", content=semantic_retrieval_injection)
+                await self.update_chat_ctx(turn_ctx)
+                
+        except Exception as e:
+            logger.warning(f"Moss search failed: {e}")
+
+        await super().on_user_message(turn_ctx, new_message)
+```

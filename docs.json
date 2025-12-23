@@ -43,6 +43,12 @@
             ]
           },
           {
+            "group": "Integrations",
+            "pages": [
+              "integrations/livekit"
+            ]
+          },
+          {
             "group": "How it works",
             "pages": [
               "integrate/authentication",
