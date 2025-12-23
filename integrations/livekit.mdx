@@ -1,6 +1,5 @@
-# Building Voice Agents with LiveKit and Moss
 
-This guide demonstrates how to integrate the Moss Semantic Search SDK (inferedge-moss) directly into a LiveKit Voice Agent. This setup allows your voice AI to perform ultra-low latency searches over your custom data to answer user questions in real-time.
+Integrate the Moss Semantic Search SDK directly into a LiveKit Voice Agent. This setup allows your voice AI to perform ultra-low latency searches over your custom data to answer user questions in real-time.
 
 ## Why Use Moss with LiveKit?
 
@@ -12,29 +11,23 @@ Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval, e
 
 Manage multiple isolated search spaces within a single agent instance. Perfect for multi-tenant scenarios or agents with different knowledge domains.
 
-## Prerequisites
+## Required Tools
 
-- Python 3.10 or higher
-- Moss api
-- LiveKit api
-- OpenAI api
-- Deepgram api
+- [Moss](https://www.usemoss.dev/)
+- [LiveKit](https://livekit.io/)
+- [OpenAI](https://openai.com/api/)
+- [Deepgram](https://deepgram.com/) 
 
 ## 1. Installation
 
-Install the LiveKit Agents framework, the Moss SDK, and the necessary plugins (OpenAI for LLM and TTS, Deepgram for STT).
+Install the Moss SDK.
 
 ```bash
-pip install livekit-agents \
-    livekit-plugins-openai \
-    livekit-plugins-deepgram \
-    livekit-plugins-silero \
-    livekit-plugins-turn-detector \
-    inferedge-moss \
+pip install inferedge-moss \
     python-dotenv
 ```
 
-## 2. Environment Configuration
+## 2. Environment Setup
 
 Create a `.env` file in your project root directory with your API keys.
 
@@ -55,7 +48,7 @@ OPENAI_API_KEY=sk-...
 DEEPGRAM_API_KEY=your-deepgram-key
 ```
 
-## 3. Creating the Knowledge Base
+## 3. Creating the Knowledge Base with Moss
 
 Before the agent can answer questions, you must index your data. Run this script once to upload documents to Moss.
 
