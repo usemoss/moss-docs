@@ -28,10 +28,10 @@ Create a `.env` file in your project root directory with your API keys.
 **File: .env**
 
 ```bash
-# LiveKit Credentials
-LIVEKIT_URL=wss://your-project.livekit.cloud
-LIVEKIT_API_KEY=your-api-key
-LIVEKIT_API_SECRET=your-api-secret
+# LiveKit Credentials, keep it as it is for local deployment, don't change it.
+LIVEKIT_URL=ws://localhost:7880
+LIVEKIT_API_KEY=devkey
+LIVEKIT_API_SECRET=secret
 
 # Moss Credentials
 MOSS_PROJECT_ID=your-moss-id
@@ -221,7 +221,13 @@ if __name__ == "__main__":
 
 ## 5. Running the Agent
 
-Simply start your worker. The necessary VAD models will handle themselves or be downloaded automatically if needed by the plugin.
+First, start the LiveKit server in development mode:
+
+```bash
+livekit-server --dev
+```
+
+Then, in a separate terminal, start your worker. The necessary VAD models will handle themselves or be downloaded automatically if needed by the plugin.
 
 ```bash
 python agent.py download-files
