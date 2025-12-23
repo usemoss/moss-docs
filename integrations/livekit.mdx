@@ -12,16 +12,14 @@ Voice agents need responses in milliseconds. Moss delivers sub-10ms retrieval fr
 
 Searches happen locally on-device. Your sensitive data never needs to leave the agent.
 
-### Multi-Index Management
-
-Manage multiple isolated search spaces within a single agent instance. Perfect for multi-tenant scenarios or agents with different knowledge domains.
-
 ## Prerequisites
 
 - Python 3.10 or higher
-- A LiveKit Cloud project
-- A Moss (InferEdge) project
-- A Cartesia account (for high-fidelity TTS)
+- Moss project
+- LiveKit account
+- Cartesia account
+- OpenAI account
+- Deepgram account
 
 ## 1. Installation
 
@@ -101,7 +99,6 @@ async def main():
 
     print(f"Creating index '{index_name}'...")
     
-    # 'moss-minilm' is recommended for low-latency voice applications
     await client.create_index(index_name, docs, model_id="moss-minilm")
     
     print("Index created successfully.")
@@ -187,7 +184,7 @@ class MossSemanticRetrievalAgent(Agent):
             results = await self.moss.query(
                 INDEX_NAME, 
                 user_query, 
-                top_k=3, 
+                top_k=5, 
                 alpha=0.8
             )
             
@@ -245,51 +242,4 @@ Simply start your worker. The necessary VAD models will handle themselves or be 
 ```bash
 python agent.py download-files
 python agent.py console
-```
-
-
-## 6. Advanced Use Cases
-
-Since we are using the Context Injection pattern (automatically searching every turn), we handle advanced logic by modifying the `on_user_message` method.
-
-### Hybrid Search Tuning
-
-The `alpha` parameter controls the balance between Keyword Search and Semantic Search (Vector). You can adjust this dynamically based on the query length. Short queries often benefit from keyword matching, while long questions benefit from semantic understanding.
-
-**Modify `on_user_message` in agent.py:**
-
-```python
-    async def on_user_message(self, turn_ctx: ChatContext, new_message: ChatMessage) -> None:
-        user_query = new_message.text_content
-        logger.info(f"User asked: {user_query}")
-
-        # Dynamic alpha based on query length
-        # Short query? Use more keyword search (alpha closer to 0)
-        # Long query? Use more semantic search (alpha closer to 1)
-        if len(user_query.split()) < 3:
-            current_alpha = 0.3 
-        else:
-            current_alpha = 0.8
-        
-        # Query with dynamic alpha
-        try:
-            search_results = await self.moss.query(
-                INDEX_NAME, 
-                user_query, 
-                top_k=3, 
-                alpha=current_alpha
-            )
-            
-            if search_results.docs:
-                context_parts = [f"- {doc.text}" for doc in search_results.docs]
-                full_context = "\n".join(context_parts)
-                semantic_retrieval_injection = f"Relevant context from knowledge base:\n{full_context}\n\nUse this to answer the user."
-                
-                turn_ctx.add_message(role="system", content=semantic_retrieval_injection)
-                await self.update_chat_ctx(turn_ctx)
-                
-        except Exception as e:
-            logger.warning(f"Moss search failed: {e}")
-
-        await super().on_user_message(turn_ctx, new_message)
 ```
