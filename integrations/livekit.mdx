@@ -60,12 +60,6 @@ DEEPGRAM_API_KEY=your-deepgram-key
 CARTESIA_API_KEY=your-cartesia-key
 ```
 
-**Important:** Add `.env` to your `.gitignore` file to keep your credentials secure:
-
-```bash
-echo ".env" >> .gitignore
-```
-
 ## 3. Creating the Knowledge Base
 
 Before the agent can answer questions, you must index your data. Run this script once to upload documents to Moss.
@@ -87,7 +81,7 @@ async def main():
         project_key=os.environ["MOSS_PROJECT_KEY"]
     )
     
-    index_name = "product-knowledge"
+    index_name = os.getenv("MOSS_INDEX_NAME", "product-knowledge")
 
     # Define documents
     docs = [
@@ -253,7 +247,6 @@ python agent.py download-files
 python agent.py console
 ```
 
-You can now connect to this agent using the LiveKit Playground or your own frontend.
 
 ## 6. Advanced Use Cases
 
@@ -261,7 +254,7 @@ Since we are using the Context Injection pattern (automatically searching every 
 
 ### Hybrid Search Tuning
 
-The `alpha` parameter controls the balance between Keyword Search (BM25) and Semantic Search (Vector). You can adjust this dynamically based on the query length. Short queries often benefit from keyword matching, while long questions benefit from semantic understanding.
+The `alpha` parameter controls the balance between Keyword Search and Semantic Search (Vector). You can adjust this dynamically based on the query length. Short queries often benefit from keyword matching, while long questions benefit from semantic understanding.
 
 **Modify `on_user_message` in agent.py:**
 
