@@ -108,12 +108,12 @@
                     "pages": [
                       "reference/python/interfaces/ModelRef",
                       "reference/python/interfaces/IndexInfo",
+                      "reference/python/interfaces/IndexStatus",
                       "reference/python/interfaces/DocumentInfo",
                       "reference/python/interfaces/QueryResultDocumentInfo",
                       "reference/python/interfaces/SearchResult",
                       "reference/python/interfaces/AddDocumentsOptions",
-                      "reference/python/interfaces/GetDocumentsOptions",
-                      "reference/python/interfaces/SerializedIndex"
+                      "reference/python/interfaces/GetDocumentsOptions"
                     ]
                   }
                 ]
