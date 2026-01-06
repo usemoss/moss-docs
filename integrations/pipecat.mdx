@@ -1,6 +1,6 @@
 Integrate Moss Semantic Search directly into a Pipecat pipeline using the `pipecat-moss` package. This setup allows your voice AI to perform search with sub-10ms latency, ensuring your agents answer questions naturally without awkward "thinking" pauses.
 
-> **Note:** To go through an end-to-end example deployment of `pipecat-moss`, please visit [Moss Samples](https://github.com/usemoss/moss-samples).
+> **Note:** To explore a complete example of deploying `pipecat-moss`, please visit [Moss Samples](https://github.com/usemoss/moss-samples).
 
 ## Why Use Moss with Pipecat?
 
@@ -68,7 +68,8 @@ The `MossRetrievalService` allows you to tune how results are retrieved and pres
 
 When adding `moss_service.query()` to your pipeline, you can adjust the following:
 
-| Parameter | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `top_k` | `int` | `5` | The number of text chunks to retrieve and inject. |
-| `alpha` | `float` | `0.8` | **Hybrid Search Weighting**. <br/>`0.0` = Keyword only. <br/>`1.0` = Semantic only (Vector). <br/>`0.8` is recommended for most voice use cases. |
+| Parameter   | Type   | Default | Description                                                                 |
+| :---------- | :----- | :------ | :-------------------------------------------------------------------------- |
+| `index_name`| `str`  | `None`  | The name of the Moss index to query.                                       |
+| `top_k`     | `int`  | `5`     | The number of text chunks to retrieve and inject.                          |
+| `alpha`     | `float`| `0.8`   | Hybrid Search Weighting. <br/>`0.0` = Keyword only. <br/>`1.0` = Semantic only (Vector). <br/>`0.8` is recommended for most voice use cases. |
