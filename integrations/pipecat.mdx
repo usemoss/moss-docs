@@ -30,6 +30,8 @@ To integrate Moss with Pipecat, you will need the following tools:
     The `MossRetrievalService` integrates as a **processor** in the Pipecat pipeline. It sits between the user input and the LLM, injecting relevant context automatically.
 
     ```python
+    import os
+    from pipecat.pipeline.pipeline import Pipeline
     from pipecat_moss import MossRetrievalService
 
     moss_service = MossRetrievalService(
