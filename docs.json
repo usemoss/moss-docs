@@ -47,7 +47,6 @@
             "pages": [
               "integrations/livekit",
               "integrations/pipecat"
-              
             ]
           },
           {
