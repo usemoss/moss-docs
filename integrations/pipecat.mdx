@@ -191,7 +191,7 @@ To integrate Moss with Pipecat, you will need the following tools:
         # init llm service
         llm = OpenAILLMService(
             api_key=os.getenv("OPENAI_API_KEY"),
-            model=os.getenv("OPENAI_MODEL", "gpt-4"),
+            model="gpt-4"
         )
 
         # init moss retrieval service 
@@ -227,7 +227,7 @@ To integrate Moss with Pipecat, you will need the following tools:
             stt,
             context_aggregator.user(),
             #--------------Moss Integration----------------
-            moss_service.query(os.getenv("MOSS_INDEX_NAME"), top_k=int(os.getenv("MOSS_TOP_K", "5"))),
+            moss_service.query(os.getenv("MOSS_INDEX_NAME"), top_k=5),
             #---------------------------------------------
             llm,
             tts,
