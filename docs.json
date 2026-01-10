@@ -17,12 +17,6 @@
         ]
       },
       {
-        "tab": "REST API",
-        "pages": [
-          "api-reference/introduction"
-        ]
-      },
-      {
         "tab": "SDK",
         "groups": [
           {
@@ -133,6 +127,12 @@
               }
             ]
           }
+        ]
+      },
+      {
+        "tab": "REST API",
+        "pages": [
+          "api-reference/introduction"
         ]
       }
     ]
