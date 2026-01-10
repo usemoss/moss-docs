@@ -17,6 +17,12 @@
         ]
       },
       {
+        "tab": "REST API",
+        "pages": [
+          "api-reference/introduction"
+        ]
+      },
+      {
         "tab": "SDK",
         "groups": [
           {
@@ -57,6 +63,12 @@
               "integrate/retrieval",
               "integrate/storage-persistence",
               "integrate/deployment-production"
+            ]
+          },
+          {
+            "group": "Control Plane API",
+            "pages": [
+              "api-reference/introduction"
             ]
           },
           {

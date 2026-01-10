@@ -1,33 +1,249 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: MOSS REST API - v1 Reference
+description: REST endpoints for creating and managing Moss vector indexes via the Moss Control Plane API.
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+The Moss Control Plane API powers all index lifecycle operations for Moss. It exposes a single authenticated control plane endpoint for managing indexes. This page documents every supported action, request shape, and response payload so you can wire the service into your applications or SDKs.
 
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
+> **Base URL**
 >
-  View the OpenAPI specification file
-</Card>
+> Replace `https://service.usemoss.dev` with the hostname of the deployed service (for example, the public ALB URL or internal gateway route).
+>
+> ```text
+> https://service.usemoss.dev
+> ```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All mutating and read operations are routed through `POST /manage` and require both of the following:
+
+- `projectId` field in the JSON body.
+- `x-project-key` header containing the project access key.
+- `x-service-version` header set to `v1`.
+
+The service verifies the credentials before running the requested action. Invalid credentials return `403 Forbidden` with a JSON error payload.
+
+```bash
+curl -X POST "https://service.usemoss.dev/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "listIndexes",
+    "projectId": "project_123"
+  }'
+```
+
+## Control Plane: `POST /manage`
+
+All API actions are multiplexed through the `/manage` endpoint. Provide an `action` string plus the required fields for that operation. On success, handlers return `2xx` JSON payloads outlined below. Failures return structured errors:
 
 ```json
-"security": [
+{
+  "error": "Human-readable message",
+  "action": "createIndex" // present on server errors
+}
+```
+
+Shared request schema:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `action` | string | ✅ | One of `createIndex`, `getIndex`, `listIndexes`, `deleteIndex`, `addDocs`, `deleteDocs`, `getDocs`. |
+| `projectId` | string | ✅ | Project identifier issued by Moss Control. |
+| `indexName` | string | ▶︎ | Required for index-scoped actions. |
+
+> **Required headers:** `x-project-key` with your project access key and `x-service-version: v1`.
+
+### Supported actions at a glance
+
+| Action | Purpose | Extra required fields |
+| --- | --- | --- |
+| `createIndex` | Create a new index with seed documents. | `indexName`, `docs` |
+| `getIndex` | Fetch metadata for a single index. | `indexName` |
+| `listIndexes` | Enumerate every index under the project. | — |
+| `deleteIndex` | Remove an index record and assets. | `indexName` |
+| `addDocs` | Upsert documents into an existing index. | `indexName`, `docs` |
+| `deleteDocs` | Remove documents by ID. | `indexName`, `docIds` |
+| `getDocs` | Retrieve stored documents (without embeddings). | `indexName` |
+
+### `createIndex`
+
+Create a new index and persist its artifacts for later retrieval.
+
+**Additional body fields**
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `docs` | object[] | ✅ | Array of seed documents. Each document must include `id` and `text`; you may optionally supply `metadata` (key-value pairs). |
+| `modelId` | string | ◻️ | Defaults to `moss-minilm`. Other options include `moss-mediumlm`. |
+
+**Example request**
+
+```json
+{
+  "action": "createIndex",
+  "projectId": "project_123",
+  "indexName": "support-faq",
+  "modelId": "moss-minilm",
+  "docs": [
+    { "id": "faq-001", "text": "How do I reset my password?", "metadata": { "category": "account" } },
+    { "id": "faq-002", "text": "Where can I download invoices?" }
+  ]
+}
+```
+
+**Success response**
+
+```json
+true
+```
+
+**Errors**
+
+- `400` when any required field is missing.
+- `404` if the project does not exist.
+- `500` on unexpected storage or indexing failures.
+  
+
+### `getIndex`
+
+Fetch metadata for a single index.
+
+**Required fields**: `indexName`
+
+**Success response**
+
+```json
+{
+  "id": "a98fe5f5-1c00-4d5c-b2a5-6c1ef8d157cc",
+  "name": "support-faq",
+  "version": "1.0.0-beta.1",
+  "status": "Ready",
+  "docCount": 124,
+  "createdAt": "2025-01-09T21:14:07.000Z",
+  "updatedAt": "2025-01-10T03:52:11.000Z",
+  "model": {
+    "id": "moss-minilm",
+    "version": "1.0.0-beta.1"
+  }
+}
+```
+
+- `404` if the index is unknown.
+
+### `listIndexes`
+
+List every index tied to a project.
+
+**Success response**
+
+```json
+[
   {
-    "bearerAuth": []
+    "id": "a98fe5f5-1c00-4d5c-b2a5-6c1ef8d157cc",
+    "name": "support-faq",
+    "version": "1.0.0-beta.1",
+    "status": "Ready",
+    "docCount": 124,
+    "createdAt": "2025-01-09T21:14:07.000Z",
+    "updatedAt": "2025-01-10T03:52:11.000Z",
+    "model": {
+      "id": "moss-minilm",
+      "version": "1.0.0-beta.1"
+    }
+  }
+]
+```
+
+### `deleteIndex`
+
+Delete an index record and associated assets.
+
+**Required fields**: `indexName`
+
+**Success response**
+
+```json
+true
+```
+
+- `404` if the index is missing.
+
+### `addDocs`
+
+Append or upsert documents into an existing index. The handler downloads existing content, merges the payload, rebuilds the index, and uploads fresh artifacts.
+
+**Required fields**: `indexName`, `docs`
+
+**Optional fields**: `options.upsert` (defaults to `true`).
+
+**Example request**
+
+```json
+{
+  "action": "addDocs",
+  "projectId": "project_123",
+  "indexName": "support-faq",
+  "docs": [
+    { "id": "faq-125", "text": "How do I change billing cycles?" }
+  ],
+  "options": {
+    "upsert": true
+  }
+}
+```
+
+**Success response**
+
+```json
+{
+  "added": 1,
+  "updated": 0
+}
+```
+
+- `404` if the index cannot be located.
+- `500` when existing documents cannot be downloaded or the update fails.
+
+### `deleteDocs`
+
+Remove specific documents by ID and rebuild the index.
+
+**Required fields**: `indexName`, `docIds` (non-empty array)
+
+**Success response**
+
+```json
+{
+  "deleted": 3
+}
+```
+
+- Missing IDs are ignored but logged; expect `deleted` to reflect only matches.
+
+### `getDocs`
+
+Retrieve the stored documents for an index. Embedding vectors are omitted to keep responses lightweight.
+
+**Required fields**: `indexName`
+
+**Optional fields**: `options.docIds` to return a subset.
+
+**Success response**
+
+```json
+[
+  {
+    "id": "faq-001",
+    "text": "How do I reset my password?",
+    "metadata": {
+      "category": "account"
+    }
+  },
+  {
+    "id": "faq-002",
+    "text": "Where can I download invoices?"
   }
 ]
 ```
