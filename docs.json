@@ -118,6 +118,12 @@
                     ]
                   }
                 ]
+              },
+              {
+                "group": "REST API",
+                "pages": [
+                  "api-reference/introduction"
+                ]
               }
             ]
           }
@@ -129,7 +135,6 @@
     "light": "/logo/moss-wordmark-light.svg",
     "dark": "/logo/moss-wordmark-dark.svg"
   },
-  
   "navbar": {
     "links": [
       {
