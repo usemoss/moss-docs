@@ -60,12 +60,6 @@
             ]
           },
           {
-            "group": "Control Plane API",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
             "group": "SDK Reference",
             "pages": [
               {
@@ -124,15 +118,15 @@
                     ]
                   }
                 ]
+              },
+              {
+                "group": "REST API",
+                "pages": [
+                  "api-reference/introduction"
+                ]
               }
             ]
           }
-        ]
-      },
-      {
-        "tab": "REST API",
-        "pages": [
-          "api-reference/introduction"
         ]
       }
     ]
@@ -141,7 +135,6 @@
     "light": "/logo/moss-wordmark-light.svg",
     "dark": "/logo/moss-wordmark-dark.svg"
   },
-  
   "navbar": {
     "links": [
       {

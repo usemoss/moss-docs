@@ -1,13 +1,11 @@
 ---
-title: MOSS REST API - v1 Reference
-description: REST endpoints for creating and managing Moss vector indexes via the Moss Control Plane API.
+title: API Reference - v1
+description: REST endpoints for creating and managing Moss project via the Control Plane API.
 ---
 
 The Moss Control Plane API powers all index lifecycle operations for Moss. It exposes a single authenticated control plane endpoint for managing indexes. This page documents every supported action, request shape, and response payload so you can wire the service into your applications or SDKs.
 
 > **Base URL**
->
-> Replace `https://service.usemoss.dev` with the hostname of the deployed service (for example, the public ALB URL or internal gateway route).
 >
 > ```text
 > https://service.usemoss.dev
@@ -75,7 +73,7 @@ Create a new index and persist its artifacts for later retrieval.
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `docs` | object[] | ✅ | Array of seed documents. Each document must include `id` and `text`; you may optionally supply `metadata` (key-value pairs). |
+| `docs` | object[] | ✅ | Array of documents. Each document must include `id` and `text`; you may optionally supply `metadata` (key-value pairs). |
 | `modelId` | string | ◻️ | Defaults to `moss-minilm`. Other options include `moss-mediumlm`. |
 
 **Example request**
@@ -172,7 +170,7 @@ true
 
 ### `addDocs`
 
-Append or upsert documents into an existing index. The handler downloads existing content, merges the payload, rebuilds the index, and uploads fresh artifacts.
+Append or upsert documents into an existing index. The service merges the new documents, rebuilds the index efficiently, and makes fresh artifacts available for further usage.
 
 **Required fields**: `indexName`, `docs`
 
@@ -220,11 +218,9 @@ Remove specific documents by ID and rebuild the index.
 }
 ```
 
-- Missing IDs are ignored but logged; expect `deleted` to reflect only matches.
-
 ### `getDocs`
 
-Retrieve the stored documents for an index. Embedding vectors are omitted to keep responses lightweight.
+Retrieve the stored documents for an index.
 
 **Required fields**: `indexName`
 
