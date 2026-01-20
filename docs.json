@@ -14,7 +14,7 @@
   "logo": {
     "light": "/logo/moss-wordmark-light.svg",
     "dark": "/logo/moss-wordmark-dark.svg",
-    "href": "https://www.usemoss.dev/"
+    "href": "https://docs.usemoss.dev/"
   },
   "favicon": "/logo/moss-dark.png",
   "fonts": {},
@@ -169,9 +169,16 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Developer Portal",
+      "label": "Portal",
       "href": "https://portal.usemoss.dev/auth/login"
-    }
+    },
+    "links": [
+      {
+        "label": "Website",
+        "icon": "globe",
+        "href": "https://www.usemoss.dev/"
+      }
+    ]
   },
   "footer": {
     "socials": {
