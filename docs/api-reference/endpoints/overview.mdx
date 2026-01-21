@@ -1,0 +1,37 @@
+---
+title: Overview
+description: Control Plane endpoint structure and shared request schema.
+openapi: 'POST /manage'
+mode: "wide"
+---
+
+All API actions are multiplexed through the `/manage` endpoint. Provide an `action` string plus the required fields for that operation. On success, handlers return `2xx` JSON payloads outlined below. Failures return structured errors:
+
+```json
+{
+  "error": "Human-readable message",
+  "action": "createIndex" // present on server errors
+}
+```
+
+Shared request schema:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `action` | string | ✅ | One of `createIndex`, `getIndex`, `listIndexes`, `deleteIndex`, `addDocs`, `deleteDocs`, `getDocs`. |
+| `projectId` | string | ✅ | Project identifier issued by Moss Control. |
+| `indexName` | string | ▶︎ | Required for index-scoped actions. |
+
+> **Required headers:** `x-project-key` with your project access key and `x-service-version: v1`.
+
+## Supported actions at a glance
+
+| Action | Purpose | Extra required fields |
+| --- | --- | --- |
+| `createIndex` | Create a new index with seed documents. | `indexName`, `docs` |
+| `getIndex` | Fetch metadata for a single index. | `indexName` |
+| `listIndexes` | Enumerate every index under the project. | — |
+| `deleteIndex` | Remove an index record and assets. | `indexName` |
+| `addDocs` | Upsert documents into an existing index. | `indexName`, `docs` |
+| `deleteDocs` | Remove documents by ID. | `indexName`, `docIds` |
+| `getDocs` | Retrieve stored documents (without embeddings). | `indexName` |

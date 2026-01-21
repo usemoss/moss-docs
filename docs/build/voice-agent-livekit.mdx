@@ -28,14 +28,17 @@ Voice agents need real-time retrieval to answer with fresh, contextual knowledge
 
 Using the LiveKit voice agent sample in [`moss-samples`](https://github.com/usemoss/moss-samples/tree/main/livekit-moss-vercel/livekit-voice-agent/livekit-moss-agent):
 
-1) Install deps:
+<Steps>
+
+<Step title="Install deps">
 ```bash
 git clone https://github.com/usemoss/moss-samples.git
 cd moss-samples/livekit-moss-vercel/livekit-voice-agent/livekit-moss-agent
 pip install -r requirements.txt
 ```
+</Step>
 
-2) Create `.env.local` with your keys:
+<Step title="Create `.env.local` with your keys">
 ```env
 MOSS_PROJECT_ID=your_project_id
 MOSS_PROJECT_KEY=your_project_key
@@ -47,15 +50,21 @@ OPENAI_API_KEY=...
 DEEPGRAM_API_KEY=...
 CARTESIA_API_KEY=...
 ```
+</Step>
 
-3) Ensure the Moss index exists (e.g., create `faqs` using the [Quickstart](/start/quickstart) sample data).
+<Step title="Ensure the Moss index exists">
+Ensure the Moss index exists (e.g., create `faqs` using the [Quickstart](__/start/quickstart__) sample data).
+</Step>
 
-4) Run the agent:
+<Step title="Run the agent">
 ```bash
 python agent.py
 ```
+</Step>
 
-The agent:
+</Steps>
+
+**The agent:**
 - Connects to LiveKit Agents
 - Loads the Moss index on start
 - Uses `search_support_faqs` to ground answers from Moss

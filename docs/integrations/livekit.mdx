@@ -1,3 +1,6 @@
+---
+title: LiveKit
+---
 
 Integrate Moss Semantic Search SDK directly into a LiveKit Voice Agent. This setup allows your voice AI to perform ultra-low latency searches over your custom data to answer user questions in real-time.
 
@@ -12,21 +15,25 @@ Moss delivers sub-10ms semantic retrieval, ensuring your voice agents respond na
 - [OpenAI](https://openai.com/api/)
 - [Deepgram](https://deepgram.com/) 
 
-## 1. Installation
+## Integration Guide
+
+<Steps>
+
+<Step title="Installation">
 
 Install the Moss SDK.
-
 ```bash
 pip install inferedge-moss \
     python-dotenv
 ```
 
-## 2. Environment Setup
+</Step>
+
+<Step title="Environment Setup">
 
 Create a `.env` file in your project root directory with your API keys.
 
-**File: .env**
-
+**File: `.env`**
 ```bash
 # LiveKit Credentials, keep it as it is for local deployment, don't change it.
 LIVEKIT_URL=ws://localhost:7880
@@ -42,12 +49,13 @@ OPENAI_API_KEY=sk-...
 DEEPGRAM_API_KEY=your-deepgram-key
 ```
 
-## 3. Creating the Knowledge Base with Moss
+</Step>
+
+<Step title="Creating the Knowledge Base with Moss">
 
 Before the agent can answer questions, you must index your data. Run this script once to upload documents to Moss.
 
-**File: build_index.py**
-
+**File: `build_index.py`**
 ```python
 import asyncio
 import os
@@ -92,12 +100,13 @@ if __name__ == "__main__":
 ```
 
 Run the builder:
-
 ```bash
 python build_index.py
 ```
 
-## 4. Building the Agent
+</Step>
+
+<Step title="Building the Agent">
 
 This implementation uses a **Context Injection pattern** where Moss search results are automatically injected into the conversation context on every user turn. This is faster and more consistent than tool calling, as the LLM always has relevant context without needing to decide when to search.
 
@@ -106,8 +115,7 @@ This implementation uses a **Context Injection pattern** where Moss search resul
 - **Context Injection**: Search results are injected into the chat history before the LLM generates a response
 - **Lower Latency**: No LLM "thinking" step to decide whether to search—it just happens
 
-**File: agent.py**
-
+**File: `agent.py`**
 ```python
 import asyncio
 import logging
@@ -219,17 +227,21 @@ if __name__ == "__main__":
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
 ```
 
-## 5. Running the Agent
+</Step>
+
+<Step title="Running the Agent">
 
 First, start the LiveKit server in development mode:
-
 ```bash
 livekit-server --dev
 ```
 
 Then, in a separate terminal, start your worker. The necessary VAD models will handle themselves or be downloaded automatically if needed by the plugin.
-
 ```bash
 python agent.py download-files
 python agent.py console
 ```
+
+</Step>
+
+</Steps>

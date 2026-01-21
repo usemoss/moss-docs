@@ -39,29 +39,6 @@ filtered = await client.query("my-index", "refund policy", 5, {
 ## Hybrid weighting (`alpha`)
 - `alpha = 1.0`: pure semantic (embeddings)
 - `alpha = 0.0`: pure keyword
-- Between 0 and 1 blends the two (default is semantic-heavy)
-
-<CodeGroup>
-```ts JavaScript
-// Blend semantic and keyword scores (60/40)
-const hybrid = await client.query('my-index', 'return policy', 3, { alpha: 0.6 })
-
-// Pure keyword
-const keywordOnly = await client.query('my-index', 'return policy', 3, { alpha: 0.0 })
-```
-
-```python Python
-# Blend semantic and keyword scores (60/40)
-hybrid = await client.query("my-index", "return policy", top_k=3, alpha=0.6)
-
-# Pure keyword
-keyword_only = await client.query("my-index", "return policy", top_k=3, alpha=0.0)
-```
-</CodeGroup>
-
-## Hybrid weighting (`alpha`)
-- `alpha = 1.0`: pure semantic (embeddings)
-- `alpha = 0.0`: pure keyword
 - Between 0 and 1 blends the two (default is semantic-heavy, e.g., ~0.8)
 
 <CodeGroup>
