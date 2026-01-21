@@ -185,7 +185,7 @@
         "groups": [
           {
             "group": "Changelog",
-            "icon": "rocket",
+            "icon": "list",
             "pages": [
               "docs/changelog"
             ]
@@ -212,7 +212,8 @@
     "socials": {
       "linkedin": "https://linkedin.com/company/mossdev",
       "x": "https://x.com/usemoss",
-      "github": "https://github.com/usemoss"
+      "github": "https://github.com/usemoss",
+      "discord": "https://discord.gg/eMXExuafBR"
     }
   },
 
