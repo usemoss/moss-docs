@@ -26,11 +26,19 @@
         {
           "anchor": "Join our Community",
           "icon": "discord",
+          "color": {
+            "light": "#7289da",
+            "dark": "#7289da"
+          },
           "href": "https://discord.gg/eMXExuafBR"
         },
         {
           "anchor": "GitHub",
           "icon": "github",
+          "color": {
+            "light": "#24292e",
+            "dark": "#24292e"
+          },
           "href": "https://github.com/usemoss/moss-samples"
         },
         {
