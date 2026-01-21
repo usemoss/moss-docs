@@ -1,14 +1,45 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "Moss Docs",
+  "public": true,
+  "description": "",
+
+
   "colors": {
     "primary": "#C63FA9",
     "light": "#E868CF",
     "dark": "#8A2C7E"
   },
+  "logo": {
+    "light": "/logo/moss-wordmark-light.svg",
+    "dark": "/logo/moss-wordmark-dark.svg",
+    "href": "https://docs.usemoss.dev/"
+  },
   "favicon": "/logo/moss-dark.png",
+  "fonts": {},
+
+
   "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Join our Community",
+          "icon": "discord",
+          "href": "https://discord.gg/eMXExuafBR"
+        },
+        {
+          "anchor": "GitHub",
+          "icon": "github",
+          "href": "https://github.com/usemoss/moss-samples"
+        },
+        {
+          "anchor": "Request a Demo",
+          "icon": "comments",
+          "href": "https://form.typeform.com/to/KdqOaXWu"
+        }
+      ]
+    },
     "tabs": [
       {
         "tab": "Home",
@@ -17,17 +48,11 @@
         ]
       },
       {
-        "tab": "SDK",
+        "tab": "Platform",
         "groups": [
           {
-            "group": "Community",
-            "pages": [
-              "start/community",
-              "start/support"
-            ]
-          },
-          {
             "group": "Getting Started",
+            "icon": "rocket",
             "pages": [
               "start/what-is-moss",
               "start/quickstart",
@@ -37,20 +62,15 @@
           },
           {
             "group": "Use Cases",
+            "icon": "grid-2",
             "pages": [
               "build/offline-first-search",
               "build/voice-agent-livekit"
             ]
           },
           {
-            "group": "Integrations",
-            "pages": [
-              "integrations/livekit",
-              "integrations/pipecat"
-            ]
-          },
-          {
             "group": "How it works",
+            "icon": "circle-nodes",
             "pages": [
               "integrate/authentication",
               "integrate/indexing-data",
@@ -58,101 +78,151 @@
               "integrate/storage-persistence",
               "integrate/deployment-production"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "SDK",
+        "pages": [
           {
-            "group": "SDK Reference",
+            "group": "JavaScript",
+            "icon": "js",
             "pages": [
+              "reference/js/api",
               {
-                "group": "JavaScript",
+                "group": "Classes",
                 "pages": [
-                  "reference/js/api",
-                  {
-                    "group": "Classes",
-                    "pages": [
-                      "reference/js/classes/MossClient"
-                    ]
-                  },
-                  {
-                    "group": "Interfaces",
-                    "pages": [
-                      "reference/js/interfaces/ModelRef",
-                      "reference/js/interfaces/IndexInfo",
-                      "reference/js/interfaces/DocumentInfo",
-                      "reference/js/interfaces/QueryResultDocumentInfo",
-                      "reference/js/interfaces/SearchResult",
-                      "reference/js/interfaces/AddDocumentsOptions",
-                      "reference/js/interfaces/GetDocumentsOptions",
-                      "reference/js/interfaces/SerializedIndex"
-                    ]
-                  },
-                  {
-                    "group": "Type Aliases",
-                    "pages": [
-                      "reference/js/type-aliases/ISODate",
-                      "reference/js/type-aliases/MossModel"
-                    ]
-                  }
+                  "reference/js/classes/MossClient"
                 ]
               },
               {
-                "group": "Python",
+                "group": "Interfaces",
                 "pages": [
-                  "reference/python/api",
-                  {
-                    "group": "Classes",
-                    "pages": [
-                      "reference/python/classes/MossClient"
-                    ]
-                  },
-                  {
-                    "group": "Interfaces",
-                    "pages": [
-                      "reference/python/interfaces/ModelRef",
-                      "reference/python/interfaces/IndexInfo",
-                      "reference/python/interfaces/IndexStatus",
-                      "reference/python/interfaces/DocumentInfo",
-                      "reference/python/interfaces/QueryResultDocumentInfo",
-                      "reference/python/interfaces/SearchResult",
-                      "reference/python/interfaces/AddDocumentsOptions",
-                      "reference/python/interfaces/GetDocumentsOptions"
-                    ]
-                  }
+                  "reference/js/interfaces/ModelRef",
+                  "reference/js/interfaces/IndexInfo",
+                  "reference/js/interfaces/DocumentInfo",
+                  "reference/js/interfaces/QueryResultDocumentInfo",
+                  "reference/js/interfaces/SearchResult",
+                  "reference/js/interfaces/AddDocumentsOptions",
+                  "reference/js/interfaces/GetDocumentsOptions",
+                  "reference/js/interfaces/SerializedIndex"
                 ]
               },
               {
-                "group": "REST API",
+                "group": "Type Aliases",
                 "pages": [
-                  "api-reference/introduction"
+                  "reference/js/type-aliases/ISODate",
+                  "reference/js/type-aliases/MossModel"
                 ]
               }
+            ]
+          },
+          {
+            "group": "Python",
+            "icon": "python",
+            "pages": [
+              "reference/python/api",
+              {
+                "group": "Classes",
+                "pages": [
+                  "reference/python/classes/MossClient"
+                ]
+              },
+              {
+                "group": "Interfaces",
+                "pages": [
+                  "reference/python/interfaces/ModelRef",
+                  "reference/python/interfaces/IndexInfo",
+                  "reference/python/interfaces/IndexStatus",
+                  "reference/python/interfaces/DocumentInfo",
+                  "reference/python/interfaces/QueryResultDocumentInfo",
+                  "reference/python/interfaces/SearchResult",
+                  "reference/python/interfaces/AddDocumentsOptions",
+                  "reference/python/interfaces/GetDocumentsOptions"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "pages": [
+          "api-reference/introduction"
+        ]
+      },
+      {
+        "tab": "Integrations",
+        "groups": [
+          {
+            "group": "Voice & Real-time",
+            "icon": "microphone",
+            "pages": [
+              "integrations/livekit",
+              "integrations/pipecat"
             ]
           }
         ]
       }
     ]
   },
-  "logo": {
-    "light": "/logo/moss-wordmark-light.svg",
-    "dark": "/logo/moss-wordmark-dark.svg"
-  },
   "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Portal",
+      "href": "https://portal.usemoss.dev/auth/login"
+    },
     "links": [
       {
         "label": "Website",
-        "href": "https://www.usemoss.dev/",
-        "icon": "globe"
-      },
-      {
-        "label": "Portal ›",
-        "href": "https://portal.usemoss.dev/auth/login",
-        "icon": "square-terminal"
-      },
-      {
-        "label": "GitHub",
-        "href": "https://github.com/usemoss/moss-samples",
-        "icon": "github"
+        "icon": "globe",
+        "href": "https://www.usemoss.dev/"
       }
     ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://linkedin.com/company/mossdev",
+      "x": "https://x.com/usemoss",
+      "github": "https://github.com/usemoss"
+    }
+  },
+
+
+  "appearance": {
+    "default": "system",
+    "strict": false
+  },
+  "background": {
+    "decoration": "gradient"
+  },
+  "styling": {
+    "eyebrows": "section"
+  },
+
+
+  "api": {},
+  "search": {},
+  "icons": {
+    "library": "fontawesome"
+  },
+
+
+  "seo": {},
+  "metadata": {
+    "timestamp": false
+  },
+  "thumbnails": {},
+
+
+  "redirects": [],
+  "integrations": {},
+  "errors": {
+    "404": {
+      "redirect": false,
+      "title": "Oops! Page Not Found",
+      "description": "The page you're looking for doesn't exist. Try searching or return to the [homepage](/)."
+    }
   },
   "contextual": {
     "options": [
@@ -166,11 +236,7 @@
      "vscode"
    ]
   },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/usemoss",
-      "github": "https://github.com/usemoss",
-      "linkedin": "https://linkedin.com/company/mossdev"
-    }
+  "interaction": {
+    "drilldown": false
   }
 }
