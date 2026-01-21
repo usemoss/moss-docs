@@ -8,7 +8,7 @@ This repository is deployed on [docs.usemoss.dev](https://docs.usemoss.dev).
 
 ## What is Moss?
 
-Moss is a runtime for real-time semantic search in conversational apps. Things like [voice support agents](https://docs.usemoss.dev/docs/integrations/pipecat), [product documentation bots](https://docs.usemoss.dev/docs/build/offline-first-search), [knowledge-grounded assistants](https://docs.usemoss.dev/docs/build/voice-agent-livekit), customer FAQ helpers, and AI copilots that need instant access to your data.
+Moss is the real-time semantic search for conversational AI. Things like [voice support agents](https://docs.usemoss.dev/docs/integrations/pipecat), [product documentation bots](https://docs.usemoss.dev/docs/build/offline-first-search), [knowledge-grounded assistants](https://docs.usemoss.dev/docs/build/voice-agent-livekit), customer FAQ helpers, and AI copilots that need instant access to your data.
 
 It delivers sub-10ms semantic lookups with instant index updates - no extra infrastructure needed. Run it in the browser, on-device, or in the cloud, wherever your agent lives.
 
