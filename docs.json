@@ -54,29 +54,29 @@
             "group": "Getting Started",
             "icon": "rocket",
             "pages": [
-              "start/what-is-moss",
-              "start/quickstart",
-              "start/core-concepts",
-              "reference/sdk"
+              "docs/start/what-is-moss",
+              "docs/start/quickstart",
+              "docs/start/core-concepts",
+              "docs/reference/sdk"
             ]
           },
           {
             "group": "Use Cases",
             "icon": "grid-2",
             "pages": [
-              "build/offline-first-search",
-              "build/voice-agent-livekit"
+              "docs/build/offline-first-search",
+              "docs/build/voice-agent-livekit"
             ]
           },
           {
             "group": "How it works",
             "icon": "circle-nodes",
             "pages": [
-              "integrate/authentication",
-              "integrate/indexing-data",
-              "integrate/retrieval",
-              "integrate/storage-persistence",
-              "integrate/deployment-production"
+              "docs/integrate/authentication",
+              "docs/integrate/indexing-data",
+              "docs/integrate/retrieval",
+              "docs/integrate/storage-persistence",
+              "docs/integrate/deployment-production"
             ]
           }
         ]
@@ -88,31 +88,31 @@
             "group": "JavaScript",
             "icon": "js",
             "pages": [
-              "reference/js/api",
+              "docs/reference/js/api",
               {
                 "group": "Classes",
                 "pages": [
-                  "reference/js/classes/MossClient"
+                  "docs/reference/js/classes/MossClient"
                 ]
               },
               {
                 "group": "Interfaces",
                 "pages": [
-                  "reference/js/interfaces/ModelRef",
-                  "reference/js/interfaces/IndexInfo",
-                  "reference/js/interfaces/DocumentInfo",
-                  "reference/js/interfaces/QueryResultDocumentInfo",
-                  "reference/js/interfaces/SearchResult",
-                  "reference/js/interfaces/AddDocumentsOptions",
-                  "reference/js/interfaces/GetDocumentsOptions",
-                  "reference/js/interfaces/SerializedIndex"
+                  "docs/reference/js/interfaces/ModelRef",
+                  "docs/reference/js/interfaces/IndexInfo",
+                  "docs/reference/js/interfaces/DocumentInfo",
+                  "docs/reference/js/interfaces/QueryResultDocumentInfo",
+                  "docs/reference/js/interfaces/SearchResult",
+                  "docs/reference/js/interfaces/AddDocumentsOptions",
+                  "docs/reference/js/interfaces/GetDocumentsOptions",
+                  "docs/reference/js/interfaces/SerializedIndex"
                 ]
               },
               {
                 "group": "Type Aliases",
                 "pages": [
-                  "reference/js/type-aliases/ISODate",
-                  "reference/js/type-aliases/MossModel"
+                  "docs/reference/js/type-aliases/ISODate",
+                  "docs/reference/js/type-aliases/MossModel"
                 ]
               }
             ]
@@ -121,24 +121,24 @@
             "group": "Python",
             "icon": "python",
             "pages": [
-              "reference/python/api",
+              "docs/reference/python/api",
               {
                 "group": "Classes",
                 "pages": [
-                  "reference/python/classes/MossClient"
+                  "docs/reference/python/classes/MossClient"
                 ]
               },
               {
                 "group": "Interfaces",
                 "pages": [
-                  "reference/python/interfaces/ModelRef",
-                  "reference/python/interfaces/IndexInfo",
-                  "reference/python/interfaces/IndexStatus",
-                  "reference/python/interfaces/DocumentInfo",
-                  "reference/python/interfaces/QueryResultDocumentInfo",
-                  "reference/python/interfaces/SearchResult",
-                  "reference/python/interfaces/AddDocumentsOptions",
-                  "reference/python/interfaces/GetDocumentsOptions"
+                  "docs/reference/python/interfaces/ModelRef",
+                  "docs/reference/python/interfaces/IndexInfo",
+                  "docs/reference/python/interfaces/IndexStatus",
+                  "docs/reference/python/interfaces/DocumentInfo",
+                  "docs/reference/python/interfaces/QueryResultDocumentInfo",
+                  "docs/reference/python/interfaces/SearchResult",
+                  "docs/reference/python/interfaces/AddDocumentsOptions",
+                  "docs/reference/python/interfaces/GetDocumentsOptions"
                 ]
               }
             ]
@@ -148,7 +148,7 @@
       {
         "tab": "API Reference",
         "pages": [
-          "api-reference/introduction"
+          "docs/api-reference/introduction"
         ]
       },
       {
@@ -158,8 +158,20 @@
             "group": "Voice & Real-time",
             "icon": "microphone",
             "pages": [
-              "integrations/livekit",
-              "integrations/pipecat"
+              "docs/integrations/livekit",
+              "docs/integrations/pipecat"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Release Notes",
+        "groups": [
+          {
+            "group": "Changelog",
+            "icon": "rocket",
+            "pages": [
+              "docs/changelog"
             ]
           }
         ]
