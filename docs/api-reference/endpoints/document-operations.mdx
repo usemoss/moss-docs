@@ -1,0 +1,96 @@
+---
+title: Document Operations
+description: Operations for adding, deleting, and retrieving documents within indexes.
+---
+
+## `addDocs`
+
+Append or upsert documents into an existing index. The service merges the new documents, rebuilds the index efficiently, and makes fresh artifacts available for further usage.
+
+**Required fields**: `indexName`, `docs`
+
+**Optional fields**: `options.upsert` (defaults to `true`).
+
+**Example request**
+
+```json
+{
+  "action": "addDocs",
+  "projectId": "project_123",
+  "indexName": "support-faq",
+  "docs": [
+    { "id": "faq-125", "text": "How do I change billing cycles?" }
+  ],
+  "options": {
+    "upsert": true
+  }
+}
+```
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+{
+  "added": 1,
+  "updated": 0
+}
+```
+
+</CodeGroup>
+
+**Errors**
+- `404` if the index cannot be located.
+- `500` when existing documents cannot be downloaded or the update fails.
+---
+
+## `deleteDocs`
+
+Remove specific documents by ID and rebuild the index.
+
+**Required fields**: `indexName`, `docIds` (non-empty array)
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+{
+  "deleted": 3
+}
+```
+
+</CodeGroup>
+
+---
+
+## `getDocs`
+
+Retrieve the stored documents for an index.
+
+**Required fields**: `indexName`
+
+**Optional fields**: `options.docIds` to return a subset.
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+[
+  {
+    "id": "faq-001",
+    "text": "How do I reset my password?",
+    "metadata": {
+      "category": "account"
+    }
+  },
+  {
+    "id": "faq-002",
+    "text": "Where can I download invoices?"
+  }
+]
+```
+
+</CodeGroup>

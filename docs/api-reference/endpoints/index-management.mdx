@@ -1,0 +1,130 @@
+---
+title: Index Management
+description: Operations for creating, retrieving, listing, and deleting indexes.
+---
+
+## `createIndex`
+
+Create a new index and persist its artifacts for later retrieval.
+
+**Additional body fields**
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `docs` | object[] | ✅ | Array of documents. Each document must include `id` and `text`; you may optionally supply `metadata` (key-value pairs). |
+| `modelId` | string | ◻️ | Defaults to `moss-minilm`. Other options include `moss-mediumlm`. |
+
+**Example request**
+
+```json
+{
+  "action": "createIndex",
+  "projectId": "project_123",
+  "indexName": "support-faq",
+  "modelId": "moss-minilm",
+  "docs": [
+    { "id": "faq-001", "text": "How do I reset my password?", "metadata": { "category": "account" } },
+    { "id": "faq-002", "text": "Where can I download invoices?" }
+  ]
+}
+```
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+true
+```
+
+</CodeGroup>
+
+**Errors**
+
+- `400` when any required field is missing.
+- `404` if the project does not exist.
+- `500` on unexpected storage or indexing failures.
+  
+---
+
+## `getIndex`
+
+Fetch metadata for a single index.
+
+**Required fields**: `indexName`
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+{
+  "id": "a98fe5f5-1c00-4d5c-b2a5-6c1ef8d157cc",
+  "name": "support-faq",
+  "version": "1.0.0-beta.1",
+  "status": "Ready",
+  "docCount": 124,
+  "createdAt": "2025-01-09T21:14:07.000Z",
+  "updatedAt": "2025-01-10T03:52:11.000Z",
+  "model": {
+    "id": "moss-minilm",
+    "version": "1.0.0-beta.1"
+  }
+}
+```
+
+</CodeGroup>
+
+**Errors**
+- `404` if the index is unknown.
+
+---
+
+## `listIndexes`
+
+List every index tied to a project.
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+[
+  {
+    "id": "a98fe5f5-1c00-4d5c-b2a5-6c1ef8d157cc",
+    "name": "support-faq",
+    "version": "1.0.0-beta.1",
+    "status": "Ready",
+    "docCount": 124,
+    "createdAt": "2025-01-09T21:14:07.000Z",
+    "updatedAt": "2025-01-10T03:52:11.000Z",
+    "model": {
+      "id": "moss-minilm",
+      "version": "1.0.0-beta.1"
+    }
+  }
+]
+```
+
+</CodeGroup>
+
+---
+
+## `deleteIndex`
+
+Delete an index record and associated assets.
+
+**Required fields**: `indexName`
+
+**Responses**
+
+<CodeGroup>
+
+```json 200 - OK
+true
+```
+
+</CodeGroup>
+
+**Errors**
+- `404` if the index is missing.

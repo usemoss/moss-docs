@@ -148,7 +148,23 @@
       {
         "tab": "API Reference",
         "pages": [
-          "docs/api-reference/introduction"
+          {
+            "group": "Getting Started",
+            "icon": "rocket",
+            "pages": [
+              "docs/api-reference/getting-started/introduction",
+              "docs/api-reference/getting-started/authentication"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "icon": "code",
+            "pages": [
+              "docs/api-reference/endpoints/overview",
+              "docs/api-reference/endpoints/index-management",
+              "docs/api-reference/endpoints/document-operations"
+            ]
+          }
         ]
       },
       {

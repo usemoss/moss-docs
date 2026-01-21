@@ -1,3 +1,8 @@
+---
+title: QueryResultDocumentInfo
+mode: "wide"
+---
+
 [@inferedge/moss](../api) / QueryResultDocumentInfo
 
 # Interface: QueryResultDocumentInfo
@@ -6,48 +11,13 @@ Document result from a query with similarity score.
 
 ## Extends
 
-- [`DocumentInfo`](DocumentInfo)
+- `DocumentInfo`
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-Unique identifier within an index.
-
-#### Inherited from
-
-[`DocumentInfo`](DocumentInfo).[`id`](DocumentInfo#id)
-
-***
-
-### text
-
-> **text**: `string`
-
-REQUIRED canonical text to embed/search.
-
-#### Inherited from
-
-[`DocumentInfo`](DocumentInfo).[`text`](DocumentInfo#text)
-
-***
-
-### metadata?
-
-> `optional` **metadata**: `Record`\<`string`, `string`\>
-
-Optional metadata associated with the document.
-
-#### Inherited from
-
-[`DocumentInfo`](DocumentInfo).[`metadata`](DocumentInfo#metadata)
-
-***
-
-### score
-
-> **score**: `number`
-
-Similarity score (0-1, higher = more similar).
+| Property | Type | Required | Description | Inherited from |
+|----------|------|----------|-------------|----------------|
+| `id` | `string` | Yes | Unique identifier within an index. | `DocumentInfo.id` |
+| `text` | `string` | Yes | REQUIRED canonical text to embed/search. | `DocumentInfo.text` |
+| `metadata` | `Record<string, string>` | No | Optional metadata associated with the document. | `DocumentInfo.metadata` |
+| `score` | `number` | Yes | Similarity score (0-1, higher = more similar). | - |

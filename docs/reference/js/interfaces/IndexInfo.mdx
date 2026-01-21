@@ -1,3 +1,8 @@
+---
+title: IndexInfo
+mode: "wide"
+---
+
 [@inferedge/moss](../api) / IndexInfo
 
 # Interface: IndexInfo
@@ -6,64 +11,13 @@ Information about an index including metadata and status.
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-Unique identifier of the index.
-
-***
-
-### name
-
-> **name**: `string`
-
-Human-readable name of the index.
-
-***
-
-### version
-
-> **version**: `null` \| `string`
-
-Index build/format version (semver).
-
-***
-
-### status
-
-> **status**: `"NotStarted"` \| `"Building"` \| `"Ready"` \| `"Failed"`
-
-Current status of the index.
-
-***
-
-### docCount
-
-> **docCount**: `number`
-
-Number of documents in the index.
-
-***
-
-### createdAt
-
-> **createdAt**: `string`
-
-When the index was created.
-
-***
-
-### updatedAt
-
-> **updatedAt**: `string`
-
-When the index was last updated.
-
-***
-
-### model
-
-> **model**: [`ModelRef`](ModelRef)
-
-Model used for embeddings.
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | `string` | Yes | Unique identifier of the index. |
+| `name` | `string` | Yes | Human-readable name of the index. |
+| `version` | `null \| string` | Yes | Index build/format version (semver). |
+| `status` | `"NotStarted" \| "Building" \| "Ready" \| "Failed"` | Yes | Current status of the index. |
+| `docCount` | `number` | Yes | Number of documents in the index. |
+| `createdAt` | `string` | Yes | When the index was created. |
+| `updatedAt` | `string` | Yes | When the index was last updated. |
+| `model` | `ModelRef` | Yes | Model used for embeddings. |

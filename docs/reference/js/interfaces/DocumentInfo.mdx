@@ -1,33 +1,21 @@
+---
+title: DocumentInfo
+mode: "wide"
+---
+
 [@inferedge/moss](../api) / DocumentInfo
 
 # Interface: DocumentInfo
-
-Document that can be indexed and retrieved.
+Document that can be indexed and retrieved
 
 ## Extended by
 
-- [`QueryResultDocumentInfo`](QueryResultDocumentInfo)
+- `QueryResultDocumentInfo`
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-Unique identifier within an index.
-
-***
-
-### text
-
-> **text**: `string`
-
-REQUIRED canonical text to embed/search.
-
-***
-
-### metadata?
-
-> `optional` **metadata**: `Record`\<`string`, `string`\>
-
-Optional metadata associated with the document.
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | `string` | Yes | Unique identifier within an index. |
+| `text` | `string` | Yes | REQUIRED canonical text to embed/search. |
+| `metadata` | `Record<string, string>` | No | Optional metadata associated with the document. |
