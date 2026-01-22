@@ -26,11 +26,19 @@
         {
           "anchor": "Join our Community",
           "icon": "discord",
+          "color": {
+            "light": "#7289da",
+            "dark": "#7289da"
+          },
           "href": "https://discord.gg/eMXExuafBR"
         },
         {
           "anchor": "GitHub",
           "icon": "github",
+          "color": {
+            "light": "#24292e",
+            "dark": "#24292e"
+          },
           "href": "https://github.com/usemoss/moss-samples"
         },
         {
@@ -185,7 +193,7 @@
         "groups": [
           {
             "group": "Changelog",
-            "icon": "rocket",
+            "icon": "list",
             "pages": [
               "docs/changelog"
             ]
@@ -212,7 +220,8 @@
     "socials": {
       "linkedin": "https://linkedin.com/company/mossdev",
       "x": "https://x.com/usemoss",
-      "github": "https://github.com/usemoss"
+      "github": "https://github.com/usemoss",
+      "discord": "https://discord.gg/eMXExuafBR"
     }
   },
 

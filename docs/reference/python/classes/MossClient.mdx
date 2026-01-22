@@ -45,7 +45,7 @@ Retrieve metadata for a single index.
 
 **Returns**
 
-`IndexInfo` - Metadata describing the requested index.
+[`IndexInfo`](/docs/reference/python/interfaces/IndexInfo) - Metadata describing the requested index.
 
 ---
 
@@ -58,7 +58,7 @@ List all indexes in the current project.
 
 **Returns**
 
-`List[IndexInfo]` - Collection of index metadata objects.
+List[[`IndexInfo`](/docs/reference/python/interfaces/IndexInfo)] - Collection of index metadata objects.
 
 ---
 
@@ -157,7 +157,7 @@ Fetch documents stored in an index.
 
 **Returns**
 
-`List[DocumentInfo]` - Documents that satisfy the filters.
+List[[`DocumentInfo`](/docs/reference/python/interfaces/DocumentInfo)] - Documents that satisfy the filters.
 
 ---
 
@@ -179,4 +179,4 @@ Execute a semantic similarity search.
 
 **Returns**
 
-`SearchResult` - Ranked documents and metadata for the query.
+[`SearchResult`](/docs/reference/python/interfaces/SearchResult) - Ranked documents and metadata for the query.
