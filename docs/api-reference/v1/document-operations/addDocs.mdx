@@ -1,0 +1,47 @@
+---
+title: Add Documents
+description: Append or upsert documents into an existing index.
+mode: "wide"
+---
+
+Append or upsert documents into an existing index. The service merges the new documents, rebuilds the index efficiently, and makes fresh artifacts available for further usage.
+
+**Required fields**: `indexName`, `docs`
+
+**Optional fields**: `options.upsert` (defaults to `true`).
+
+**Example request**
+
+```bash
+curl -X POST "https://service.usemoss.dev/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "addDocs",
+    "projectId": "project_123",
+    "indexName": "support-faq",
+    "docs": [
+      { "id": "faq-125", "text": "How do I change billing cycles?" }
+    ],
+    "options": {
+      "upsert": true
+    }
+  }'
+```
+
+**Responses**
+
+<CodeGroup>
+```json 200 - OK
+{
+  "added": 1,
+  "updated": 0
+}
+```
+</CodeGroup>
+
+**Errors**
+
+- `404` if the index cannot be located.
+- `500` when existing documents cannot be downloaded or the update fails.
