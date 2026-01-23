@@ -160,17 +160,28 @@
             "group": "Getting Started",
             "icon": "rocket",
             "pages": [
-              "docs/api-reference/getting-started/introduction",
-              "docs/api-reference/getting-started/authentication"
+              "docs/api-reference/v1/getting-started/introduction",
+              "docs/api-reference/v1/getting-started/authentication",
+              "docs/api-reference/v1/getting-started/overview"
             ]
           },
           {
-            "group": "Endpoints",
-            "icon": "code",
+            "group": "Index Management",
+            "icon": "table-list",
             "pages": [
-              "docs/api-reference/endpoints/overview",
-              "docs/api-reference/endpoints/index-management",
-              "docs/api-reference/endpoints/document-operations"
+              "docs/api-reference/v1/index-management/createIndex",
+              "docs/api-reference/v1/index-management/getIndex",
+              "docs/api-reference/v1/index-management/listIndex",
+              "docs/api-reference/v1/index-management/deleteIndex"
+            ]
+          },
+          {
+            "group": "Document Operations",
+            "icon": "file-text",
+            "pages": [
+              "docs/api-reference/v1/document-operations/addDocs",
+              "docs/api-reference/v1/document-operations/getDocs",
+              "docs/api-reference/v1/document-operations/deleteDocs"
             ]
           }
         ]

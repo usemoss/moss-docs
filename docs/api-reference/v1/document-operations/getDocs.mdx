@@ -1,0 +1,45 @@
+---
+title: Get Documents
+description: Retrieve the stored documents for an index.
+mode: "wide"
+---
+
+Retrieve the stored documents for an index.
+
+**Required fields**: `indexName`
+
+**Optional fields**: `options.docIds` to return a subset.
+
+**Example request**
+
+```bash
+curl -X POST "https://service.usemoss.dev/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "getDocs",
+    "projectId": "project_123",
+    "indexName": "support-faq"
+  }'
+```
+
+**Responses**
+
+<CodeGroup>
+```json 200 - OK
+[
+  {
+    "id": "faq-001",
+    "text": "How do I reset my password?",
+    "metadata": {
+      "category": "account"
+    }
+  },
+  {
+    "id": "faq-002",
+    "text": "Where can I download invoices?"
+  }
+]
+```
+</CodeGroup>

@@ -1,0 +1,47 @@
+---
+title: Create Index
+description: Create a new index and persist its artifacts for later retrieval.
+mode: "wide"
+---
+
+Create a new index and persist its artifacts for later retrieval.
+
+**Additional body fields**
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `docs` | object[] | ✅ | Array of documents. Each document must include `id` and `text`; you may optionally supply `metadata` (key-value pairs). |
+| `modelId` | string | ◻️ | Defaults to `moss-minilm`. Other options include `moss-mediumlm`. |
+
+**Example request**
+
+```bash
+curl -X POST "https://service.usemoss.dev/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "createIndex",
+    "projectId": "project_123",
+    "indexName": "support-faq",
+    "modelId": "moss-minilm",
+    "docs": [
+      { "id": "faq-001", "text": "How do I reset my password?", "metadata": { "category": "account" } },
+      { "id": "faq-002", "text": "Where can I download invoices?" }
+    ]
+  }'
+```
+
+**Responses**
+
+<CodeGroup>
+```json 200 - OK
+true
+```
+</CodeGroup>
+
+**Errors**
+
+- `400` when any required field is missing.
+- `404` if the project does not exist.
+- `500` on unexpected storage or indexing failures.

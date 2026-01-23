@@ -1,0 +1,34 @@
+---
+title: Delete Documents
+description: Remove specific documents by ID and rebuild the index.
+mode: "wide"
+---
+
+Remove specific documents by ID and rebuild the index.
+
+**Required fields**: `indexName`, `docIds` (non-empty array)
+
+**Example request**
+
+```bash
+curl -X POST "https://service.usemoss.dev/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "deleteDocs",
+    "projectId": "project_123",
+    "indexName": "support-faq",
+    "docIds": ["faq-001", "faq-042", "faq-099"]
+  }'
+```
+
+**Responses**
+
+<CodeGroup>
+```json 200 - OK
+{
+  "deleted": 3
+}
+```
+</CodeGroup>
