@@ -3,7 +3,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Moss Docs",
   "public": true,
-  "description": "",
+  "description": "Moss is the real-time semantic search for conversational AI. It enables developers to build offline-first, AI-powered search experiences with JavaScript and Python SDKs. Deploy locally or in production with seamless data indexing and retrieval.",
 
 
   "colors": {
@@ -256,7 +256,16 @@
   },
 
 
-  "seo": {},
+  "seo": {
+    "metatags": {
+      "og:title": "Moss - Real-time semantic search for conversational AI.",
+      "og:description": "Build offline-first semantic search with Moss. JavaScript & Python SDKs for AI-powered search, vector indexing, and real-time voice agents.",
+      "og:image": "/logo/moss-wordmark-dark.svg",
+      "og:site_name": "Moss Documentation",
+      "keywords": "semantic search, offline-first search, vector database, AI search, embeddings, voice agents, LiveKit integration, JavaScript SDK, Python SDK, local-first, RAG, retrieval augmented generation"
+    },
+    "indexing": "navigable"
+  },
   "metadata": {
     "timestamp": false
   },
