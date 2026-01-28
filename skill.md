@@ -39,29 +39,21 @@ moss-docs/
 ├── docs/
 │   ├── index.mdx               # Homepage (custom mode)
 │   ├── start/                  # Getting started guides
-│   │   ├── what-is-moss.mdx
-│   │   ├── quickstart.mdx
-│   │   └── core-concepts.mdx
+│   │   ├── ...
 │   ├── integrate/              # How it works
-│   │   ├── authentication.mdx
-│   │   ├── indexing-data.mdx
-│   │   ├── retrieval.mdx
-│   │   └── storage-persistence.mdx
+│   │   ├── ...
 │   ├── build/                  # Use cases
-│   │   ├── offline-first-search.mdx
-│   │   └── voice-agent-livekit.mdx
+│   │   ├── ...
 │   ├── integrations/           # Third-party integrations
-│   │   ├── livekit.mdx
-│   │   └── pipecat.mdx
+│   │   ├── ...
 │   ├── reference/              # SDK reference
 │   │   ├── sdk.mdx
 │   │   ├── js/                 # JavaScript SDK docs
 │   │   └── python/             # Python SDK docs
 │   └── api-reference/          # REST API reference
-│       └── v1/
+│       └── ...
 ├── snippets/                   # Reusable MDX components
-│   ├── next-steps.mdx
-│   └── start-next-steps.mdx
+│   ├── ...
 └── logo/                       # Brand assets
 ```
 
