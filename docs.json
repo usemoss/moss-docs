@@ -263,7 +263,12 @@
   "thumbnails": {},
 
 
-  "redirects": [],
+  "redirects": [
+    {
+      "source": "/install.md",
+      "destination": "/404"
+    }
+  ],
   "integrations": {},
   "errors": {
     "404": {
