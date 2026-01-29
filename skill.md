@@ -1,7 +1,6 @@
 ---
 name: moss-docs
-description: Build and maintain Moss documentation. Use when creating docs pages,
-  updating SDK references, adding integration guides, or configuring navigation.
+description: Documentation and capabilities reference for Moss semantic search. Use for understanding Moss APIs, SDKs, and integration patterns.
 license: MIT
 compatibility: Requires Node.js for Mintlify CLI. Works with any Git-based workflow.
 metadata:
@@ -10,245 +9,199 @@ metadata:
   docs-url: https://docs.usemoss.dev
 ---
 
-# Moss Documentation Best Practices
+# Moss Agent Skills
 
-**Always consult [docs.usemoss.dev](https://docs.usemoss.dev) for the latest documentation and [mintlify.com/docs](https://mintlify.com/docs) for Mintlify components and configuration.**
+## Capabilities
 
-Moss is the real-time semantic search runtime for conversational AI. This repository contains the official documentation deployed at [docs.usemoss.dev](https://docs.usemoss.dev), built with Mintlify.
+Moss is the real-time semantic search runtime for conversational AI. It delivers sub-10ms lookups and instant index updates that run in the browser, on-device, or in the cloudwherever your agent lives. Agents can create indexes, embed documents, perform semantic/hybrid searches, and manage document lifecycles without managing infrastructure. The platform handles embedding generation, index persistence, and optional cloud sync—allowing agents to focus on retrieval logic rather than infrastructure.
 
-## Quick reference
+## Skills
 
-### CLI commands
+### Index Management
+- **Create Index**: Build a new semantic index with documents and embedding model selection
+- **Load Index**: Load an existing index from persistent storage for querying
+- **Get Index**: Retrieve metadata about a specific index (document count, model, etc.)
+- **List Indexes**: Enumerate all indexes under a project
+- **Delete Index**: Remove an index and all associated data
 
-* `npm i -g mint` - Install the Mintlify CLI
-* `mint dev` - Local preview at localhost:3000
-* `mint update` - Update to latest Mintlify version
-* `mint broken-links` - Check internal links
-* `mint validate` - Validate documentation builds
+### Document Operations
+- **Add Documents**: Insert or upsert documents into an existing index with optional metadata
+- **Get Documents**: Retrieve stored documents by ID or fetch all documents
+- **Delete Documents**: Remove specific documents from an index by their IDs
 
-### Required files
+### Search & Retrieval
+- **Semantic Search**: Query using natural language with vector similarity matching
+- **Keyword Search**: Use BM25-based keyword matching for exact term lookups
+- **Hybrid Search**: Blend semantic and keyword search with configurable alpha weighting
+- **Metadata Filtering**: Constrain results by document metadata (category, language, tags)
+- **Top-K Results**: Return configurable number of best-matching documents with scores
 
-* `docs.json` - Site configuration (navigation, theme, integrations). **Never use `mint.json`** (deprecated)
-* `*.mdx` files - Documentation pages with YAML frontmatter
+### Embedding Models
+- **moss-minilm**: Fast, lightweight model optimized for edge/offline use (default)
+- **moss-mediumlm**: Higher accuracy model with reasonable performance for precision-critical use cases
 
-### Repository structure
+### SDK Methods
 
-```
-moss-docs/
-├── docs.json                    # Site configuration
-├── docs/
-│   ├── index.mdx               # Homepage (custom mode)
-│   ├── start/                  # Getting started guides
-│   │   ├── ...
-│   ├── integrate/              # How it works
-│   │   ├── ...
-│   ├── build/                  # Use cases
-│   │   ├── ...
-│   ├── integrations/           # Third-party integrations
-│   │   ├── ...
-│   ├── reference/              # SDK reference
-│   │   ├── sdk.mdx
-│   │   ├── js/                 # JavaScript SDK docs
-│   │   └── python/             # Python SDK docs
-│   └── api-reference/          # REST API reference
-│       └── ...
-├── snippets/                   # Reusable MDX components
-│   ├── ...
-└── logo/                       # Brand assets
-```
+| JavaScript | Python | Description |
+|------------|--------|-------------|
+| `createIndex()` | `create_index()` | Create index with documents |
+| `loadIndex()` | `load_index()` | Load index from storage |
+| `getIndex()` | `get_index()` | Get index metadata |
+| `listIndexes()` | `list_indexes()` | List all indexes |
+| `deleteIndex()` | `delete_index()` | Delete an index |
+| `addDocs()` | `add_docs()` | Add/upsert documents |
+| `getDocs()` | `get_docs()` | Retrieve documents |
+| `deleteDocs()` | `delete_docs()` | Remove documents |
+| `query()` | `query()` | Semantic search |
 
-## Navigation structure
+### API Actions
+All REST API operations go through `POST /manage` with an `action` field:
+- `createIndex` - Create index with seed documents
+- `getIndex` - Get metadata for single index
+- `listIndexes` - List all project indexes
+- `deleteIndex` - Remove index and assets
+- `addDocs` - Upsert documents into index
+- `getDocs` - Retrieve stored documents
+- `deleteDocs` - Remove documents by ID
 
-The site uses **tabs** as the primary navigation pattern in `docs.json`:
+## Workflows
 
-| Tab | Purpose |
-|-----|---------|
-| **Home** | Landing page with hero and quickstart link |
-| **Platform** | Getting started, use cases, how it works |
-| **SDK** | JavaScript and Python SDK reference |
-| **API Reference** | REST API endpoints (v1) |
-| **Integrations** | Third-party integrations (LiveKit, Pipecat) |
-| **Release Notes** | Changelog |
+### Basic Semantic Search Workflow
+1. Initialize MossClient with project credentials
+2. Call `createIndex()` with documents and model (`moss-minilm` or `moss-mediumlm`)
+3. Call `loadIndex()` to prepare index for queries
+4. Call `query()` with search text and top_k parameter
+5. Process returned documents with scores
 
-### Adding new pages
+### Hybrid Search Workflow
+1. Create and load index as above
+2. Call `query()` with alpha parameter to blend semantic and keyword
+3. `alpha: 1.0` = pure semantic, `alpha: 0.0` = pure keyword, `alpha: 0.6` = 60/40 blend
+4. Default is semantic-heavy (~0.8) for conversational use cases
 
-1. Create the `.mdx` file in the appropriate directory
-2. Add the page path to `docs.json` navigation
-3. Use root-relative paths without extensions: `/docs/start/quickstart`
+### Document Update Workflow
+1. Initialize client and ensure index exists
+2. Call `addDocs()` with new documents and `upsert: true` option
+3. Existing documents with matching IDs are updated; new IDs are inserted
+4. Call `deleteDocs()` to remove outdated documents by ID
 
-## Content patterns
+### Voice Agent Context Injection Workflow
+1. Initialize MossClient and load index at agent startup
+2. On each user message, automatically query Moss for relevant context
+3. Inject search results into LLM context before generating response
+4. Respond with knowledge-grounded answer (no tool-calling latency)
 
-### Page frontmatter
+### Offline-First Search Workflow
+1. Create index with documents using local embedding model
+2. Load index from local storage
+3. Query runs entirely on-device with sub-10ms latency
+4. Optionally sync to cloud for backup and sharing
 
-Every MDX file requires frontmatter:
+## Integration
 
-```yaml
----
-title: "Page Title"
-description: "Brief description for SEO and navigation"
----
-```
+### Voice Agent Frameworks
+- **LiveKit**: Context injection into voice agent pipeline with `inferedge-moss` SDK
+- **Pipecat**: Pipeline processor via `pipecat-moss` package that auto-injects retrieval results
 
-Optional frontmatter:
-- `mode: "wide"` - Full-width layout
-- `mode: "custom"` - Custom layout (used for homepage)
+### Runtime Environments
+- **Browser**: Client-side semantic search for web apps
+- **Electron**: Desktop app local search via IPC to main process
+- **Browser Extensions**: Background service worker with message-based query interface
+- **Server/Cloud**: Standard SDK usage with optional cloud sync
 
-### Dual-language code examples
+### AI Providers
+- **OpenAI**: Compatible with GPT models for LLM responses
+- **Deepgram**: STT integration in voice pipelines
+- **Cartesia**: TTS integration in voice pipelines
 
-Always provide both JavaScript and Python examples using `<CodeGroup>`:
-
-````mdx
-<CodeGroup>
-```ts JavaScript
-import { MossClient } from '@inferedge/moss'
-const client = new MossClient(projectId, projectKey)
-await client.createIndex('faqs', docs, 'moss-minilm')
-```
-```python Python
-from inferedge_moss import MossClient
-client = MossClient(project_id, project_key)
-await client.create_index("faqs", documents, "moss-minilm")
-```
-</CodeGroup>
-````
-
-### Step-by-step guides
-
-Use `<Steps>` for sequential instructions:
-
-````mdx
-<Steps>
-<Step title="Install">
-<CodeGroup>
-```bash JavaScript
-npm install @inferedge/moss
-```
-```bash Python
-pip install inferedge-moss
-```
-</CodeGroup>
-</Step>
-
-<Step title="Configure credentials">
-Set environment variables...
-</Step>
-</Steps>
-````
-
-### Reusable snippets
-
-Import shared content from `/snippets/`:
-
-````mdx
-import StartNextSteps from '/snippets/start-next-steps.mdx';
-
-<StartNextSteps />
-````
-
-### Callouts
-
-Use appropriate callout components:
-
-- `<Tip>` - Best practices and recommendations
-- `<Note>` - Supplementary information
-- `<Warning>` - Destructive actions or important caveats
-
-## Moss SDK reference
-
-### Package names
-
-| Language | Package | Install |
-|----------|---------|---------|
-| JavaScript/TypeScript | `@inferedge/moss` | `npm install @inferedge/moss` |
-| Python | `inferedge-moss` | `pip install inferedge-moss` |
-
-### Models
-
-| Model | Description |
-|-------|-------------|
-| `moss-minilm` | Default. Fast, lightweight, great for edge/offline |
-| `moss-mediumlm` | Higher accuracy with reasonable performance |
-
-### Hybrid search (`alpha` parameter)
-
-- `alpha: 1.0` - Pure semantic (embeddings)
-- `alpha: 0.0` - Pure keyword (BM25)
-- `alpha: 0.6` - Blend (60% semantic, 40% keyword)
-- Default is semantic-heavy (~0.8)
-
-### Method naming conventions
-
-| JavaScript | Python |
-|------------|--------|
-| `createIndex()` | `create_index()` |
-| `loadIndex()` | `load_index()` |
-| `deleteIndex()` | `delete_index()` |
-| `addDocs()` | `add_docs()` |
-| `deleteDocs()` | `delete_docs()` |
-| `getDocs()` | `get_docs()` |
-| `query()` | `query()` |
-
-## API reference
+## Context
 
 ### Authentication
-
-All API requests require:
-- `projectId` in JSON body
-- `x-project-key` header
-- `x-service-version: v1` header
+SDK requires project credentials:
+- `MOSS_PROJECT_ID`: Project identifier from Moss Portal
+- `MOSS_PROJECT_KEY`: Project access key from Moss Portal
 
 ```bash
-curl -X POST "https://service.usemoss.dev/manage" \
-  -H "Content-Type: application/json" \
-  -H "x-service-version: v1" \
-  -H "x-project-key: moss_access_key_xxxxx" \
-  -d '{"action": "listIndexes", "projectId": "project_123"}'
+export MOSS_PROJECT_ID=your_project_id
+export MOSS_PROJECT_KEY=your_project_key
 ```
 
-### API endpoints structure
+REST API requires headers:
+- `x-project-key`: Project access key
+- `x-service-version: v1`: API version header
+- `projectId` in JSON body
 
-API reference pages are organized under `docs/api-reference/v1/`:
-- `getting-started/` - Introduction, authentication, overview
-- `index-management/` - createIndex, getIndex, listIndex, deleteIndex
-- `document-operations/` - addDocs, getDocs, deleteDocs
+### Package Installation
 
-## Integration guides
+| Language | Package | Install Command |
+|----------|---------|-----------------|
+| JavaScript/TypeScript | `@inferedge/moss` | `npm install @inferedge/moss` |
+| Python | `inferedge-moss` | `pip install inferedge-moss` |
+| Pipecat Integration | `pipecat-moss` | `pip install pipecat-moss` |
 
-When documenting integrations (LiveKit, Pipecat, etc.):
+### Document Schema
+```typescript
+interface DocumentInfo {
+  id: string;           // Required: unique identifier
+  text: string;         // Required: content to embed and search
+  metadata?: object;    // Optional: key-value pairs for filtering
+}
+```
 
-1. Start with "Why Use Moss with X?" section
-2. List required tools/dependencies
-3. Use `<Steps>` for the integration guide
-4. Include complete, runnable code examples
-5. Show environment setup with `.env` examples
+### Query Parameters
 
-### Integration pattern: Context Injection
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `indexName` | string | - | Target index name (required) |
+| `query` | string | - | Natural language search text (required) |
+| `top_k` / `topK` | number | 5 | Max results to return |
+| `alpha` | float | ~0.8 | Hybrid weighting: 0.0=keyword, 1.0=semantic |
+| `filters` | object | - | Metadata constraints |
 
-For voice agents, document the context injection pattern:
-1. Automatic search on every user message
-2. Inject results into conversation context
-3. LLM responds with knowledge-grounded answer
+### Model Selection
 
-## Common gotchas
+| Model | Use Case | Tradeoff |
+|-------|----------|----------|
+| `moss-minilm` | Edge, offline, browser, speed-first | Fast, lightweight |
+| `moss-mediumlm` | Precision-critical, higher accuracy | Slightly slower |
 
-1. **Use `docs.json` not `mint.json`** - `mint.json` is deprecated
-2. **Frontmatter required** - Every MDX file needs at least `title`
-3. **Code block language** - Always specify language identifier
-4. **Dual-language examples** - Always provide JS and Python versions
-5. **Async/await** - All SDK methods are async; show proper async patterns
-6. **Environment variables** - Use `MOSS_PROJECT_ID` and `MOSS_PROJECT_KEY`
+### Performance Expectations
+- Sub-10ms local queries (hardware-dependent)
+- Instant index updates without reindexing entire corpus
+- Sync is optional; compute stays on-device
+- No infrastructure to manage
 
-## Links and resources
+### Chunking Best Practices
+- Aim for ~200–500 tokens per chunk
+- Overlap 10–20% to preserve context
+- Normalize whitespace and strip boilerplate
 
-### Internal linking
+### Common Errors
 
-- Use root-relative paths without extensions: `/docs/start/quickstart`
-- Images in `/logo/` directory: `/logo/moss-wordmark-dark.svg`
+| Error | Cause | Fix |
+|-------|-------|-----|
+| Unauthorized | Missing credentials | Set `MOSS_PROJECT_ID` and `MOSS_PROJECT_KEY` |
+| Index not found | Query before create | Call `createIndex()` first |
+| Index not loaded | Query before load | Call `loadIndex()` before `query()` |
+| Missing embeddings runtime | Invalid model | Use `moss-minilm` or `moss-mediumlm` |
 
-### External resources
+### Async Pattern
+All SDK methods are async—always use `await`:
 
-- Documentation: [docs.usemoss.dev](https://docs.usemoss.dev)
-- Portal: [portal.usemoss.dev](https://portal.usemoss.dev)
-- Samples: [github.com/usemoss/moss-samples](https://github.com/usemoss/moss-samples)
-- Discord: [discord.gg/eMXExuafBR](https://discord.gg/eMXExuafBR)
-- Mintlify docs: [mintlify.com/docs](https://mintlify.com/docs)
+```typescript
+// JavaScript
+await client.createIndex('faqs', docs, 'moss-minilm')
+await client.loadIndex('faqs')
+const results = await client.query('faqs', 'search text', 5)
+```
+
+```python
+# Python
+await client.create_index("faqs", docs, "moss-minilm")
+await client.load_index("faqs")
+results = await client.query("faqs", "search text", top_k=5)
+```
+
+---
+
+> For additional documentation and navigation, see: https://docs.usemoss.dev/llms.txt
