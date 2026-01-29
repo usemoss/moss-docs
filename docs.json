@@ -3,7 +3,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "name": "Moss Docs",
   "public": true,
-  "description": "",
+  "description": "Moss is a high-performance runtime for real-time semantic search. It delivers sub-10 ms lookups, instant index updates, and zero infra overhead. Moss runs where your agent lives - cloud, in-browser, or on-device - so search feels native and users never wait.",
 
 
   "colors": {
@@ -256,14 +256,28 @@
   },
 
 
-  "seo": {},
+  "seo": {
+    "metatags": {
+      "og:title": "Moss - Real-time Semantic Search for Conversational AI",
+      "og:description": "Turn lagging, robotic AI interactions into natural, human-like experiences with sub-10 ms semantic search. Moss runs where your agent lives - cloud, in-browser, or on-device - so search feels native and users never wait.",
+      "og:image": "/logo/favicon.svg",
+      "og:site_name": "Moss Documentation",
+      "keywords": "semantic search, real-time search, conversational AI, voice AI, sub-10ms latency, vector database, AI search, embeddings, voice agents, LiveKit integration, Pipecat, JavaScript SDK, Python SDK, local-first, RAG, retrieval augmented generation, on-device search, in-browser search"
+    },
+    "indexing": "navigable"
+  },
   "metadata": {
     "timestamp": false
   },
   "thumbnails": {},
 
 
-  "redirects": [],
+  "redirects": [
+    {
+      "source": "/install.md",
+      "destination": "/404"
+    }
+  ],
   "integrations": {},
   "errors": {
     "404": {
