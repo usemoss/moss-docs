@@ -1,8 +1,6 @@
 ---
 name: moss-docs
 description: Documentation and capabilities reference for Moss semantic search. Use for understanding Moss APIs, SDKs, and integration patterns.
-license: MIT
-compatibility: Requires Node.js for Mintlify CLI. Works with any Git-based workflow.
 metadata:
   author: usemoss
   version: "1.0"
@@ -13,7 +11,7 @@ metadata:
 
 ## Capabilities
 
-Moss is the real-time semantic search runtime for conversational AI. It delivers sub-10ms lookups and instant index updates that run in the browser, on-device, or in the cloudwherever your agent lives. Agents can create indexes, embed documents, perform semantic/hybrid searches, and manage document lifecycles without managing infrastructure. The platform handles embedding generation, index persistence, and optional cloud sync—allowing agents to focus on retrieval logic rather than infrastructure.
+Moss is the real-time semantic search runtime for conversational AI. It delivers sub-10ms lookups and instant index updates that run in the browser, on-device, or in the cloud - wherever your agent lives. Agents can create indexes, embed documents, perform semantic/hybrid searches, and manage document lifecycles without managing infrastructure. The platform handles embedding generation, index persistence, and optional cloud sync - allowing agents to focus on retrieval logic rather than infrastructure.
 
 ## Skills
 
@@ -103,17 +101,6 @@ All REST API operations go through `POST /manage` with an `action` field:
 - **LiveKit**: Context injection into voice agent pipeline with `inferedge-moss` SDK
 - **Pipecat**: Pipeline processor via `pipecat-moss` package that auto-injects retrieval results
 
-### Runtime Environments
-- **Browser**: Client-side semantic search for web apps
-- **Electron**: Desktop app local search via IPC to main process
-- **Browser Extensions**: Background service worker with message-based query interface
-- **Server/Cloud**: Standard SDK usage with optional cloud sync
-
-### AI Providers
-- **OpenAI**: Compatible with GPT models for LLM responses
-- **Deepgram**: STT integration in voice pipelines
-- **Cartesia**: TTS integration in voice pipelines
-
 ## Context
 
 ### Authentication
@@ -186,7 +173,7 @@ interface DocumentInfo {
 | Missing embeddings runtime | Invalid model | Use `moss-minilm` or `moss-mediumlm` |
 
 ### Async Pattern
-All SDK methods are async—always use `await`:
+All SDK methods are async - always use `await`:
 
 ```typescript
 // JavaScript
