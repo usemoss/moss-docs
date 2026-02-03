@@ -1,0 +1,39 @@
+---
+title: IndexInfo
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / LoadIndexOptions
+
+# Interface: LoadIndexOptions
+
+Options for loading an index, including optional auto-refresh configuration.
+
+## Properties
+
+### autoRefresh?
+
+> `optional` **autoRefresh**: `boolean`
+
+Whether to enable auto-refresh polling for this index.
+When enabled, the index will periodically check for updates from the cloud.
+
+#### Default
+
+```ts
+false
+```
+
+***
+
+### pollingIntervalInSeconds?
+
+> `optional` **pollingIntervalInSeconds**: `number`
+
+Polling interval in seconds. Only used when autoRefresh is true.
+
+#### Default
+
+```ts
+600 (10 minutes)
+```

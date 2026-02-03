@@ -1,0 +1,26 @@
+---
+title: QueryOptions
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / QueryOptions
+
+# Interface: QueryOptions
+
+Optional parameters for semantic queries.
+
+## Properties
+
+### embedding?
+
+> `optional` **embedding**: `number`[]
+
+Caller-provided embedding vector. When supplied, the service/client skips embedding generation.
+
+***
+
+### topK?
+
+> `optional` **topK**: `number`
+
+Number of top results to return. Overrides method-level defaults.

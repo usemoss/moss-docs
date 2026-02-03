@@ -11,11 +11,48 @@ Complete serialized representation of an index for local .moss file storage. Con
 
 ## Properties
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `name` | `string` | Yes | Name of the index. |
-| `version` | `string` | Yes | Index build/format version (semver). |
-| `model` | `ModelRef` | Yes | Model bound to this index. |
-| `dimension` | `number` | Yes | Embedding dimensionality. |
-| `embeddings` | `number[][]` | Yes | Embedding vectors (rows = embedding vectors). |
-| `docIds` | `string[]` | Yes | Document IDs parallel to embeddings. |
+### name
+
+> **name**: `string`
+
+Name of the index.
+
+***
+
+### version
+
+> **version**: `string`
+
+Index build/format version (semver).
+
+***
+
+### model
+
+> **model**: [`ModelRef`](./ModelRef)
+
+Model bound to this index.
+
+***
+
+### dimension
+
+> **dimension**: `number`
+
+Embedding dimensionality.
+
+***
+
+### embeddings
+
+> **embeddings**: `number`[][]
+
+Embedding vectors (rows = embedding vectors).
+
+***
+
+### docIds
+
+> **docIds**: `string`[]
+
+Document IDs parallel to embeddings.
