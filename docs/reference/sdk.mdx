@@ -69,7 +69,7 @@ async def main():
   res = await client.query("faqs", "return a damaged product", query_options)  # 1.0 semantic, 0.0 keyword
   await client.delete_index("faqs")
 
-  print(res)
+
 
 
 if __name__ == "__main__":
