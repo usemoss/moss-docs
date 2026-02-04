@@ -86,6 +86,13 @@
               "docs/integrate/storage-persistence",
               "docs/integrate/deployment-production"
             ]
+          },
+          {
+            "group": "Pricing",
+            "icon": "dollar",
+            "pages": [
+              "docs/pricing"
+            ]
           }
         ]
       },
