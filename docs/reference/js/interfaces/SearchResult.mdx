@@ -11,9 +11,32 @@ Search operation result.
 
 ## Properties
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `docs` | `QueryResultDocumentInfo[]` | Yes | Matching documents ordered by similarity score. |
-| `query` | `string` | Yes | The original search query. |
-| `indexName` | `string` | No | Name of the index that was searched. |
-| `timeTakenInMs` | `number` | No | Time taken to execute the search in milliseconds. |
+### docs
+
+> **docs**: [`QueryResultDocumentInfo`](./QueryResultDocumentInfo)[]
+
+Matching documents ordered by similarity score.
+
+***
+
+### query
+
+> **query**: `string`
+
+The original search query.
+
+***
+
+### indexName?
+
+> `optional` **indexName**: `string`
+
+Name of the index that was searched.
+
+***
+
+### timeTakenInMs?
+
+> `optional` **timeTakenInMs**: `number`
+
+Time taken to execute the search in milliseconds.

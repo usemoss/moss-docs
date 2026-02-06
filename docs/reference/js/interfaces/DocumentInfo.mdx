@@ -10,12 +10,36 @@ Document that can be indexed and retrieved
 
 ## Extended by
 
-- `QueryResultDocumentInfo`
+- [`QueryResultDocumentInfo`](./QueryResultDocumentInfo)
 
 ## Properties
 
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `id` | `string` | Yes | Unique identifier within an index. |
-| `text` | `string` | Yes | REQUIRED canonical text to embed/search. |
-| `metadata` | `Record<string, string>` | No | Optional metadata associated with the document. |
+### id
+
+> **id**: `string`
+
+Unique identifier within an index.
+
+***
+
+### text
+
+> **text**: `string`
+
+REQUIRED canonical text to embed/search.
+
+***
+
+### metadata?
+
+> `optional` **metadata**: `Record`\<`string`, `string`\>
+
+Optional metadata associated with the document.
+
+***
+
+### embedding?
+
+> `optional` **embedding**: `number`[]
+
+Optional caller-provided embedding vector.

@@ -7,7 +7,8 @@ description: Local semantic search client for vector similarity operations
 
 Local semantic search client for vector similarity operations.
 
-## Quick Example
+## Example
+
 ```typescript
 const client = new MossClient('your-project-id', 'your-project-key');
 
@@ -21,56 +22,72 @@ await client.createIndex('docs', [
 const results = await client.query('docs', 'AI and neural networks');
 ```
 
----
+## Constructors
 
-## Constructor
+### Constructor
 
-### new MossClient()
-```typescript
-new MossClient(projectId: string, projectKey: string): MossClient
-```
+> **new MossClient**(`projectId`, `projectKey`): `MossClient`
 
 Creates a new MossClient instance for local operations.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `projectId` | `string` | Yes | Your project identifier. |
-| `projectKey` | `string` | Yes | Your project authentication key. |
+##### projectId
 
-**Returns**
+`string`
+
+Your project identifier.
+
+##### projectKey
+
+`string`
+
+Your project authentication key.
+
+#### Returns
 
 `MossClient`
-
----
 
 ## Methods
 
 ### createIndex()
-```typescript
-createIndex(indexName: string, docs: DocumentInfo[], modelId: string): Promise<boolean>
-```
+
+> **createIndex**(`indexName`, `docs`, `modelId?`): `Promise`\<`boolean`\>
 
 Creates a new index with the provided documents.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the index to create. |
-| `docs` | `DocumentInfo[]` | Yes | Initial documents to add to the index. |
-| `modelId` | `string` | Yes | Model to use for embeddings. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<boolean>` - Promise that resolves to true if successful.
+Name of the index to create.
 
-**Throws**
+##### docs
+
+[`DocumentInfo`](../interfaces/DocumentInfo)[]
+
+Initial documents to add to the index.
+
+##### modelId?
+
+`string`
+
+The model ID to use for embeddings.
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+Promise that resolves to true if successful.
+
+#### Throws
 
 If the index already exists or creation fails.
 
-**Example**
+#### Example
+
 ```typescript
 const success = await client.createIndex('knowledge-base', [
   { id: 'doc1', text: 'Introduction to AI' },
@@ -78,49 +95,55 @@ const success = await client.createIndex('knowledge-base', [
 ], 'moss-minilm');
 ```
 
----
+***
 
 ### getIndex()
-```typescript
-getIndex(indexName: string): Promise<IndexInfo>
-```
+
+> **getIndex**(`indexName`): `Promise`\<[`IndexInfo`](../interfaces/IndexInfo)\>
 
 Gets information about a specific index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the index to retrieve. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<IndexInfo>` - Promise that resolves to IndexInfo object.
+Name of the index to retrieve.
 
-**Throws**
+#### Returns
+
+`Promise`\<[`IndexInfo`](../interfaces/IndexInfo)\>
+
+Promise that resolves to IndexInfo object.
+
+#### Throws
 
 If the index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 const info = await client.getIndex('knowledge-base');
 console.log(`Index has ${info.docCount} documents`);
 ```
 
----
+***
 
 ### listIndexes()
-```typescript
-listIndexes(): Promise<IndexInfo[]>
-```
+
+> **listIndexes**(): `Promise`\<[`IndexInfo`](../interfaces/IndexInfo)[]\>
 
 Lists all available indexes.
 
-**Returns**
+#### Returns
 
-`Promise<IndexInfo[]>` - Promise that resolves to array of IndexInfo objects.
+`Promise`\<[`IndexInfo`](../interfaces/IndexInfo)[]\>
 
-**Example**
+Promise that resolves to array of IndexInfo objects.
+
+#### Example
+
 ```typescript
 const indexes = await client.listIndexes();
 indexes.forEach(index => {
@@ -128,89 +151,78 @@ indexes.forEach(index => {
 });
 ```
 
----
+***
 
 ### deleteIndex()
-```typescript
-deleteIndex(indexName: string): Promise<boolean>
-```
+
+> **deleteIndex**(`indexName`): `Promise`\<`boolean`\>
 
 Deletes an index and all its data.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the index to delete. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<boolean>` - Promise that resolves to true if successful.
+Name of the index to delete.
 
-**Throws**
+#### Returns
+
+`Promise`\<`boolean`\>
+
+Promise that resolves to true if successful.
+
+#### Throws
 
 If the index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 const deleted = await client.deleteIndex('old-index');
 ```
 
----
-
-### loadIndex()
-```typescript
-loadIndex(indexName: string): Promise<string>
-```
-
-Loads an index from a local .moss file.
-
-**Parameters**
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the index to load. |
-
-**Returns**
-
-`Promise<string>` - Promise that resolves to the index name.
-
-**Throws**
-
-If the index file does not exist or is invalid.
-
-**Example**
-```typescript
-const indexName = await client.loadIndex('my-index');
-console.log(`Loaded index: ${indexName}`);
-```
-
----
+***
 
 ### addDocs()
-```typescript
-addDocs(indexName: string, docs: DocumentInfo[], options?: AddDocumentsOptions): Promise<{ added: number; updated: number; }>
-```
+
+> **addDocs**(`indexName`, `docs`, `options?`): `Promise`\<\{ `added`: `number`; `updated`: `number`; \}\>
 
 Adds or updates documents in an index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the target index. |
-| `docs` | `DocumentInfo[]` | Yes | Documents to add or update. |
-| `options` | `AddDocumentsOptions` | No | Optional configuration for the operation. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<{ added: number; updated: number; }>` - Promise that resolves to operation result with counts.
+Name of the target index.
 
-**Throws**
+##### docs
+
+[`DocumentInfo`](../interfaces/DocumentInfo)[]
+
+Documents to add or update.
+
+##### options?
+
+[`AddDocumentsOptions`](../interfaces/AddDocumentsOptions)
+
+Optional configuration for the operation.
+
+#### Returns
+
+`Promise`\<\{ `added`: `number`; `updated`: `number`; \}\>
+
+Promise that resolves to operation result with counts.
+
+#### Throws
 
 If the index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 const result = await client.addDocs('knowledge-base', [
   { id: 'new-doc', text: 'New content to index' }
@@ -218,61 +230,79 @@ const result = await client.addDocs('knowledge-base', [
 console.log(`Added: ${result.added}, Updated: ${result.updated}`);
 ```
 
----
+***
 
 ### deleteDocs()
-```typescript
-deleteDocs(indexName: string, docIds: string[]): Promise<{ deleted: number; }>
-```
+
+> **deleteDocs**(`indexName`, `docIds`): `Promise`\<\{ `deleted`: `number`; \}\>
 
 Deletes documents from an index by their IDs.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the target index. |
-| `docIds` | `string[]` | Yes | Array of document IDs to delete. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<{ deleted: number; }>` - Promise that resolves to operation result with count.
+Name of the target index.
 
-**Throws**
+##### docIds
+
+`string`[]
+
+Array of document IDs to delete.
+
+#### Returns
+
+`Promise`\<\{ `deleted`: `number`; \}\>
+
+Promise that resolves to operation result with count.
+
+#### Throws
 
 If the index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 const result = await client.deleteDocs('knowledge-base', ['doc1', 'doc2']);
 console.log(`Deleted ${result.deleted} documents`);
 ```
 
----
+***
 
 ### getDocs()
-```typescript
-getDocs(indexName: string, options?: GetDocumentsOptions): Promise<DocumentInfo[]>
-```
+
+> **getDocs**(`indexName`, `options?`): `Promise`\<[`DocumentInfo`](../interfaces/DocumentInfo)[]\>
 
 Retrieves documents from an index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `indexName` | `string` | Yes | Name of the target index. |
-| `options` | `GetDocumentsOptions` | No | Optional configuration for retrieval. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<DocumentInfo[]>` - Promise that resolves to array of documents.
+Name of the target index.
 
-**Throws**
+##### options?
+
+[`GetDocumentsOptions`](../interfaces/GetDocumentsOptions)
+
+Optional configuration for retrieval.
+
+#### Returns
+
+`Promise`\<[`DocumentInfo`](../interfaces/DocumentInfo)[]\>
+
+Promise that resolves to array of documents.
+
+#### Throws
 
 If the index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 // Get all documents
 const allDocs = await client.getDocs('knowledge-base');
@@ -283,32 +313,117 @@ const specificDocs = await client.getDocs('knowledge-base', {
 });
 ```
 
----
+***
+
+### loadIndex()
+
+> **loadIndex**(`indexName`, `options?`): `Promise`\<`string`\>
+
+Downloads an index from the cloud into memory for fast local querying.
+
+**How it works:**
+1. Fetches the index assets from the cloud
+2. Loads the embedding model for generating query embeddings
+3. Executes a local similarity match between the query embedding and the retrieved index.
+
+**Why use this?**
+- Without `loadIndex()`: Every `query()` call goes to the cloud API (~100-500ms network latency)
+- With `loadIndex()`: Queries run entirely in-memory (~1-10ms)
+
+**Reload behavior:**
+If the index is already loaded, calling `loadIndex()` again will:
+- Stop any existing auto-refresh polling
+- Download a fresh copy from the cloud
+- Replace the in-memory index
+
+**Auto-refresh (optional):**
+Enable `autoRefresh: true` to periodically poll the cloud for updates.
+When a newer version is detected, the index is automatically hot-swapped
+without interrupting queries.
+
+#### Parameters
+
+##### indexName
+
+`string`
+
+Name of the index to load.
+
+##### options?
+
+[`LoadIndexOptions`](../interfaces/LoadIndexOptions)
+
+Optional configuration including auto-refresh settings.
+
+#### Returns
+
+`Promise`\<`string`\>
+
+Promise that resolves to the index name.
+
+#### Throws
+
+If the index does not exist in the cloud or loading fails.
+
+#### Example
+
+```typescript
+// Simple load - enables fast local queries
+await client.loadIndex('my-index');
+
+// Now queries run locally (fast, no network calls)
+const results = await client.query('my-index', 'search text');
+
+// Load with auto-refresh to keep index up-to-date
+await client.loadIndex('my-index', {
+  autoRefresh: true,
+  pollingIntervalInSeconds: 300, // Check cloud every 5 minutes
+});
+
+// Stop auto-refresh by reloading without the option
+await client.loadIndex('my-index');
+```
+
+***
 
 ### query()
-```typescript
-query(indexName: string, query: string, topK?: number): Promise<SearchResult>
-```
+
+> **query**(`indexName`, `query`, `options?`): `Promise`\<[`SearchResult`](../interfaces/SearchResult)\>
 
 Performs a semantic similarity search against the specified index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `indexName` | `string` | Yes | - | Name of the target index to search. |
-| `query` | `string` | Yes | - | The search query text. |
-| `topK` | `number` | No | `5` | Maximum number of results to return. |
+##### indexName
 
-**Returns**
+`string`
 
-`Promise<SearchResult>` - Promise that resolves to SearchResult with matching documents.
+Name of the target index to search.
 
-**Throws**
+##### query
+
+`string`
+
+The search query text.
+
+##### options?
+
+[`QueryOptions`](../interfaces/QueryOptions)
+
+Optional query configuration including topK (default: 5) and embedding overrides.
+
+#### Returns
+
+`Promise`\<[`SearchResult`](../interfaces/SearchResult)\>
+
+Promise that resolves to SearchResult with matching documents.
+
+#### Throws
 
 If the specified index does not exist.
 
-**Example**
+#### Example
+
 ```typescript
 const results = await client.query('knowledge-base', 'machine learning');
 results.docs.forEach(doc => {

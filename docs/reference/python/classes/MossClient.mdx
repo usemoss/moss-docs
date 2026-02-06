@@ -9,174 +9,157 @@ Semantic search client for vector similarity operations.
 
 ## Methods
 
-### create_index()
-```python
-create_index(index_name: str, docs: List[DocumentInfo], model_id: str) -> bool
-```
+### `create_index(index_name, docs, model_id)`
 
 Create a new index populated with documents.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Name of the index to create. |
-| `docs` | `List[DocumentInfo]` | Yes | Documents to ingest into the index. |
-| `model_id` | `str` | Yes | Identifier for the embedding model. |
+- **index_name** (`str`): Name of the index to create.
+- **docs** (List[[`DocumentInfo`](../interfaces/DocumentInfo)]): Documents to ingest into the index.
+- **model_id** (`Optional[str]`): Embedding model identifier to override the
+service default "moss-minilm".
 
-**Returns**
+#### Returns
 
-`bool` - True if the creation request succeeded.
+`bool`
+
+True if the creation request succeeded.
+
 
 ---
 
-### get_index()
-```python
-get_index(index_name: str) -> IndexInfo
-```
+### `get_index(index_name)`
 
 Retrieve metadata for a single index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Name of the index to inspect. |
+- **index_name** (`str`): Name of the index to inspect.
 
-**Returns**
+#### Returns
 
-[`IndexInfo`](/docs/reference/python/interfaces/IndexInfo) - Metadata describing the requested index.
+[`IndexInfo`](../interfaces/IndexInfo)
+
+Metadata describing the requested index.
+
 
 ---
 
-### list_indexes()
-```python
-list_indexes() -> List[IndexInfo]
-```
+### `list_indexes()`
 
 List all indexes in the current project.
 
-**Returns**
+#### Returns
 
-List[[`IndexInfo`](/docs/reference/python/interfaces/IndexInfo)] - Collection of index metadata objects.
+List[[`IndexInfo`](../interfaces/IndexInfo)]
+
+List[IndexInfo]: Collection of index metadata objects.
+
 
 ---
 
-### delete_index()
-```python
-delete_index(index_name: str) -> bool
-```
+### `delete_index(index_name)`
 
 Delete an index and all associated documents.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Name of the index to delete. |
+- **index_name** (`str`): Name of the index to delete.
 
-**Returns**
+#### Returns
 
-`bool` - True if the deletion request succeeded.
+`bool`
 
----
+True if the deletion request succeeded.
 
-### load_index()
-```python
-load_index(index_name: str) -> str
-```
-
-Load an index from persistent storage.
-
-**Parameters**
-
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Name of the index to load. |
-
-**Returns**
-
-`str` - Identifier or status describing the loaded index.
 
 ---
 
-### add_docs()
-```python
-add_docs(index_name: str, docs: List[DocumentInfo], options: Optional[AddDocumentsOptions]) -> Dict[str, int]
-```
+### `add_docs(index_name, docs, options)`
 
 Insert or update documents in an index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Target index name. |
-| `docs` | `List[DocumentInfo]` | Yes | Documents to add or upsert. |
-| `options` | `Optional[AddDocumentsOptions]` | No | Upsert behavior overrides. |
+- **index_name** (`str`): Target index name.
+- **docs** (List[[`DocumentInfo`](../interfaces/DocumentInfo)]): Documents to add or upsert.
+- **options** (Optional[[`AddDocumentsOptions`](../interfaces/AddDocumentsOptions)]): Upsert behavior overrides.
 
-**Returns**
+#### Returns
 
-`Dict[str, int]` - Mutation counts such as inserted or updated totals.
+`Dict[str, int]`
+
+Dict[str, int]: Mutation counts such as inserted or updated totals.
+
 
 ---
 
-### delete_docs()
-```python
-delete_docs(index_name: str, doc_ids: List[str]) -> Dict[str, int]
-```
+### `delete_docs(index_name, doc_ids)`
 
 Remove documents by identifier.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Target index name. |
-| `doc_ids` | `List[str]` | Yes | Identifiers of documents to delete. |
+- **index_name** (`str`): Target index name.
+- **doc_ids** (`List[str]`): Identifiers of documents to delete.
 
-**Returns**
+#### Returns
 
-`Dict[str, int]` - Summary counts for deleted documents.
+`Dict[str, int]`
+
+Dict[str, int]: Summary counts for deleted documents.
+
 
 ---
 
-### get_docs()
-```python
-get_docs(index_name: str, options: Optional[GetDocumentsOptions]) -> List[DocumentInfo]
-```
+### `get_docs(index_name, options)`
 
 Fetch documents stored in an index.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Target index name. |
-| `options` | `Optional[GetDocumentsOptions]` | No | Retrieval filters. |
+- **index_name** (`str`): Target index name.
+- **options** (Optional[[`GetDocumentsOptions`](../interfaces/GetDocumentsOptions)]): Retrieval filters.
 
-**Returns**
+#### Returns
 
-List[[`DocumentInfo`](/docs/reference/python/interfaces/DocumentInfo)] - Documents that satisfy the filters.
+List[[`DocumentInfo`](../interfaces/DocumentInfo)]
+
+List[DocumentInfo]: Documents that satisfy the filters.
+
 
 ---
 
-### query()
-```python
-query(index_name: str, query: str, top_k: int, alpha: Optional[float]) -> SearchResult
-```
+### `load_index(index_name)`
+
+Load an index from persistent storage.
+
+#### Parameters
+
+- **index_name** (`str`): Name of the index to load.
+
+#### Returns
+
+`str`
+
+Identifier or status describing the loaded index.
+
+
+---
+
+### `query(index_name, query, options)`
 
 Execute a semantic similarity search.
 
-**Parameters**
+#### Parameters
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `index_name` | `str` | Yes | Target index name. |
-| `query` | `str` | Yes | Natural language query string. |
-| `top_k` | `int` | Yes | Maximum number of documents to return. |
-| `alpha` | `Optional[float]` | No | Hybrid weighting value. |
+- **index_name** (`str`): Target index name.
+- **query** (`str`): Natural language query string.
+- **options** (Optional[[`QueryOptions`](../interfaces/QueryOptions)]): Controls custom embeddings and per-query overrides.
 
-**Returns**
+#### Returns
 
-[`SearchResult`](/docs/reference/python/interfaces/SearchResult) - Ranked documents and metadata for the query.
+[`SearchResult`](../interfaces/SearchResult)
+
+Ranked documents and metadata for the query.

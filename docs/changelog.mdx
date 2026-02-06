@@ -5,13 +5,34 @@ mode: "wide"
 
 <Tabs>
 <Tab title="Python">
-<Update label="unreleased" description="v1.0.0-beta.10">
-- Added support for user-supplied embeddings
+
+<Update label="2026-02-02" description="v1.0.0-beta.13">
+- **Hot Reload & Auto-Refresh**: Indexes can now automatically detect and reload when updated in the cloud.
+  - `load_index()` now accepts optional `auto_refresh` and `polling_interval_in_seconds` parameters
+  - When `auto_refresh` is enabled, the SDK polls for updates at the configured interval (default: 600 seconds)
+  - To stop auto-refresh, call `load_index()` again without the `auto_refresh` option
+- `load_index()` now allows reloading an already-loaded index (previously threw an error)
+- Index management now uses Rust core for improved performance and reliability
+</Update>
+
+<Update label="2026-01-30" description="v1.0.0-beta.12">
+- Adds partial support for Python 3.14 by disabling local embedding service functionality. Full support coming soon.
+</Update>
+
+<Update label="2026-01-29" description="v1.0.0-beta.11">
+- Adds support for user-supplied embeddings.
+- `query()` now automatically falls back to the cloud API when the index is not loaded locally, enabling queries without requiring `load_index()` first.
+- Adds better scoring evaluation for search results
+</Update>
+
+<Update label="2026-01-26" description="v1.0.0-beta.10">
+- Removes the '< 2' upper bound on numpy dependency.
 </Update>
 
 <Update label="2026-01-14" description="v1.0.0-beta.9">
 - Dropped support for Python 3.9 and below
-- Fixed keyword search not functioning correctly after `load_index()`
+- Bug fix: Keyword search now functions correctly after `load_index()`.
+- New service endpoint with significant infrastructure upgrades. Management operations are now ~3× faster across most real-world use cases, providing faster index operations while also supporting larger payloads.
 </Update>
 
 <Update label="2025-12-15" description="v1.0.0-beta.8">
@@ -66,18 +87,34 @@ mode: "wide"
 </Tab>
 
 <Tab title="JavaScript">
-<Update label="unreleased" description="v1.0.0-beta.3">
-**New Features & Updates:**
-- **Embeddings:**
-  - Added support for user-supplied document embeddings during ingestion
-  - Added optional `embedding` arrays in `DocumentInfo` payloads to bypass native embedding service
-  
-- **Search:**
-  - Added `QueryOptions` overload to accept custom embeddings alongside query text
-  
-- **Core:**
-  - Relaxed `modelId` requirement when creating indexes
-  - SDK now defaults to `moss-minilm` model when no explicit model is provided
+<Update label="2026-02-02" description="v1.0.0-beta.6">
+- **Hot Reload & Auto-Refresh**: Indexes can now automatically detect and reload when updated in the cloud.
+  - `loadIndex()` now accepts optional `LoadIndexOptions` with `autoRefresh` and `pollingIntervalInSeconds` parameters
+  - When `autoRefresh` is enabled, the SDK polls for updates at the configured interval (default: 600 seconds)
+  - To stop auto-refresh, call `loadIndex()` again without the `autoRefresh` option
+- `loadIndex()` now allows reloading an already-loaded index (previously threw an error)
+</Update>
+
+<Update label="2025-01-29" description="v1.0.0-beta.5">
+- Query optimizations for custom-embedding workflow
+</Update>
+
+<Update label="2025-01-28" description="v1.0.0-beta.4">
+- Fixed `ReferenceError: process is not defined` crash in browser environments. The SDK now works seamlessly across all JavaScript runtimes including browsers, Node.js, Deno, and Bun.
+</Update>
+
+<Update label="2025-01-24" description="v1.0.0-beta.3">
+
+**Added**
+
+- Support for user-supplied document embeddings during ingestion. The SDK supports optional `embedding` arrays in `DocumentInfo` payloads without using the native embedding service from moss.
+- Query overloads now accept `QueryOptions` so users can provide a custom embedding alongside query text.
+- Relaxed `modelId` requirement when creating indexes. The SDK aligns with the service default of `moss-minilm` when no explicit model is provided.
+- `query()` now automatically falls back to the cloud API when the index is not loaded locally, enabling queries without requiring `loadIndex()` first.
+
+**Enhancements**
+
+- New service endpoint with significant infrastructure upgrades. Management operations are now ~3× faster across most real-world use cases, providing faster index operations while also supporting larger payloads.
 </Update>
 
 <Update label="2025-11-30" description="v1.0.0-beta.2">
