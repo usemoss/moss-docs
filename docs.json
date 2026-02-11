@@ -14,7 +14,7 @@
   "logo": {
     "light": "/logo/moss-wordmark-light.svg",
     "dark": "/logo/moss-wordmark-dark.svg",
-    "href": "https://docs.usemoss.dev/"
+    "href": "https://docs.moss.dev/"
   },
   "favicon": "/logo/moss-dark.png",
   "fonts": {},
@@ -230,7 +230,7 @@
       {
         "label": "Website",
         "icon": "globe",
-        "href": "https://www.usemoss.dev/"
+        "href": "https://www.moss.dev/"
       }
     ]
   },

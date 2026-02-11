@@ -2,9 +2,9 @@
 name: moss-docs
 description: Documentation and capabilities reference for Moss semantic search. Use for understanding Moss APIs, SDKs, and integration patterns.
 metadata:
-  author: usemoss
+  author: moss
   version: "1.0"
-  docs-url: https://docs.usemoss.dev
+  docs-url: https://docs.moss.dev
 ---
 
 # Moss Agent Skills
@@ -191,4 +191,4 @@ results = await client.query("faqs", "search text", top_k=5)
 
 ---
 
-> For additional documentation and navigation, see: https://docs.usemoss.dev/llms.txt
+> For additional documentation and navigation, see: https://docs.moss.dev/llms.txt
