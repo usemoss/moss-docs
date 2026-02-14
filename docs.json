@@ -93,6 +93,14 @@
             "pages": [
               "docs/pricing"
             ]
+          },
+          {
+            "group": "Legal",
+            "icon": "scale-balanced",
+            "pages": [
+              "docs/privacy",
+              "docs/tos"
+            ]
           }
         ]
       },
