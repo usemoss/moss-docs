@@ -1,5 +1,5 @@
 ---
-title: QueryResultDocumentInfo
+title: "QueryResultDocumentInfo"
 mode: "wide"
 ---
 
@@ -15,56 +15,10 @@ Document result from a query with similarity score.
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-Unique identifier within an index.
-
-#### Inherited from
-
-[`DocumentInfo`](./DocumentInfo).[`id`](./DocumentInfo#id)
-
-***
-
-### text
-
-> **text**: `string`
-
-REQUIRED canonical text to embed/search.
-
-#### Inherited from
-
-[`DocumentInfo`](./DocumentInfo).[`text`](./DocumentInfo#text)
-
-***
-
-### metadata?
-
-> `optional` **metadata**: `Record`\<`string`, `string`\>
-
-Optional metadata associated with the document.
-
-#### Inherited from
-
-[`DocumentInfo`](./DocumentInfo).[`metadata`](./DocumentInfo#metadata)
-
-***
-
-### embedding?
-
-> `optional` **embedding**: `number`[]
-
-Optional caller-provided embedding vector.
-
-#### Inherited from
-
-[`DocumentInfo`](./DocumentInfo).[`embedding`](./DocumentInfo#embedding)
-
-***
-
-### score
-
-> **score**: `number`
-
-Similarity score (0-1, higher = more similar).
+| Property | Type | Description | Inherited from |
+| ------ | ------ | ------ | ------ |
+| `id` | `string` | Unique identifier within an index. | [`DocumentInfo`](./DocumentInfo).[`id`](./DocumentInfo#id) |
+| `text` | `string` | REQUIRED canonical text to embed/search. | [`DocumentInfo`](./DocumentInfo).[`text`](./DocumentInfo#text) |
+| `metadata?` | `Record`\<`string`, `string`\> | Optional metadata associated with the document. | [`DocumentInfo`](./DocumentInfo).[`metadata`](./DocumentInfo#metadata) |
+| `embedding?` | `number`[] | Optional caller-provided embedding vector. | [`DocumentInfo`](./DocumentInfo).[`embedding`](./DocumentInfo#embedding) |
+| `score` | `number` | Similarity score (0-1, higher = more similar). | - |

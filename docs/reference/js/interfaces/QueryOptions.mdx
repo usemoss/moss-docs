@@ -1,5 +1,5 @@
 ---
-title: QueryOptions
+title: "QueryOptions"
 mode: "wide"
 ---
 
@@ -11,16 +11,7 @@ Optional parameters for semantic queries.
 
 ## Properties
 
-### embedding?
-
-> `optional` **embedding**: `number`[]
-
-Caller-provided embedding vector. When supplied, the service/client skips embedding generation.
-
-***
-
-### topK?
-
-> `optional` **topK**: `number`
-
-Number of top results to return. Overrides method-level defaults.
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `embedding?` | `number`[] | Caller-provided embedding vector. When supplied, the service/client skips embedding generation. |
+| `topK?` | `number` | Number of top results to return. Overrides method-level defaults. |
