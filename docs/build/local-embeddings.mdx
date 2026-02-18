@@ -12,7 +12,7 @@ Use a local model where supported, or pick a remote embedding in index creation.
 ```ts
 import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
-await client.createIndex('local-embeddings', docs, 'moss-minilm')
+await client.createIndex('local-embeddings', docs, { modelId: 'moss-minilm' })
 ```
 
 ## Tips

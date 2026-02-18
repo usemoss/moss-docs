@@ -20,10 +20,10 @@ const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PRO
 const index = 'agent-knowledge'
 await client.createIndex(index, [
   { id: 'user_profile', text: 'User prefers concise answers.' }
-], 'moss-minilm')
+], { modelId: 'moss-minilm' })
 
 await client.loadIndex(index)
-const memories = await client.query(index, 'preferences for responses', 3)
+const memories = await client.query(index, 'preferences for responses', { topK: 3 })
 ```
 
 ## Result

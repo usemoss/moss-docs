@@ -68,7 +68,7 @@ client = MossClient(project_id='your-project-id', project_key='your-project-key'
 | `query(indexName, query, options?)` | `query(name, query, options?)` | Semantic search (cloud fallback if not loaded locally) | `SearchResult` |
 
 ### API Actions
-All REST API operations go through `POST /manage` with an `action` field:
+All REST API operations go through `POST /v1/manage` with an `action` field:
 - `createIndex` - Create index with seed documents
 - `getIndex` - Get metadata for single index
 - `listIndexes` - List all project indexes

@@ -186,7 +186,9 @@
             "group": "Index Management",
             "icon": "table-list",
             "pages": [
-              "docs/api-reference/v1/index-management/createIndex",
+              "docs/api-reference/v1/index-management/initUpload",
+              "docs/api-reference/v1/index-management/startBuild",
+              "docs/api-reference/v1/index-management/getJobStatus",
               "docs/api-reference/v1/index-management/getIndex",
               "docs/api-reference/v1/index-management/listIndex",
               "docs/api-reference/v1/index-management/deleteIndex"

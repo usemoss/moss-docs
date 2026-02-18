@@ -52,7 +52,7 @@ const indexName = process.env.MOSS_INDEX_NAME || 'faqs' // ensure this exists (s
 
 async function main() {
   await client.loadIndex(indexName)
-  const results = await client.query(indexName, 'How do I return a damaged product?', 3)
+  const results = await client.query(indexName, 'How do I return a damaged product?', { topK: 3 })
 
   console.log(`Found ${results.docs.length} docs in ${results.timeTakenInMs}ms`)
   results.docs.forEach((doc, i) => {

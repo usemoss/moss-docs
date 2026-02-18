@@ -4,14 +4,14 @@ description: Remove specific documents by ID and rebuild the index.
 mode: "wide"
 ---
 
-Remove specific documents by ID and rebuild the index.
+Remove specific documents by ID and rebuild the index. This is an async operation — the response includes a `jobId` you can poll with `getJobStatus`.
 
 **Required fields**: `indexName`, `docIds` (non-empty array)
 
 **Example request**
 
 ```bash
-curl -X POST "https://service.usemoss.dev/manage" \
+curl -X POST "https://service.usemoss.dev/v1/manage" \
   -H "Content-Type: application/json" \
   -H "x-service-version: v1" \
   -H "x-project-key: moss_access_key_xxxxx" \
@@ -28,7 +28,8 @@ curl -X POST "https://service.usemoss.dev/manage" \
 <CodeGroup>
 ```json 200 - OK
 {
-  "deleted": 3
+  "jobId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "status": "building"
 }
 ```
 </CodeGroup>

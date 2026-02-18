@@ -13,12 +13,7 @@ description: "Choose vector, keyword, or hybrid retrieval"
 import { MossClient } from '@inferedge/moss'
 const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
 await client.loadIndex('my-index')
-const byVector = await client.query('my-index', 'getting started latency', 5)
-
-// Metadata filtering (mirrors moss-samples)
-const filtered = await client.query('my-index', 'refund policy', 5, {
-  filters: { category: 'faq', lang: 'en' }
-})
+const byVector = await client.query('my-index', 'getting started latency', { topK: 5 })
 ```
 
 ```python Python
@@ -43,14 +38,7 @@ filtered = await client.query("my-index", "refund policy", 5, {
 
 <CodeGroup>
 ```ts JavaScript
-// Blend semantic and keyword scores (60/40)
-const hybrid = await client.query('my-index', 'return policy', 3, { alpha: 0.6 })
-
-// Pure keyword
-const keywordOnly = await client.query('my-index', 'return policy', 3, { alpha: 0.0 })
-
-// Pure semantic
-const semanticOnly = await client.query('my-index', 'return policy', 3, { alpha: 1.0 })
+const results = await client.query('my-index', 'return policy', { topK: 3 })
 ```
 
 ```python Python
