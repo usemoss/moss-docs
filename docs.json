@@ -191,8 +191,7 @@
               "docs/api-reference/v1/index-management/getJobStatus",
               "docs/api-reference/v1/index-management/getIndex",
               "docs/api-reference/v1/index-management/listIndex",
-              "docs/api-reference/v1/index-management/deleteIndex",
-              "docs/api-reference/v1/index-management/getIndexUrl"
+              "docs/api-reference/v1/index-management/deleteIndex"
             ]
           },
           {
