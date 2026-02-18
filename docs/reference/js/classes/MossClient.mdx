@@ -1,11 +1,13 @@
 ---
-title: MossClient
-description: Local semantic search client for vector similarity operations
+title: "MossClient"
+description: "Local semantic search client for vector similarity operations."
 ---
+
+[@inferedge/moss](../api) / MossClient
 
 # MossClient
 
-Local semantic search client for vector similarity operations.
+MossClient - Local semantic search client for vector similarity operations.
 
 ## Example
 
@@ -32,17 +34,10 @@ Creates a new MossClient instance for local operations.
 
 #### Parameters
 
-##### projectId
-
-`string`
-
-Your project identifier.
-
-##### projectKey
-
-`string`
-
-Your project authentication key.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `projectId` | `string` | Your project identifier. |
+| `projectKey` | `string` | Your project authentication key. |
 
 #### Returns
 
@@ -58,23 +53,11 @@ Creates a new index with the provided documents.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the index to create.
-
-##### docs
-
-[`DocumentInfo`](../interfaces/DocumentInfo)[]
-
-Initial documents to add to the index.
-
-##### modelId?
-
-`string`
-
-The model ID to use for embeddings.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the index to create. |
+| `docs` | [`DocumentInfo`](../interfaces/DocumentInfo)[] | Initial documents to add to the index. |
+| `modelId?` | `string` | The model ID to use for embeddings. |
 
 #### Returns
 
@@ -105,11 +88,9 @@ Gets information about a specific index.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the index to retrieve.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the index to retrieve. |
 
 #### Returns
 
@@ -161,11 +142,9 @@ Deletes an index and all its data.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the index to delete.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the index to delete. |
 
 #### Returns
 
@@ -193,23 +172,11 @@ Adds or updates documents in an index.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the target index.
-
-##### docs
-
-[`DocumentInfo`](../interfaces/DocumentInfo)[]
-
-Documents to add or update.
-
-##### options?
-
-[`AddDocumentsOptions`](../interfaces/AddDocumentsOptions)
-
-Optional configuration for the operation.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the target index. |
+| `docs` | [`DocumentInfo`](../interfaces/DocumentInfo)[] | Documents to add or update. |
+| `options?` | [`AddDocumentsOptions`](../interfaces/AddDocumentsOptions) | Optional configuration for the operation. |
 
 #### Returns
 
@@ -240,17 +207,10 @@ Deletes documents from an index by their IDs.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the target index.
-
-##### docIds
-
-`string`[]
-
-Array of document IDs to delete.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the target index. |
+| `docIds` | `string`[] | Array of document IDs to delete. |
 
 #### Returns
 
@@ -279,17 +239,10 @@ Retrieves documents from an index.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the target index.
-
-##### options?
-
-[`GetDocumentsOptions`](../interfaces/GetDocumentsOptions)
-
-Optional configuration for retrieval.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the target index. |
+| `options?` | [`GetDocumentsOptions`](../interfaces/GetDocumentsOptions) | Optional configuration for retrieval. |
 
 #### Returns
 
@@ -343,17 +296,10 @@ without interrupting queries.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the index to load.
-
-##### options?
-
-[`LoadIndexOptions`](../interfaces/LoadIndexOptions)
-
-Optional configuration including auto-refresh settings.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the index to load. |
+| `options?` | [`LoadIndexOptions`](../interfaces/LoadIndexOptions) | Optional configuration including auto-refresh settings. |
 
 #### Returns
 
@@ -394,23 +340,11 @@ Performs a semantic similarity search against the specified index.
 
 #### Parameters
 
-##### indexName
-
-`string`
-
-Name of the target index to search.
-
-##### query
-
-`string`
-
-The search query text.
-
-##### options?
-
-[`QueryOptions`](../interfaces/QueryOptions)
-
-Optional query configuration including topK (default: 5) and embedding overrides.
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `indexName` | `string` | Name of the target index to search. |
+| `query` | `string` | The search query text. |
+| `options?` | [`QueryOptions`](../interfaces/QueryOptions) | Optional query configuration including topK (default: 5) and embedding overrides. |
 
 #### Returns
 

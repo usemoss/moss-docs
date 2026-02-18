@@ -1,12 +1,13 @@
 ---
-title: DocumentInfo
+title: "DocumentInfo"
 mode: "wide"
 ---
 
 [@inferedge/moss](../api) / DocumentInfo
 
 # Interface: DocumentInfo
-Document that can be indexed and retrieved
+
+Document that can be indexed and retrieved.
 
 ## Extended by
 
@@ -14,32 +15,9 @@ Document that can be indexed and retrieved
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-Unique identifier within an index.
-
-***
-
-### text
-
-> **text**: `string`
-
-REQUIRED canonical text to embed/search.
-
-***
-
-### metadata?
-
-> `optional` **metadata**: `Record`\<`string`, `string`\>
-
-Optional metadata associated with the document.
-
-***
-
-### embedding?
-
-> `optional` **embedding**: `number`[]
-
-Optional caller-provided embedding vector.
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `id` | `string` | Unique identifier within an index. |
+| `text` | `string` | REQUIRED canonical text to embed/search. |
+| `metadata?` | `Record`\<`string`, `string`\> | Optional metadata associated with the document. |
+| `embedding?` | `number`[] | Optional caller-provided embedding vector. |

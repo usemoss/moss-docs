@@ -5,6 +5,12 @@ mode: "wide"
 
 <Tabs>
 <Tab title="Python">
+<Update label="2026-02-06" description="v1.0.0-beta.14">
+- Query latency reduced from ~2,300ms to ~10ms for 100K vectors
+- Optimized search pipeline reducing memory allocations
+- Significantly reduced memory overhead for large indexes (100K+ documents) in the context of hybrid search (keyword + semantic)
+- Enhanced performance across all index sizes
+</Update>
 
 <Update label="2026-02-02" description="v1.0.0-beta.13">
 - **Hot Reload & Auto-Refresh**: Indexes can now automatically detect and reload when updated in the cloud.
@@ -26,64 +32,53 @@ mode: "wide"
 </Update>
 
 <Update label="2026-01-26" description="v1.0.0-beta.10">
-- Removes the '< 2' upper bound on numpy dependency.
+- Removes the '&lt;2' upper bound on numpy dependency.
 </Update>
 
 <Update label="2026-01-14" description="v1.0.0-beta.9">
-- Dropped support for Python 3.9 and below
+- Drops support for Python 3.9 and below.
 - Bug fix: Keyword search now functions correctly after `load_index()`.
 - New service endpoint with significant infrastructure upgrades. Management operations are now ~3× faster across most real-world use cases, providing faster index operations while also supporting larger payloads.
 </Update>
 
 <Update label="2025-12-15" description="v1.0.0-beta.8">
-- Updated `inferedge-moss-core` dependency to version 0.2.3 for new ARM64 wheel support
+- Updates `inferedge-moss-core` dependency to version 0.2.3 for new ARM64 wheel support.
 </Update>
 
 <Update label="2025-12-01" description="v1.0.0-beta.7">
-- Added IntelliSense support in all IDEs
+Adds IntelliSense support in all the IDEs
 </Update>
 
 <Update label="2025-11-29" description="v1.0.0-beta.6">
-- Added support for keyword search
-- Added alpha blending between keyword and semantic search
+Adds support for keyword search and alpha blending between keyword and semantic search.
 </Update>
 
 <Update label="2025-10-23" description="v1.0.0-beta.5">
-- Removed Pipecat integration and MossContextRetriever from the SDK
-- Will be offered as a separate Pipecat extension soon
+Removes Pipecat integration and MossContextRetriever from the SDK. Will be offered as a pipecat extension instead soon.
 </Update>
 
 <Update label="2025-10-09" description="v1.0.0-beta.4">
-- Performance improvements for `query()` calls
+Performance improvements for query() calls.
 </Update>
 
 <Update label="2025-10-09" description="v1.0.0-beta.3">
-**New Features & Updates:**
-- **Integrations:**
-  - Added MossContextRetriever for Pipecat integration in real-time voice AI applications
+- **MossContextRetriever**: Added Pipecat integration for real-time voice AI applications
   - Automatically enhances LLM conversations with semantic search results from Moss indexes
   - Seamless integration with OpenAI LLM context frames
 </Update>
 
 <Update label="2025-09-14" description="v1.0.0-beta.1">
-**New Features & Updates:**
-- **Core:**
-  - Initial release of inferedge-moss
-  - Multi-index support for isolated search spaces
-  - API key validation with secure host access
-  - Performance metrics tracking
-  
-- **Search:**
-  - Semantic search using transformer-based embeddings
-  - Query interface with configurable result count
-  - Add, update, and remove items across indexes
+Initial release of inferedge-moss with core features:
 
-- **Embeddings:**
-  - Lightweight embedding models for edge computing
-  - Support for proprietary "moss-minilm" model
-  - Cloudflare CDN support for fast model loading
+- Semantic search using transformer-based embeddings
+- Lightweight embedding models for edge computing; supports proprietary "moss-minilm" model
+- API key validation with secure host access
+- Cloudflare CDN support for fast model loading
+- Multi-index support for isolated search spaces
+- Add, update, and remove items across indexes
+- Query interface with configurable result count
+- Performance metrics tracking
 </Update>
-
 </Tab>
 
 <Tab title="JavaScript">
@@ -104,7 +99,6 @@ mode: "wide"
 </Update>
 
 <Update label="2025-01-24" description="v1.0.0-beta.3">
-
 **Added**
 
 - Support for user-supplied document embeddings during ingestion. The SDK supports optional `embedding` arrays in `DocumentInfo` payloads without using the native embedding service from moss.
@@ -118,31 +112,24 @@ mode: "wide"
 </Update>
 
 <Update label="2025-11-30" description="v1.0.0-beta.2">
-**Bug Fixes:**
-- **Core:**
-  - Fixed ESM (ES Module) import compatibility issue
-  - Package now correctly exports as an ES module with standard ESM syntax support
+**Fixed**
 
-**Breaking Changes:**
-- **Core:**
-  - Migration required from CommonJS (`require`) to ES Module syntax (`import`)
+- Fixed ESM (ES Module) import compatibility issue. The package now correctly exports as an ES module and can be imported using standard ESM syntax.
+
+**Upgrade Instructions**
+
+- Migrate from CommonJS (`require`) to ES Module syntax (`import`).
 </Update>
 
 <Update label="2025-10-01" description="v1.0.0-beta.1">
-**New Features & Updates:**
-- **Core:**
-  - Initial release of @inferedge/moss
-  - Multi-index support for isolated search spaces
-  - TypeScript support with full type definitions
-  
-- **Search:**
-  - Semantic search using transformer-based embeddings
-  - Blazing fast querying support after loading indexes
-  - Add, update, and remove documents across indexes
+Initial release of @inferedge/moss with core features:
 
-- **Embeddings:**
-  - Lightweight embedding models for edge computing
-  - Support for proprietary "moss-minilm" and "moss-mediumlm" models
+- Semantic search using transformer-based embeddings
+- Lightweight embedding models for edge computing; supports proprietary "moss-minilm" and "moss-mediumlm" models
+- Multi-index support for isolated search spaces
+- Add, update, and remove documents across indexes
+- Blazing fast querying support after loading indexes
+- TypeScript support with full type definitions
 </Update>
 </Tab>
 
