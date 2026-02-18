@@ -1,0 +1,19 @@
+---
+title: "JobProgress"
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / JobProgress
+
+# Interface: JobProgress
+
+Progress update passed to the `onProgress` callback during async operations.
+
+## Properties
+
+| Property | Type |
+| ------ | ------ |
+| `jobId` | `string` |
+| `status` | [`JobStatus`](../type-aliases/JobStatus) |
+| `progress` | `number` |
+| `currentPhase` | [`JobPhase`](../type-aliases/JobPhase) \| `null` |

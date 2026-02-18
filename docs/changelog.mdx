@@ -5,6 +5,14 @@ mode: "wide"
 
 <Tabs>
 <Tab title="Python">
+<Update label="2026-02-17" description="v1.0.0-beta.15">
+- All index mutations and reads now go through the Rust ManageClient, replacing the Python HTTP layer
+- Index creation uses an async bulk pipeline: binary upload → server-side build → poll until completion
+- `load_index` supports both V1 and V2 binary formats, with cloud query fallback when index isn't loaded locally
+- New return type `MutationResult` (with `job_id`, `index_name`, `doc_count`) for `create_index`, `add_docs`, `delete_docs`
+- `get_docs` takes `doc_ids` directly instead of wrapping in `GetDocumentsOptions`
+</Update>
+
 <Update label="2026-02-06" description="v1.0.0-beta.14">
 - Query latency reduced from ~2,300ms to ~10ms for 100K vectors
 - Optimized search pipeline reducing memory allocations
@@ -82,6 +90,12 @@ Initial release of inferedge-moss with core features:
 </Tab>
 
 <Tab title="JavaScript">
+<Update label="2026-02-18" description="v1.0.0-beta.7">
+- Async job-based mutations (`createIndex`, `addDocs`, `deleteDocs`) with built-in polling and `onProgress` callbacks
+- Large index support — up to 100k documents via presigned upload + server-side build
+- New binary index format with smaller payloads and faster deserialization; existing indexes using the previous format are still supported
+</Update>
+
 <Update label="2026-02-02" description="v1.0.0-beta.6">
 - **Hot Reload & Auto-Refresh**: Indexes can now automatically detect and reload when updated in the cloud.
   - `loadIndex()` now accepts optional `LoadIndexOptions` with `autoRefresh` and `pollingIntervalInSeconds` parameters

@@ -1,0 +1,23 @@
+---
+title: "JobStatusResponse"
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / JobStatusResponse
+
+# Interface: JobStatusResponse
+
+Full job status response from getJobStatus.
+
+## Properties
+
+| Property | Type |
+| ------ | ------ |
+| `jobId` | `string` |
+| `status` | [`JobStatus`](../type-aliases/JobStatus) |
+| `progress` | `number` |
+| `currentPhase` | [`JobPhase`](../type-aliases/JobPhase) \| `null` |
+| `error?` | `string` \| `null` |
+| `createdAt` | `string` |
+| `updatedAt` | `string` |
+| `completedAt` | `string` \| `null` |

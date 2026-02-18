@@ -1,0 +1,19 @@
+---
+title: "MutationResult"
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / MutationResult
+
+# Interface: MutationResult
+
+Result of an async mutation operation (createIndex, addDocs, deleteDocs).
+Returned after the operation completes (polling is handled internally).
+
+## Properties
+
+| Property | Type |
+| ------ | ------ |
+| `jobId` | `string` |
+| `indexName` | `string` |
+| `docCount` | `number` |

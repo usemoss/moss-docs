@@ -55,15 +55,17 @@ client = MossClient(project_id='your-project-id', project_key='your-project-key'
 
 | JavaScript | Python | Description | Returns |
 |------------|--------|-------------|---------|
-| `createIndex(indexName, docs, modelId?)` | `create_index(index_name, docs, model_id?)` | Create index with documents | `boolean` |
-| `loadIndex(indexName, options?)` | `load_index(index_name)` | Load index from storage | `string` (index name) |
-| `getIndex(indexName)` | `get_index(index_name)` | Get index metadata | `IndexInfo` |
+| `createIndex(indexName, docs, options?)` | `create_index(name, docs, model_id?)` | Create index with documents (async job) | `MutationResult` |
+| `loadIndex(indexName, options?)` | `load_index(name, auto_refresh?, polling_interval_in_seconds?)` | Load index from storage | `string` (index name) |
+| `getIndex(indexName)` | `get_index(name)` | Get index metadata | `IndexInfo` |
 | `listIndexes()` | `list_indexes()` | List all indexes | `IndexInfo[]` |
-| `deleteIndex(indexName)` | `delete_index(index_name)` | Delete an index | `boolean` |
-| `addDocs(indexName, docs, options?)` | `add_docs(index_name, docs, options?)` | Add/upsert documents | `{ added, updated }` |
-| `getDocs(indexName, options?)` | `get_docs(index_name, options?)` | Retrieve documents | `DocumentInfo[]` |
-| `deleteDocs(indexName, docIds)` | `delete_docs(index_name, doc_ids)` | Remove documents | `{ deleted }` |
-| `query(indexName, query, options?)` | `query(index_name, query, options?)` | Semantic search | `SearchResult` |
+| `deleteIndex(indexName)` | `delete_index(name)` | Delete an index | `boolean` |
+| `addDocs(indexName, docs, options?)` | `add_docs(name, docs, options?)` | Add/upsert documents (async job) | `MutationResult` |
+| `getDocs(indexName, options?)` | `get_docs(name, options?)` | Retrieve documents | `DocumentInfo[]` |
+| `deleteDocs(indexName, docIds, options?)` | `delete_docs(name, doc_ids)` | Remove documents (async job) | `MutationResult` |
+| `getJobStatus(jobId)` | `get_job_status(job_id)` | Poll async job status | `JobStatusResponse` |
+| - | `unload_index(name)` | Unload index from memory | - |
+| `query(indexName, query, options?)` | `query(name, query, options?)` | Semantic search (cloud fallback if not loaded locally) | `SearchResult` |
 
 ### API Actions
 All REST API operations go through `POST /manage` with an `action` field:
@@ -195,14 +197,58 @@ interface ModelRef {
 }
 ```
 
+### Mutation & Job Interfaces
+
+```typescript
+// Result returned by async mutation operations (createIndex, addDocs, deleteDocs)
+interface MutationResult {
+  jobId: string;         // Job identifier for polling (job_id in Python)
+  indexName: string;     // Name of the affected index (index_name in Python)
+  docCount: number;      // Number of documents affected (doc_count in Python)
+}
+
+// Options for mutation operations
+interface MutationOptions {
+  upsert?: boolean;               // Default: true. Update existing documents with same ID
+  onProgress?: (progress: JobProgress) => void;  // JS only: progress callback
+}
+
+// Options for createIndex
+interface CreateIndexOptions {
+  modelId?: string;               // Embedding model to use (model_id in Python)
+  onProgress?: (progress: JobProgress) => void;  // JS only: progress callback
+}
+
+// Progress update during async jobs (passed to onProgress callback)
+interface JobProgress {
+  jobId: string;                  // Job identifier (job_id in Python)
+  status: JobStatus;              // Current job status
+  progress: number;               // 0-100 completion percentage
+  currentPhase: JobPhase | null;  // Current processing phase (current_phase in Python)
+}
+
+// Full job status response from getJobStatus
+interface JobStatusResponse {
+  jobId: string;                  // Job identifier (job_id in Python)
+  status: JobStatus;              // Current status
+  progress: number;               // 0-100 completion percentage
+  currentPhase: JobPhase | null;  // Current processing phase (current_phase in Python)
+  createdAt: string;              // ISO 8601 timestamp (created_at in Python)
+  updatedAt: string;              // ISO 8601 timestamp (updated_at in Python)
+  completedAt?: string | null;    // ISO 8601 timestamp (completed_at in Python)
+  error?: string | null;          // Error message if failed
+}
+
+// Job status values
+type JobStatus = "pending_upload" | "uploading" | "building" | "completed" | "failed";
+
+// Job processing phases
+type JobPhase = "downloading" | "deserializing" | "generating_embeddings" | "building_index" | "uploading" | "cleanup";
+```
+
 ### Options Interfaces
 
 ```typescript
-// Controls upsert behavior for addDocs
-interface AddDocumentsOptions {
-  upsert?: boolean;  // Default: true. Update existing documents with same ID
-}
-
 // Filter which documents to retrieve with getDocs
 interface GetDocumentsOptions {
   docIds?: string[];  // Optional IDs to retrieve (doc_ids in Python). Omit to get all
@@ -240,24 +286,30 @@ interface LoadIndexOptions {
 |-------|-------|-----|
 | Unauthorized | Missing credentials | Set `MOSS_PROJECT_ID` and `MOSS_PROJECT_KEY` |
 | Index not found | Query before create | Call `createIndex()` first |
-| Index not loaded | Query before load | Call `loadIndex()` before `query()` |
+| Index not loaded | Query before load | Call `loadIndex()` before `query()` (note: `query()` falls back to cloud if not loaded locally in JS) |
 | Missing embeddings runtime | Invalid model | Use `moss-minilm` or `moss-mediumlm` |
+| Job failed | Async mutation error | Check `JobStatusResponse.error` via `getJobStatus(jobId)` |
 
-Most SDK methods throw if the target index does not exist. `createIndex()` throws if the index already exists. `loadIndex()` throws if the index does not exist in cloud or loading fails.
+Most SDK methods throw if the target index does not exist. `createIndex()` throws if the index already exists. `loadIndex()` throws if the index does not exist in cloud or loading fails. Mutation methods (`createIndex`, `addDocs`, `deleteDocs`) run as async jobs and return `MutationResult`; use `getJobStatus()` for manual polling if needed.
 
 ### Async Pattern
-All SDK methods are async - always use `await`:
+All SDK methods are async - always use `await`. Mutation methods (`createIndex`, `addDocs`, `deleteDocs`) return a `MutationResult` with a `jobId` and handle the async job lifecycle automatically (including polling until completion):
 
 ```typescript
-// JavaScript
-await client.createIndex('faqs', docs, 'moss-minilm')
+// JavaScript - mutations now return MutationResult and support onProgress
+const result = await client.createIndex('faqs', docs, {
+  modelId: 'moss-minilm',
+  onProgress: (p) => console.log(`${p.currentPhase}: ${p.progress}%`)
+})
+console.log(result.jobId) // job ID for manual status checks
 await client.loadIndex('faqs')
 const results = await client.query('faqs', 'search text', 5)
 ```
 
 ```python
 # Python
-await client.create_index("faqs", docs, "moss-minilm")
+result = await client.create_index("faqs", docs, "moss-minilm")
+print(result.job_id)  # job ID for manual status checks
 await client.load_index("faqs")
 results = await client.query("faqs", "search text", top_k=5)
 ```

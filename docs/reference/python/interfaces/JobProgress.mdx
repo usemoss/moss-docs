@@ -1,0 +1,15 @@
+---
+title: JobProgress
+mode: "wide"
+---
+
+# Interface: JobProgress
+
+Progress update for a job.
+
+## Properties
+
+- **job_id**: `str`
+- **status**: [`JobStatus`](./JobStatus)
+- **progress**: `float`
+- **current_phase**: Optional[[`JobPhase`](./JobPhase)]

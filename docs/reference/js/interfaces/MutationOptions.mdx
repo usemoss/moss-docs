@@ -1,0 +1,17 @@
+---
+title: "MutationOptions"
+mode: "wide"
+---
+
+[@inferedge/moss](../api) / MutationOptions
+
+# Interface: MutationOptions
+
+Options for async mutation operations (addDocs, deleteDocs).
+
+## Properties
+
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `upsert?` | `boolean` | Whether to update existing documents with the same ID. Only applies to addDocs. **Default** `true` |
+| `onProgress?` | (`progress`) => `void` | Callback invoked with progress updates (~every 2s) while the server is processing. |
