@@ -37,20 +37,33 @@ Moss is the real-time semantic search runtime for conversational AI. It delivers
 ### Embedding Models
 - **moss-minilm**: Fast, lightweight model optimized for edge/offline use (default)
 - **moss-mediumlm**: Higher accuracy model with reasonable performance for precision-critical use cases
+- **custom**: Use when providing pre-computed embeddings from external sources. No embedding model is loaded; all documents must include `embedding` vectors, and all queries must provide embeddings via `QueryOptions.embedding`
+
+### Client Initialization
+
+```typescript
+// JavaScript
+const client = new MossClient('your-project-id', 'your-project-key')
+```
+
+```python
+# Python
+client = MossClient(project_id='your-project-id', project_key='your-project-key')
+```
 
 ### SDK Methods
 
-| JavaScript | Python | Description |
-|------------|--------|-------------|
-| `createIndex()` | `create_index()` | Create index with documents |
-| `loadIndex()` | `load_index()` | Load index from storage |
-| `getIndex()` | `get_index()` | Get index metadata |
-| `listIndexes()` | `list_indexes()` | List all indexes |
-| `deleteIndex()` | `delete_index()` | Delete an index |
-| `addDocs()` | `add_docs()` | Add/upsert documents |
-| `getDocs()` | `get_docs()` | Retrieve documents |
-| `deleteDocs()` | `delete_docs()` | Remove documents |
-| `query()` | `query()` | Semantic search |
+| JavaScript | Python | Description | Returns |
+|------------|--------|-------------|---------|
+| `createIndex(indexName, docs, modelId?)` | `create_index(index_name, docs, model_id?)` | Create index with documents | `boolean` |
+| `loadIndex(indexName, options?)` | `load_index(index_name)` | Load index from storage | `string` (index name) |
+| `getIndex(indexName)` | `get_index(index_name)` | Get index metadata | `IndexInfo` |
+| `listIndexes()` | `list_indexes()` | List all indexes | `IndexInfo[]` |
+| `deleteIndex(indexName)` | `delete_index(index_name)` | Delete an index | `boolean` |
+| `addDocs(indexName, docs, options?)` | `add_docs(index_name, docs, options?)` | Add/upsert documents | `{ added, updated }` |
+| `getDocs(indexName, options?)` | `get_docs(index_name, options?)` | Retrieve documents | `DocumentInfo[]` |
+| `deleteDocs(indexName, docIds)` | `delete_docs(index_name, doc_ids)` | Remove documents | `{ deleted }` |
+| `query(indexName, query, options?)` | `query(index_name, query, options?)` | Semantic search | `SearchResult` |
 
 ### API Actions
 All REST API operations go through `POST /manage` with an `action` field:
@@ -98,8 +111,8 @@ All REST API operations go through `POST /manage` with an `action` field:
 ## Integration
 
 ### Voice Agent Frameworks
-- **LiveKit**: Context injection into voice agent pipeline with `inferedge-moss` SDK
-- **Pipecat**: Pipeline processor via `pipecat-moss` package that auto-injects retrieval results
+- **LiveKit**: Context injection into voice agent pipeline using the `inferedge-moss` SDK directly. Uses `on_user_turn_completed` hook to query Moss and inject results into chat context before LLM generation.
+- **Pipecat**: Pipeline processor via `pipecat-moss` package (`MossRetrievalService`). Sits between user input and LLM in the pipeline, auto-injecting retrieval results. Initialized with `project_id`, `project_key`, and optional `system_prompt`. Use `.load_index(index_name)` then `.query(index_name, top_k, alpha)` as a pipeline processor.
 
 ## Context
 
@@ -129,13 +142,14 @@ REST API requires headers:
 ### Document Schema
 ```typescript
 interface DocumentInfo {
-  id: string;           // Required: unique identifier
-  text: string;         // Required: content to embed and search
-  metadata?: object;    // Optional: key-value pairs for filtering
+  id: string;              // Required: unique identifier
+  text: string;            // Required: content to embed and search
+  metadata?: object;       // Optional: key-value pairs for filtering
+  embedding?: number[];    // Optional: caller-provided embedding vector (required when model is "custom")
 }
 ```
 
-### Query Parameters
+### Query Parameters (QueryOptions)
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -143,7 +157,63 @@ interface DocumentInfo {
 | `query` | string | - | Natural language search text (required) |
 | `top_k` / `topK` | number | 5 | Max results to return |
 | `alpha` | float | ~0.8 | Hybrid weighting: 0.0=keyword, 1.0=semantic |
+| `embedding` | number[] / Sequence[float] | - | Caller-provided embedding vector; skips embedding generation when supplied |
 | `filters` | object | - | Metadata constraints |
+
+### Search Result Schema
+
+```typescript
+interface SearchResult {
+  docs: QueryResultDocumentInfo[];  // Matching documents ordered by similarity
+  query: string;                    // The original search query
+  indexName?: string;               // Name of the index searched (index_name in Python)
+  timeTakenInMs?: number;           // Search execution time in ms (time_taken_ms in Python)
+}
+
+interface QueryResultDocumentInfo extends DocumentInfo {
+  score: number;  // Similarity score (0-1, higher = more similar)
+}
+```
+
+### Index Info Schema
+
+```typescript
+interface IndexInfo {
+  id: string;            // Unique identifier of the index
+  name: string;          // Human-readable name
+  version: string | null; // Index build/format version (semver)
+  status: string;        // "NotStarted" | "Building" | "Ready" | "Failed"
+  docCount: number;      // Number of documents (doc_count in Python)
+  createdAt: string;     // ISO 8601 creation timestamp (created_at in Python)
+  updatedAt: string;     // ISO 8601 last updated timestamp (updated_at in Python)
+  model: ModelRef;       // Embedding model reference
+}
+
+interface ModelRef {
+  id: string | null;      // Model identifier
+  version: string | null; // Model version (semver/commit)
+}
+```
+
+### Options Interfaces
+
+```typescript
+// Controls upsert behavior for addDocs
+interface AddDocumentsOptions {
+  upsert?: boolean;  // Default: true. Update existing documents with same ID
+}
+
+// Filter which documents to retrieve with getDocs
+interface GetDocumentsOptions {
+  docIds?: string[];  // Optional IDs to retrieve (doc_ids in Python). Omit to get all
+}
+
+// Controls loadIndex behavior (JavaScript only)
+interface LoadIndexOptions {
+  autoRefresh?: boolean;           // Default: false. Enable polling for index updates
+  pollingIntervalInSeconds?: number; // Default: 600. Polling interval when autoRefresh is true
+}
+```
 
 ### Model Selection
 
@@ -151,6 +221,7 @@ interface DocumentInfo {
 |-------|----------|----------|
 | `moss-minilm` | Edge, offline, browser, speed-first | Fast, lightweight |
 | `moss-mediumlm` | Precision-critical, higher accuracy | Slightly slower |
+| `custom` | Pre-computed embeddings from external sources | No model loaded; must supply embeddings |
 
 ### Performance Expectations
 - Sub-10ms local queries (hardware-dependent)
@@ -171,6 +242,8 @@ interface DocumentInfo {
 | Index not found | Query before create | Call `createIndex()` first |
 | Index not loaded | Query before load | Call `loadIndex()` before `query()` |
 | Missing embeddings runtime | Invalid model | Use `moss-minilm` or `moss-mediumlm` |
+
+Most SDK methods throw if the target index does not exist. `createIndex()` throws if the index already exists. `loadIndex()` throws if the index does not exist in cloud or loading fails.
 
 ### Async Pattern
 All SDK methods are async - always use `await`:
