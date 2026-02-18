@@ -9,158 +9,55 @@ Semantic search client for vector similarity operations.
 
 ## Methods
 
-### `create_index(index_name, docs, model_id)`
-
-Create a new index populated with documents.
-
-#### Parameters
-
-- **index_name** (`str`): Name of the index to create.
-- **docs** (List[[`DocumentInfo`](../interfaces/DocumentInfo)]): Documents to ingest into the index.
-- **model_id** (`Optional[str]`): Embedding model identifier to override the
-service default "moss-minilm".
-
-#### Returns
-
-`bool`
-
-True if the creation request succeeded.
+### `create_index(name, docs, model_id)`
 
 
 ---
 
-### `get_index(index_name)`
+### `add_docs(name, docs, options)`
 
-Retrieve metadata for a single index.
 
-#### Parameters
+---
 
-- **index_name** (`str`): Name of the index to inspect.
+### `delete_docs(name, doc_ids)`
 
-#### Returns
 
-[`IndexInfo`](../interfaces/IndexInfo)
+---
 
-Metadata describing the requested index.
+### `get_job_status(job_id)`
+
+
+---
+
+### `get_index(name)`
 
 
 ---
 
 ### `list_indexes()`
 
-List all indexes in the current project.
 
-#### Returns
+---
 
-List[[`IndexInfo`](../interfaces/IndexInfo)]
-
-List[IndexInfo]: Collection of index metadata objects.
+### `delete_index(name)`
 
 
 ---
 
-### `delete_index(index_name)`
-
-Delete an index and all associated documents.
-
-#### Parameters
-
-- **index_name** (`str`): Name of the index to delete.
-
-#### Returns
-
-`bool`
-
-True if the deletion request succeeded.
+### `get_docs(name, options)`
 
 
 ---
 
-### `add_docs(index_name, docs, options)`
-
-Insert or update documents in an index.
-
-#### Parameters
-
-- **index_name** (`str`): Target index name.
-- **docs** (List[[`DocumentInfo`](../interfaces/DocumentInfo)]): Documents to add or upsert.
-- **options** (Optional[[`AddDocumentsOptions`](../interfaces/AddDocumentsOptions)]): Upsert behavior overrides.
-
-#### Returns
-
-`Dict[str, int]`
-
-Dict[str, int]: Mutation counts such as inserted or updated totals.
+### `load_index(name, auto_refresh, polling_interval_in_seconds)`
 
 
 ---
 
-### `delete_docs(index_name, doc_ids)`
-
-Remove documents by identifier.
-
-#### Parameters
-
-- **index_name** (`str`): Target index name.
-- **doc_ids** (`List[str]`): Identifiers of documents to delete.
-
-#### Returns
-
-`Dict[str, int]`
-
-Dict[str, int]: Summary counts for deleted documents.
+### `unload_index(name)`
 
 
 ---
 
-### `get_docs(index_name, options)`
-
-Fetch documents stored in an index.
-
-#### Parameters
-
-- **index_name** (`str`): Target index name.
-- **options** (Optional[[`GetDocumentsOptions`](../interfaces/GetDocumentsOptions)]): Retrieval filters.
-
-#### Returns
-
-List[[`DocumentInfo`](../interfaces/DocumentInfo)]
-
-List[DocumentInfo]: Documents that satisfy the filters.
-
-
----
-
-### `load_index(index_name)`
-
-Load an index from persistent storage.
-
-#### Parameters
-
-- **index_name** (`str`): Name of the index to load.
-
-#### Returns
-
-`str`
-
-Identifier or status describing the loaded index.
-
-
----
-
-### `query(index_name, query, options)`
-
-Execute a semantic similarity search.
-
-#### Parameters
-
-- **index_name** (`str`): Target index name.
-- **query** (`str`): Natural language query string.
-- **options** (Optional[[`QueryOptions`](../interfaces/QueryOptions)]): Controls custom embeddings and per-query overrides.
-
-#### Returns
-
-[`SearchResult`](../interfaces/SearchResult)
-
-Ranked documents and metadata for the query.
+### `query(name, query, options)`
 

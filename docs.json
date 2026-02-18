@@ -109,22 +109,27 @@
               {
                 "group": "Interfaces",
                 "pages": [
-                  "docs/reference/js/interfaces/AddDocumentsOptions",
+                  "docs/reference/js/interfaces/CreateIndexOptions",
                   "docs/reference/js/interfaces/DocumentInfo",
                   "docs/reference/js/interfaces/GetDocumentsOptions",
                   "docs/reference/js/interfaces/IndexInfo",
+                  "docs/reference/js/interfaces/JobProgress",
+                  "docs/reference/js/interfaces/JobStatusResponse",
                   "docs/reference/js/interfaces/LoadIndexOptions",
                   "docs/reference/js/interfaces/ModelRef",
+                  "docs/reference/js/interfaces/MutationOptions",
+                  "docs/reference/js/interfaces/MutationResult",
                   "docs/reference/js/interfaces/QueryOptions",
                   "docs/reference/js/interfaces/QueryResultDocumentInfo",
-                  "docs/reference/js/interfaces/SearchResult",
-                  "docs/reference/js/interfaces/SerializedIndex"
+                  "docs/reference/js/interfaces/SearchResult"
                 ]
               },
               {
                 "group": "Type Aliases",
                 "pages": [
                   "docs/reference/js/type-aliases/ISODate",
+                  "docs/reference/js/type-aliases/JobPhase",
+                  "docs/reference/js/type-aliases/JobStatus",
                   "docs/reference/js/type-aliases/MossModel"
                 ]
               }
@@ -149,7 +154,13 @@
                   "docs/reference/python/interfaces/GetDocumentsOptions",
                   "docs/reference/python/interfaces/IndexInfo",
                   "docs/reference/python/interfaces/IndexStatus",
+                  "docs/reference/python/interfaces/JobPhase",
+                  "docs/reference/python/interfaces/JobProgress",
+                  "docs/reference/python/interfaces/JobStatus",
+                  "docs/reference/python/interfaces/JobStatusResponse",
                   "docs/reference/python/interfaces/ModelRef",
+                  "docs/reference/python/interfaces/MutationOptions",
+                  "docs/reference/python/interfaces/MutationResult",
                   "docs/reference/python/interfaces/QueryOptions",
                   "docs/reference/python/interfaces/QueryResultDocumentInfo",
                   "docs/reference/python/interfaces/SearchResult"

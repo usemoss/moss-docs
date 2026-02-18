@@ -1,26 +1,37 @@
 ---
 title: "MossClient"
-description: "Local semantic search client for vector similarity operations."
+description: "Async-first semantic search client for vector similarity operations."
 ---
 
 [@inferedge/moss](../api) / MossClient
 
 # MossClient
 
-MossClient - Local semantic search client for vector similarity operations.
+MossClient - Async-first semantic search client for vector similarity operations.
+
+All mutations (createIndex, addDocs, deleteDocs) are async operations
+that run server-side and poll until complete.
 
 ## Example
 
 ```typescript
+import { MossClient } from '@inferedge/moss';
+
 const client = new MossClient('your-project-id', 'your-project-key');
 
-// Create an index with documents
-await client.createIndex('docs', [
+// Create an index with documents (polls until complete)
+const result = await client.createIndex('docs', [
   { id: '1', text: 'Machine learning fundamentals' },
   { id: '2', text: 'Deep learning neural networks' }
-], 'moss-minilm');
+]);
+
+// Add docs (polls until complete)
+await client.addDocs('docs', [
+  { id: '3', text: 'Natural language processing' }
+]);
 
 // Query the index
+await client.loadIndex('docs');
 const results = await client.query('docs', 'AI and neural networks');
 ```
 
@@ -30,7 +41,7 @@ const results = await client.query('docs', 'AI and neural networks');
 
 > **new MossClient**(`projectId`, `projectKey`): `MossClient`
 
-Creates a new MossClient instance for local operations.
+Creates a new MossClient instance.
 
 #### Parameters
 
@@ -47,23 +58,32 @@ Creates a new MossClient instance for local operations.
 
 ### createIndex()
 
-> **createIndex**(`indexName`, `docs`, `modelId?`): `Promise`\<`boolean`\>
+> **createIndex**(`indexName`, `docs`, `options?`): `Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Creates a new index with the provided documents.
+Creates a new index with the provided documents via async upload.
+
+Handles the full flow: init → upload → build → poll until complete.
+Returns when the index is ready.
+
+When all documents have pre-computed embeddings, they are serialized as raw
+float32 in the binary upload. When no documents have embeddings, the server
+generates embeddings in batches (dimension=0 flow).
+
+Mixed documents (some with embeddings, some without) are rejected.
 
 #### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `indexName` | `string` | Name of the index to create. |
-| `docs` | [`DocumentInfo`](../interfaces/DocumentInfo)[] | Initial documents to add to the index. |
-| `modelId?` | `string` | The model ID to use for embeddings. |
+| `docs` | [`DocumentInfo`](../interfaces/DocumentInfo)[] | Documents, optionally with pre-computed embeddings. |
+| `options?` | [`CreateIndexOptions`](../interfaces/CreateIndexOptions) | Optional model ID and progress callback. |
 
 #### Returns
 
-`Promise`\<`boolean`\>
+`Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Promise that resolves to true if successful.
+Promise that resolves to MutationResult when the index is ready.
 
 #### Throws
 
@@ -72,10 +92,12 @@ If the index already exists or creation fails.
 #### Example
 
 ```typescript
-const success = await client.createIndex('knowledge-base', [
+const result = await client.createIndex('knowledge-base', [
   { id: 'doc1', text: 'Introduction to AI' },
   { id: 'doc2', text: 'Machine learning basics' }
-], 'moss-minilm');
+], {
+  onProgress: (p) => console.log(`${p.status} ${p.progress}%`),
+});
 ```
 
 ***
@@ -166,9 +188,12 @@ const deleted = await client.deleteIndex('old-index');
 
 ### addDocs()
 
-> **addDocs**(`indexName`, `docs`, `options?`): `Promise`\<\{ `added`: `number`; `updated`: `number`; \}\>
+> **addDocs**(`indexName`, `docs`, `options?`): `Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Adds or updates documents in an index.
+Adds or updates documents in an index asynchronously.
+
+The index rebuild happens server-side. This method polls until
+the rebuild is complete and then returns.
 
 #### Parameters
 
@@ -176,13 +201,13 @@ Adds or updates documents in an index.
 | ------ | ------ | ------ |
 | `indexName` | `string` | Name of the target index. |
 | `docs` | [`DocumentInfo`](../interfaces/DocumentInfo)[] | Documents to add or update. |
-| `options?` | [`AddDocumentsOptions`](../interfaces/AddDocumentsOptions) | Optional configuration for the operation. |
+| `options?` | [`MutationOptions`](../interfaces/MutationOptions) | Optional configuration (upsert, onProgress callback). |
 
 #### Returns
 
-`Promise`\<\{ `added`: `number`; `updated`: `number`; \}\>
+`Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Promise that resolves to operation result with counts.
+Promise that resolves to MutationResult when the operation is complete.
 
 #### Throws
 
@@ -194,16 +219,19 @@ If the index does not exist.
 const result = await client.addDocs('knowledge-base', [
   { id: 'new-doc', text: 'New content to index' }
 ], { upsert: true });
-console.log(`Added: ${result.added}, Updated: ${result.updated}`);
+console.log(`Job ${result.jobId} completed`);
 ```
 
 ***
 
 ### deleteDocs()
 
-> **deleteDocs**(`indexName`, `docIds`): `Promise`\<\{ `deleted`: `number`; \}\>
+> **deleteDocs**(`indexName`, `docIds`, `options?`): `Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Deletes documents from an index by their IDs.
+Deletes documents from an index by their IDs asynchronously.
+
+The index rebuild happens server-side. This method polls until
+the rebuild is complete and then returns.
 
 #### Parameters
 
@@ -211,12 +239,13 @@ Deletes documents from an index by their IDs.
 | ------ | ------ | ------ |
 | `indexName` | `string` | Name of the target index. |
 | `docIds` | `string`[] | Array of document IDs to delete. |
+| `options?` | [`MutationOptions`](../interfaces/MutationOptions) | Optional configuration (onProgress callback). |
 
 #### Returns
 
-`Promise`\<\{ `deleted`: `number`; \}\>
+`Promise`\<[`MutationResult`](../interfaces/MutationResult)\>
 
-Promise that resolves to operation result with count.
+Promise that resolves to MutationResult when the operation is complete.
 
 #### Throws
 
@@ -226,7 +255,34 @@ If the index does not exist.
 
 ```typescript
 const result = await client.deleteDocs('knowledge-base', ['doc1', 'doc2']);
-console.log(`Deleted ${result.deleted} documents`);
+console.log(`Job ${result.jobId} completed`);
+```
+
+***
+
+### getJobStatus()
+
+> **getJobStatus**(`jobId`): `Promise`\<[`JobStatusResponse`](../interfaces/JobStatusResponse)\>
+
+Gets the current status of an async job.
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `jobId` | `string` | The job ID returned by createIndex, addDocs, or deleteDocs. |
+
+#### Returns
+
+`Promise`\<[`JobStatusResponse`](../interfaces/JobStatusResponse)\>
+
+Promise that resolves to JobStatusResponse with progress details.
+
+#### Example
+
+```typescript
+const status = await client.getJobStatus(jobId);
+console.log(`${status.status} — ${status.progress}%`);
 ```
 
 ***
@@ -337,6 +393,9 @@ await client.loadIndex('my-index');
 > **query**(`indexName`, `query`, `options?`): `Promise`\<[`SearchResult`](../interfaces/SearchResult)\>
 
 Performs a semantic similarity search against the specified index.
+
+If the index has been loaded via `loadIndex()`, runs entirely in-memory.
+Otherwise, falls back to the cloud `/query` endpoint.
 
 #### Parameters
 
