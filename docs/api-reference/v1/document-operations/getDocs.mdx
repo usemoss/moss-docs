@@ -13,7 +13,7 @@ Retrieve the stored documents for an index.
 **Example request**
 
 ```bash
-curl -X POST "https://service.usemoss.dev/manage" \
+curl -X POST "https://service.usemoss.dev/v1/manage" \
   -H "Content-Type: application/json" \
   -H "x-service-version: v1" \
   -H "x-project-key: moss_access_key_xxxxx" \
@@ -30,15 +30,20 @@ curl -X POST "https://service.usemoss.dev/manage" \
 ```json 200 - OK
 [
   {
-    "id": "faq-001",
-    "text": "How do I reset my password?",
+    "id": "faq-1",
+    "text": "Reset password: Click 'Forgot Password' on the sign-in page to receive a reset link via email.",
     "metadata": {
-      "category": "account"
+      "category": "account",
+      "topic": "password"
     }
   },
   {
-    "id": "faq-002",
-    "text": "Where can I download invoices?"
+    "id": "faq-2",
+    "text": "Enable two-factor authentication: Go to Account Settings > Security and toggle on 2FA to add an extra layer of protection.",
+    "metadata": {
+      "category": "account",
+      "topic": "2fa"
+    }
   }
 ]
 ```

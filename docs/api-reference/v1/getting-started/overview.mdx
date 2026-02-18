@@ -4,12 +4,12 @@ description: Control Plane endpoint structure and shared request schema.
 mode: "wide"
 ---
 
-All API actions are multiplexed through the `/manage` endpoint. Provide an `action` string plus the required fields for that operation. On success, handlers return `2xx` JSON payloads outlined below. Failures return structured errors:
+All API actions are multiplexed through the `/v1/manage` endpoint. Provide an `action` string plus the required fields for that operation. On success, handlers return `2xx` JSON payloads outlined below. Failures return structured errors:
 
 ```json
 {
   "error": "Human-readable message",
-  "action": "createIndex" // present on server errors
+  "action": "addDocs" // present on server errors
 }
 ```
 
@@ -17,7 +17,7 @@ Shared request schema:
 
 | Field | Type | Required | Notes |
 | --- | --- | --- | --- |
-| `action` | string | ✅ | One of `createIndex`, `getIndex`, `listIndexes`, `deleteIndex`, `addDocs`, `deleteDocs`, `getDocs`. |
+| `action` | string | ✅ | One of `initUpload`, `startBuild`, `getJobStatus`, `getIndex`, `listIndexes`, `deleteIndex`, `addDocs`, `deleteDocs`, `getDocs`, `getIndexUrl`. |
 | `projectId` | string | ✅ | Project identifier issued by Moss Control. |
 | `indexName` | string | ▶︎ | Required for index-scoped actions. |
 
@@ -27,10 +27,13 @@ Shared request schema:
 
 | Action | Purpose | Extra required fields |
 | --- | --- | --- |
-| `createIndex` | Create a new index with seed documents. | `indexName`, `docs` |
+| `initUpload` | Get a presigned URL to upload index data. | `indexName`, `modelId`, `docCount`, `dimension` |
+| `startBuild` | Trigger an index build after uploading data. | `jobId` |
+| `getJobStatus` | Check the status of an async build job. | `jobId` |
 | `getIndex` | Fetch metadata for a single index. | `indexName` |
 | `listIndexes` | Enumerate every index under the project. | — |
 | `deleteIndex` | Remove an index record and assets. | `indexName` |
+| `getIndexUrl` | Get download URLs for a built index. | `indexName` |
 | `addDocs` | Upsert documents into an existing index. | `indexName`, `docs` |
 | `deleteDocs` | Remove documents by ID. | `indexName`, `docIds` |
 | `getDocs` | Retrieve stored documents (without embeddings). | `indexName` |

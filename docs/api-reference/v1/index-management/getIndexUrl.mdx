@@ -1,0 +1,43 @@
+---
+title: Get Index URL
+description: Get download URLs for a built index.
+mode: "wide"
+---
+
+Retrieve the public download URLs for a built index's artifacts. Use these URLs to load the index on the client side.
+
+**Required fields**: `indexName`
+
+**Example request**
+
+```bash
+curl -X POST "https://service.usemoss.dev/v1/manage" \
+  -H "Content-Type: application/json" \
+  -H "x-service-version: v1" \
+  -H "x-project-key: moss_access_key_xxxxx" \
+  -d '{
+    "action": "getIndexUrl",
+    "projectId": "project_123",
+    "indexName": "support-faq"
+  }'
+```
+
+**Responses**
+
+<CodeGroup>
+```json 200 - OK
+{
+  "indexUrl": "https://<bucket>.r2.dev/projects/<project_id>/indexes/<index>/index.moss",
+  "jsonUrl": "https://<bucket>.r2.dev/projects/<project_id>/indexes/<index>/data.json"
+}
+```
+</CodeGroup>
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `indexUrl` | string | URL to download the compiled index artifact (`.moss` file). |
+| `jsonUrl` | string | URL to download the document data as JSON. |
+
+**Errors**
+
+- `404` if the index does not exist or has not been built yet.
