@@ -15,7 +15,7 @@ const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PRO
 await client.createIndex('my-index', [
   { id: 'doc-1', text: '...', metadata: { category: 'faq', tags: 'returns,shipping', lang: 'en' } },
   { id: 'doc-2', text: '...' }
-], 'moss-minilm')
+], { modelId: 'moss-minilm' })
 
 // Upsert more docs later
 await client.addDocs('my-index', [

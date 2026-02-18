@@ -40,10 +40,9 @@ const docs: DocumentInfo[] = [
   { id: 'doc3', text: 'Change address via customer service.', metadata: { category: 'support' } },
 ]
 
-await client.createIndex('faqs', docs, 'moss-minilm') // creates & syncs
+await client.createIndex('faqs', docs, { modelId: 'moss-minilm' }) // creates & syncs
 await client.loadIndex('faqs') // loads from cloud or cache
-const queryOptions = { topK: 3, alpha: 0.6 }
-const results = await client.query('faqs', 'return a damaged product', queryOptions) // alpha: 1.0 semantic, 0.0 keyword
+const results = await client.query('faqs', 'return a damaged product', { topK: 3 })
 await client.deleteIndex('faqs')
 ```
 
@@ -78,21 +77,14 @@ if __name__ == "__main__":
 ## Common types
 - `DocumentInfo` – `{ id: string; text: string; metadata?: Record<string,string> }`
 - `AddDocumentsOptions` – `{ upsert?: boolean }`
-- `QueryOptions` – `JavaScript: { topK?: number; alpha?: number; filters?: object }` · `Python: QueryOptions(top_k?: int, alpha?: float, filters?: dict)`
-- `alpha` (query option) – blend semantic (1.0) vs keyword (0.0); defaults to semantic-heavy
+- `QueryOptions` – `JavaScript: { topK?: number; embedding?: number[] }` · `Python: QueryOptions(top_k?: int, alpha?: float, filters?: dict)`
+- `alpha` (Python query option) – blend semantic (1.0) vs keyword (0.0); defaults to semantic-heavy
 
 ## Hybrid search controls
 
 <CodeGroup>
 ```ts JavaScript
-// Pure keyword
-await client.query('faqs', 'return policy', { topK: 3, alpha: 0.0 })
-
-// Default (semantic heavy)
-await client.query('faqs', 'return policy', { topK: 3 }) // alpha defaults to semantic-heavy (e.g., ~0.8)
-
-// Pure semantic
-await client.query('faqs', 'return policy', { topK: 3, alpha: 1.0 })
+await client.query('faqs', 'return policy', { topK: 3 })
 ```
 
 ```python Python

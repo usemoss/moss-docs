@@ -23,12 +23,12 @@ const INDEX = 'electron-docs'
 
 app.whenReady().then(async () => {
   client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PROJECT_KEY!)
-  await client.createIndex(INDEX, initialDocs, 'moss-minilm')
+  await client.createIndex(INDEX, initialDocs, { modelId: 'moss-minilm' })
 })
 
 ipcMain.handle('search', async (_e, q: string) => {
   await client.loadIndex(INDEX)
-  return client.query(INDEX, q, 5)
+  return client.query(INDEX, q, { topK: 5 })
 })
 ```
 

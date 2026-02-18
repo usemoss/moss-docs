@@ -21,7 +21,7 @@ const client = new MossClient(process.env.MOSS_PROJECT_ID!, process.env.MOSS_PRO
 chrome.runtime.onMessage.addListener(async (msg, _sender, sendResponse) => {
   if (msg.type === 'query') {
     await client.loadIndex('ext-knowledge')
-    const res = await client.query('ext-knowledge', msg.text, 3)
+    const res = await client.query('ext-knowledge', msg.text, { topK: 3 })
     sendResponse(res)
   }
 })
