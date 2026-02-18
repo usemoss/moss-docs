@@ -77,7 +77,7 @@ if __name__ == "__main__":
 ## Common types
 - `DocumentInfo` – `{ id: string; text: string; metadata?: Record<string,string> }`
 - `AddDocumentsOptions` – `{ upsert?: boolean }`
-- `QueryOptions` – `JavaScript: { topK?: number; embedding?: number[] }` · `Python: QueryOptions(top_k?: int, alpha?: float, filters?: dict)`
+- `QueryOptions` – `JavaScript: { topK?: number; embedding: number[] }` · `Python: QueryOptions(top_k?: int, alpha?: float, filters?: dict)`
 - `alpha` (Python query option) – blend semantic (1.0) vs keyword (0.0); defaults to semantic-heavy
 
 ## Hybrid search controls
