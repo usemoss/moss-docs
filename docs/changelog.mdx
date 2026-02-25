@@ -5,6 +5,10 @@ mode: "wide"
 
 <Tabs>
 <Tab title="Python">
+<Update label="2026-02-23" description="v1.0.0-beta.16">
+- Bumped `inferedge-moss-core` dependency to `0.5.0` to support session index telemetry and `push_index` improvements
+</Update>
+
 <Update label="2026-02-17" description="v1.0.0-beta.15">
 - All index mutations and reads now go through the Rust ManageClient, replacing the Python HTTP layer
 - Index creation uses an async bulk pipeline: binary upload → server-side build → poll until completion
