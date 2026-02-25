@@ -17,17 +17,12 @@ const byVector = await client.query('my-index', 'getting started latency', { top
 ```
 
 ```python Python
-from inferedge_moss import MossClient
+from inferedge_moss import MossClient, QueryOptions
 import os
 
 client = MossClient(os.getenv("MOSS_PROJECT_ID"), os.getenv("MOSS_PROJECT_KEY"))
 await client.load_index("my-index")
-by_vector = await client.query("my-index", "getting started latency", 5)
-
-# Metadata filtering (mirrors moss-samples)
-filtered = await client.query("my-index", "refund policy", 5, {
-    "filters": { "category": "faq", "lang": "en" }
-})
+by_vector = await client.query("my-index", "getting started latency", QueryOptions(top_k=5))
 ```
 </CodeGroup>
 
@@ -42,14 +37,16 @@ const results = await client.query('my-index', 'return policy', { topK: 3 })
 ```
 
 ```python Python
+from inferedge_moss import QueryOptions
+
 # Blend semantic and keyword scores (60/40)
-hybrid = await client.query("my-index", "return policy", top_k=3, alpha=0.6)
+hybrid = await client.query("my-index", "return policy", QueryOptions(top_k=3, alpha=0.6))
 
 # Pure keyword
-keyword_only = await client.query("my-index", "return policy", top_k=3, alpha=0.0)
+keyword_only = await client.query("my-index", "return policy", QueryOptions(top_k=3, alpha=0.0))
 
 # Pure semantic
-semantic_only = await client.query("my-index", "return policy", top_k=3, alpha=1.0)
+semantic_only = await client.query("my-index", "return policy", QueryOptions(top_k=3, alpha=1.0))
 ```
 </CodeGroup>
 

@@ -65,7 +65,7 @@ main().catch(console.error)
 ```python Python
 import os
 import asyncio
-from inferedge_moss import MossClient
+from inferedge_moss import MossClient, QueryOptions
 
 project_id = os.getenv("MOSS_PROJECT_ID")
 project_key = os.getenv("MOSS_PROJECT_KEY")
@@ -74,7 +74,7 @@ index_name = os.getenv("MOSS_INDEX_NAME", "faqs")  # ensure this exists (see Qui
 async def main():
     client = MossClient(project_id, project_key)
     await client.load_index(index_name)
-    results = await client.query(index_name, "How do I return a damaged product?", 3)
+    results = await client.query(index_name, "How do I return a damaged product?", QueryOptions(top_k=3))
 
     print(f"Found {len(results.docs)} docs")
     for i, doc in enumerate(results.docs, 1):

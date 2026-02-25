@@ -32,19 +32,19 @@ await client.deleteIndex('my-index')
 ```
 
 ```python Python
-from inferedge_moss import MossClient, AddDocumentsOptions, GetDocumentsOptions
+from inferedge_moss import MossClient, DocumentInfo, MutationOptions, GetDocumentsOptions
 
 client = MossClient(project_id, project_key)
 await client.create_index('my-index', [
-    { 'id': 'doc-1', 'text': '...', 'metadata': { 'category': 'faq', 'tags': 'returns,shipping', 'lang': 'en' } },
-    { 'id': 'doc-2', 'text': '...' }
+    DocumentInfo(id='doc-1', text='...', metadata={'category': 'faq', 'tags': 'returns,shipping', 'lang': 'en'}),
+    DocumentInfo(id='doc-2', text='...')
 ], 'moss-minilm')
 
 # Upsert more docs later
 await client.add_docs('my-index', [
-    { 'id': 'doc-2', 'text': 'updated text' },
-    { 'id': 'doc-3', 'text': 'new text' }
-], AddDocumentsOptions(upsert=True))
+    DocumentInfo(id='doc-2', text='updated text'),
+    DocumentInfo(id='doc-3', text='new text')
+], MutationOptions(upsert=True))
 
 # Fetch specific docs
 subset = await client.get_docs('my-index', GetDocumentsOptions(doc_ids=['doc-1', 'doc-3']))
