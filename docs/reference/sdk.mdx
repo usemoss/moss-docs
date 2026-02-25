@@ -24,7 +24,7 @@ High-level overview of the official SDKs. For endpoint details, see the [SDK Ref
 - `moss-mediumlm`: higher accuracy with reasonable performance
 
 ## Client lifecycle
-- Create index with docs + model → Load index → Query (`top_k`, `alpha`, filters) → Upsert/delete docs → Delete index when done
+- Create index with docs + model → Load index → Query (`top_k`, `alpha`) → Upsert/delete docs → Delete index when done
 
 ## Examples (JS/Python)
 
@@ -76,8 +76,8 @@ if __name__ == "__main__":
 
 ## Common types
 - `DocumentInfo` – `{ id: string; text: string; metadata?: Record<string,string> }`
-- `AddDocumentsOptions` – `{ upsert?: boolean }`
-- `QueryOptions` – `JavaScript: { topK?: number; embedding: number[] }` · `Python: QueryOptions(top_k?: int, alpha?: float, filters?: dict)`
+- `MutationOptions` – `{ upsert?: boolean }`
+- `QueryOptions` – `JavaScript: { topK?: number; embedding?: number[] }` · `Python: QueryOptions(top_k?: int, alpha?: float, embedding?: Sequence[float])`
 - `alpha` (Python query option) – blend semantic (1.0) vs keyword (0.0); defaults to semantic-heavy
 
 ## Hybrid search controls

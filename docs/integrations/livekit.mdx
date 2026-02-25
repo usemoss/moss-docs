@@ -135,7 +135,7 @@ from livekit.agents import (
 
 
 # Moss Import
-from inferedge_moss import MossClient
+from inferedge_moss import MossClient, QueryOptions
 
 load_dotenv()
 
@@ -170,10 +170,9 @@ class MossSemanticRetrievalAgent(Agent):
         try:
             # 1. Automatic Search 
             results = await self.moss.query(
-                INDEX_NAME, 
-                user_query, 
-                top_k=5, 
-                alpha=0.8
+                INDEX_NAME,
+                user_query,
+                QueryOptions(top_k=5, alpha=0.8)
             )
             
             # 2. Context Injection
