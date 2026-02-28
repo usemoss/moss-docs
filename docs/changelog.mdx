@@ -5,6 +5,17 @@ mode: "wide"
 
 <Tabs>
 <Tab title="Python">
+<Update label="2026-02-26" description="v1.0.0-beta.17">
+- **Metadata Filtering**: `query()` now accepts an optional `filter` dict to narrow results by document metadata on locally loaded indexes
+  - Comparison operators: `$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`
+  - Set operators: `$in`, `$nin`
+  - Composable with `$and` / `$or` for complex predicates (supports arbitrary nesting)
+  - Numeric coercion: int and float filter values are automatically converted to strings for consistent matching
+- **Geo-distance filtering**: new `$near` operator filters documents by haversine distance from a `"lat,lng,radiusMeters"` value
+- When `filter` is passed to `query()` but the index is not loaded locally, a warning is logged and the filter is skipped (cloud query API does not yet support filtering)
+- Updated `inferedge-moss-core` dependency to `0.6.0`
+</Update>
+
 <Update label="2026-02-23" description="v1.0.0-beta.16">
 - Bumped `inferedge-moss-core` dependency to `0.5.0` to support session index telemetry and `push_index` improvements
 </Update>
